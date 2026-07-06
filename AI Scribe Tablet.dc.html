@@ -16,15 +16,19 @@
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
   @keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
   ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c6cfd4;border-radius:4px}
+  [data-prototype-stage]{display:flex;gap:28px;padding:clamp(8px,2vw,24px);align-items:flex-start;justify-content:center;min-height:100vh;box-sizing:border-box;overflow:auto}
+  [data-tablet-wrap]{width:1216px;height:876px;flex:none;position:relative}
+  [data-tablet-shell]{background:#14181b;border-radius:34px;padding:18px;box-shadow:0 24px 60px rgba(20,30,40,.28);flex:none;transform-origin:top left}
 </style>
 </helmet>
 
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#0f766e"/><circle cx="50" cy="41" r="11" fill="#fdfcf9"/><rect x="33" y="58" width="34" height="5.5" rx="2.75" fill="#fdfcf9"/><rect x="39" y="69" width="22" height="5.5" rx="2.75" fill="#9fd8d0"/></svg></template>
 
-<div style="display:flex;gap:28px;padding:32px;align-items:flex-start;justify-content:center;min-height:100vh;box-sizing:border-box">
+<div data-prototype-stage>
 
   <!-- ===================== TABLET DEVICE ===================== -->
-  <div style="background:#14181b;border-radius:34px;padding:18px;box-shadow:0 24px 60px rgba(20,30,40,.28);flex:none">
+  <div data-tablet-wrap>
+  <div data-tablet-shell>
     <div style="width:1180px;height:840px;background:#f4f7f8;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;position:relative">
 
       <!-- Persistent status strip -->
@@ -674,6 +678,31 @@
   </div>
 
 </div>
+  </div>
+</div>
+<script>
+  (function () {
+    var shell = document.querySelector('[data-tablet-shell]');
+    var wrap = document.querySelector('[data-tablet-wrap]');
+    if (!shell || !wrap) return;
+
+    function fitTablet() {
+      var shellWidth = 1216;
+      var shellHeight = 876;
+      var margin = Math.max(16, Math.min(48, window.innerWidth * 0.04));
+      var availableWidth = Math.max(320, window.innerWidth - margin);
+      var availableHeight = Math.max(360, window.innerHeight - margin);
+      var scale = Math.min(1, availableWidth / shellWidth, availableHeight / shellHeight);
+      shell.style.transform = 'scale(' + scale + ')';
+      wrap.style.width = Math.round(shellWidth * scale) + 'px';
+      wrap.style.height = Math.round(shellHeight * scale) + 'px';
+    }
+
+    window.addEventListener('resize', fitTablet);
+    window.addEventListener('orientationchange', fitTablet);
+    fitTablet();
+  })();
+</script>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1740, &quot;height&quot;: 950}, &quot;showLabels&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Walkthrough&quot;}, &quot;showExplainer&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Walkthrough&quot;}}">
 class Component extends DCLogic {
