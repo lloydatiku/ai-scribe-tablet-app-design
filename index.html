@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -16,6 +16,12 @@
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
   @keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
   ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c6cfd4;border-radius:4px}
+
+  /* Browser-fit and wrapping guardrails added after export. */
+  *{box-sizing:border-box;min-width:0}
+  button,span{max-width:100%}
+  button{white-space:normal!important;line-height:1.16!important;overflow:visible!important}
+  div,span,button,p,h1,h2,h3,strong{overflow-wrap:anywhere;word-break:normal}
 </style>
 </helmet>
 
@@ -32,12 +38,12 @@
         <div style="display:flex;align-items:center;gap:8px">
           <div style="width:30px;height:30px;border-radius:50%;background:#0f766e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">AO</div>
           <div>
-            <div style="font-size:13px;font-weight:700">Adaeze O. Â· 54F</div>
-            <div style="font-size:10.5px;color:#5b6b74">Hypertension follow-up Â· Today 09:15</div>
+            <div style="font-size:13px;font-weight:700">Adaeze O. · 54F</div>
+            <div style="font-size:10.5px;color:#5b6b74">Hypertension follow-up · Today 09:15</div>
           </div>
         </div>
         <div style="display:flex;gap:8px;align-items:center;margin-left:8px">
-          <span style="font-size:10.5px;font-weight:600;background:#e3f1e7;color:#1f7a3d;padding:3px 9px;border-radius:20px">Consent âœ“</span>
+          <span style="font-size:10.5px;font-weight:600;background:#e3f1e7;color:#1f7a3d;padding:3px 9px;border-radius:20px">Consent OK</span>
           <span style="{{ noteStateStyle }}">{{ noteStateLabel }}</span>
           <span style="{{ flagChipStyle }}">{{ flagChipLabel }}</span>
           <span style="font-size:10.5px;font-weight:600;background:#eaeef2;color:#475569;padding:3px 9px;border-radius:20px">EHR: Connected</span>
@@ -70,9 +76,9 @@
 
           <div style="display:flex;align-items:flex-end;gap:16px">
             <div style="flex:1">
-              <div style="font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#0f766e">Riverside Family Practice Â· Room 4</div>
+              <div style="font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#0f766e">Riverside Family Practice · Room 4</div>
               <div style="font-family:Newsreader,Georgia,serif;font-size:30px;font-weight:500;color:#12242b;margin-top:7px;line-height:1.1">Good morning, Dr. Hassan</div>
-              <div style="font-size:12.5px;color:#5b6b74;margin-top:6px">Monday 6 July Â· 3 encounters today Â· <strong style="color:#a3202a">1 needs your attention</strong> Â· sorted by safety, not recency</div>
+              <div style="font-size:12.5px;color:#5b6b74;margin-top:6px">Monday 6 July · 3 encounters today · <strong style="color:#a3202a">1 needs your attention</strong> · sorted by safety, not recency</div>
             </div>
             <div style="display:flex;gap:4px;background:#ffffff;border:1px solid #d8e2e4;border-radius:22px;padding:4px;box-shadow:0 2px 8px rgba(18,50,60,.05)">
               <span style="font-size:11px;font-weight:700;padding:6px 14px;border-radius:18px;background:#12242b;color:#fff">My drafts</span>
@@ -87,18 +93,18 @@
               <span style="{{ badgeStyle }}">1</span>
               <div style="width:48px;height:48px;border-radius:50%;background:#0f766e;color:#fdfcf9;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;font-family:Newsreader,Georgia,serif">AO</div>
               <div style="flex:1">
-                <div style="font-family:Newsreader,Georgia,serif;font-size:19px;font-weight:600;color:#12242b">Adaeze O. <span style="color:#8a979e;font-size:14px;font-weight:400">Â· 54F Â· Hypertension follow-up</span></div>
-                <div style="font-size:11.5px;color:#5b6b74;margin-top:3px">09:15 Â· Primary care Â· draft ready 24 min ago</div>
+                <div style="font-family:Newsreader,Georgia,serif;font-size:19px;font-weight:600;color:#12242b">Adaeze O. <span style="color:#8a979e;font-size:14px;font-weight:400">· 54F · Hypertension follow-up</span></div>
+                <div style="font-size:11.5px;color:#5b6b74;margin-top:3px">09:15 · Primary care · draft ready 24 min ago</div>
               </div>
               <span style="{{ homeFlagStyle }}">{{ homeFlagLabel }}</span>
-              <span style="background:#0f766e;color:#fff;font-size:12px;font-weight:700;border-radius:12px;padding:10px 20px;box-shadow:0 6px 14px rgba(15,118,110,.25)">Open note â†’</span>
+              <span style="background:#0f766e;color:#fff;font-size:12px;font-weight:700;border-radius:12px;padding:10px 20px;box-shadow:0 6px 14px rgba(15,118,110,.25)">Open note →</span>
             </div>
             <div style="display:flex;align-items:center;gap:10px;border-top:1px solid #edf2f3;background:#fbfdfd;padding:11px 26px;flex-wrap:wrap">
               <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a979e">Journey</span>
-              <span style="font-size:11px;font-weight:700;color:#1f7a3d">Consent âœ“</span><span style="color:#c2ccd1">â†’</span>
-              <span style="font-size:11px;font-weight:700;color:#1f7a3d">Recorded âœ“</span><span style="color:#c2ccd1">â†’</span>
-              <span style="font-size:11px;font-weight:700;color:#1f7a3d">Drafted âœ“</span><span style="color:#c2ccd1">â†’</span>
-              <span style="{{ noteStateStyle }}">{{ noteStateLabel }}</span><span style="color:#c2ccd1">â†’</span>
+              <span style="font-size:11px;font-weight:700;color:#1f7a3d">Consent OK</span><span style="color:#c2ccd1">→</span>
+              <span style="font-size:11px;font-weight:700;color:#1f7a3d">Recorded OK</span><span style="color:#c2ccd1">→</span>
+              <span style="font-size:11px;font-weight:700;color:#1f7a3d">Drafted OK</span><span style="color:#c2ccd1">→</span>
+              <span style="{{ noteStateStyle }}">{{ noteStateLabel }}</span><span style="color:#c2ccd1">→</span>
               <span style="{{ ehrChipStyle }}">{{ ehrChipLabel }}</span>
             </div>
           </div>
@@ -107,28 +113,28 @@
             <div style="background:#ffffff;border:1px solid #dfe7e9;border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:14px">
               <div style="width:40px;height:40px;border-radius:50%;background:#efeaf7;color:#6d4fa1;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;font-family:Newsreader,Georgia,serif">MB</div>
               <div style="flex:1">
-                <div style="font-family:Newsreader,Georgia,serif;font-size:15px;font-weight:600;color:#12242b">Musa B. <span style="color:#8a979e;font-size:12px;font-weight:400">Â· Diabetes annual review</span></div>
-                <div style="font-size:11px;color:#5b6b74;margin-top:2px">10:00 Â· recording finished</div>
+                <div style="font-family:Newsreader,Georgia,serif;font-size:15px;font-weight:600;color:#12242b">Musa B. <span style="color:#8a979e;font-size:12px;font-weight:400">· Diabetes annual review</span></div>
+                <div style="font-size:11px;color:#5b6b74;margin-top:2px">10:00 · recording finished</div>
               </div>
-              <span style="font-size:10.5px;font-weight:600;background:#efeaf7;color:#6d4fa1;padding:4px 11px;border-radius:16px">Transcript processingâ€¦</span>
+              <span style="font-size:10.5px;font-weight:600;background:#efeaf7;color:#6d4fa1;padding:4px 11px;border-radius:16px">Transcript processing…</span>
             </div>
             <div style="background:#ffffff;border:1px solid #dfe7e9;border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:14px">
               <div style="width:40px;height:40px;border-radius:50%;background:#eaeef2;color:#475569;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;font-family:Newsreader,Georgia,serif">KE</div>
               <div style="flex:1">
-                <div style="font-family:Newsreader,Georgia,serif;font-size:15px;font-weight:600;color:#12242b">Kemi E. <span style="color:#8a979e;font-size:12px;font-weight:400">Â· Chest pain review</span></div>
-                <div style="font-size:11px;color:#5b6b74;margin-top:2px">08:30 Â· signed 08:58</div>
+                <div style="font-family:Newsreader,Georgia,serif;font-size:15px;font-weight:600;color:#12242b">Kemi E. <span style="color:#8a979e;font-size:12px;font-weight:400">· Chest pain review</span></div>
+                <div style="font-size:11px;color:#5b6b74;margin-top:2px">08:30 · signed 08:58</div>
               </div>
-              <span style="font-size:10.5px;font-weight:600;background:#e3f1e7;color:#1f7a3d;padding:4px 11px;border-radius:16px">Signed Â· Exported âœ“</span>
+              <span style="font-size:10.5px;font-weight:600;background:#e3f1e7;color:#1f7a3d;padding:4px 11px;border-radius:16px">Signed · Exported OK</span>
             </div>
           </div>
 
           <div>
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
               <span style="{{ badgeStyle }}">2</span>
-              <span style="font-size:11px;font-weight:700;color:#5b6b74;text-transform:uppercase;letter-spacing:.09em">Service indicators â€” this week</span>
+              <span style="font-size:11px;font-weight:700;color:#5b6b74;text-transform:uppercase;letter-spacing:.09em">Service indicators — this week</span>
             </div>
             <div style="display:grid;grid-template-columns:repeat(4,1fr);background:#ffffff;border:1px solid #d8e2e4;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(18,50,60,.04)">
-              <div style="padding:16px 20px;border-right:1px solid #edf2f3"><div style="font-size:10.5px;color:#8a979e;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Draft latency</div><div style="font-family:Newsreader,Georgia,serif;font-size:26px;font-weight:500;color:#12242b;margin-top:5px">38 s</div><div style="font-size:10.5px;color:#1f7a3d;margin-top:2px;font-weight:600">â–¼ 6 s vs last week</div></div>
+              <div style="padding:16px 20px;border-right:1px solid #edf2f3"><div style="font-size:10.5px;color:#8a979e;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Draft latency</div><div style="font-family:Newsreader,Georgia,serif;font-size:26px;font-weight:500;color:#12242b;margin-top:5px">38 s</div><div style="font-size:10.5px;color:#1f7a3d;margin-top:2px;font-weight:600">▼ 6 s vs last week</div></div>
               <div style="padding:16px 20px;border-right:1px solid #edf2f3"><div style="font-size:10.5px;color:#8a979e;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Note length vs norm</div><div style="font-family:Newsreader,Georgia,serif;font-size:26px;font-weight:500;color:#12242b;margin-top:5px">+9%</div><div style="font-size:10.5px;color:#92610c;margin-top:2px;font-weight:600">Watch for note bloat</div></div>
               <div style="padding:16px 20px;border-right:1px solid #edf2f3"><div style="font-size:10.5px;color:#8a979e;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Replay burden / note</div><div style="font-family:Newsreader,Georgia,serif;font-size:26px;font-weight:500;color:#12242b;margin-top:5px">2.1 min</div><div style="font-size:10.5px;color:#5b6b74;margin-top:2px;font-weight:600">Stable</div></div>
               <div style="padding:16px 20px"><div style="font-size:10.5px;color:#8a979e;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Blocked sign attempts</div><div style="font-family:Newsreader,Georgia,serif;font-size:26px;font-weight:500;color:#12242b;margin-top:5px">{{ unsafeAttempts }}</div><div style="font-size:10.5px;color:#5b6b74;margin-top:2px;font-weight:600">Sign gate working</div></div>
@@ -142,7 +148,7 @@
         <div style="padding:20px 22px;display:grid;grid-template-columns:1.2fr 1fr;gap:18px">
           <div style="display:flex;flex-direction:column;gap:14px">
             <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="{{ badgeStyle }}">1</span><h3 style="margin:0;font-size:14px;font-weight:700">Consent scope â€” each permission is separate</h3></div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="{{ badgeStyle }}">1</span><h3 style="margin:0;font-size:14px;font-weight:700">Consent scope — each permission is separate</h3></div>
               <div style="display:flex;flex-direction:column;gap:8px">
                 <sc-for list="{{ consentItems }}" as="c" hint-placeholder-count="5">
                   <div onClick="{{ c.toggle }}" style="display:flex;align-items:center;gap:12px;padding:9px 12px;border:1px solid #e4eaed;border-radius:10px;cursor:pointer" style-hover="background:#f6f9fa">
@@ -169,9 +175,9 @@
             <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="{{ badgeStyle }}">3</span><h3 style="margin:0;font-size:14px;font-weight:700">Device &amp; room readiness</h3></div>
               <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px">
-                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Room microphone</span><span style="color:#1f7a3d;font-weight:700">Connected âœ“</span></div>
-                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Network</span><span style="color:#1f7a3d;font-weight:700">Good âœ“</span></div>
-                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>EHR encounter matched</span><span style="color:#1f7a3d;font-weight:700">#E-20481 âœ“</span></div>
+                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Room microphone</span><span style="color:#1f7a3d;font-weight:700">Connected OK</span></div>
+                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Network</span><span style="color:#1f7a3d;font-weight:700">Good OK</span></div>
+                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>EHR encounter matched</span><span style="color:#1f7a3d;font-weight:700">#E-20481 OK</span></div>
                 <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Interpreter present</span><span style="color:#5b6b74;font-weight:600">No</span></div>
                 <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Language</span><span style="color:#5b6b74;font-weight:600">English</span></div>
               </div>
@@ -186,7 +192,7 @@
                   <div style="width:4px;height:18px;background:#c22730;border-radius:2px;animation:eq .7s .15s infinite"></div>
                   <div style="width:4px;height:18px;background:#c22730;border-radius:2px;animation:eq .7s .3s infinite"></div>
                   <div style="width:4px;height:18px;background:#c22730;border-radius:2px;animation:eq .7s .45s infinite"></div>
-                  <span style="font-size:12px;font-weight:700;color:#a3202a;margin-left:6px">Listening Â· {{ recClock }}</span>
+                  <span style="font-size:12px;font-weight:700;color:#a3202a;margin-left:6px">Listening · {{ recClock }}</span>
                 </div>
               </sc-if>
             </div>
@@ -204,12 +210,12 @@
           <div style="background:#0f766e;color:#fff;padding:11px 16px;display:flex;align-items:center;gap:10px">
             <span style="{{ badgeStyle }}">1</span>
             <div style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">AO</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:700">Encounter Â· Adaeze O.</div><div style="font-size:10.5px;opacity:.8">Patient left Â· Clinician right Â· tap â–¶ to replay any turn</div></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:700">Encounter · Adaeze O.</div><div style="font-size:10.5px;opacity:.8">Patient left · Clinician right · tap Play to replay any turn</div></div>
             <span style="font-size:10.5px;font-weight:700;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:14px">03:15</span>
           </div>
           <div style="display:flex;align-items:center;gap:8px;background:#fdf3e0;border-bottom:1px solid #ecd9ab;padding:7px 14px">
             <span style="{{ badgeStyle }}">5</span>
-            <span style="font-size:10.5px;color:#6b4a10;font-weight:600">Audio: good Â· Diarisation: 96% Â· 1 overlapping span at 04:12</span>
+            <span style="font-size:10.5px;color:#6b4a10;font-weight:600">Audio: good · Diarisation: 96% · 1 overlapping span at 04:12</span>
           </div>
           <div style="padding:12px 14px 16px;display:flex;flex-direction:column;gap:2px">
           <sc-for list="{{ turns }}" as="u" hint-placeholder-count="6">
@@ -234,7 +240,7 @@
                       <span style="{{ f.style }}">{{ f.label }}</span>
                     </sc-for>
                     <sc-for list="{{ u.links }}" as="lk" hint-placeholder-count="1">
-                      <button onClick="{{ lk.go }}" style="font-size:10.5px;font-weight:700;color:#0f766e;background:#e4f2f0;border:1px solid #bcdcd7;border-radius:12px;padding:2px 9px;cursor:pointer;font-family:inherit" style-hover="background:#d2ebe7">â†’ note {{ lk.sid }}</button>
+                      <button onClick="{{ lk.go }}" style="font-size:10.5px;font-weight:700;color:#0f766e;background:#e4f2f0;border:1px solid #bcdcd7;border-radius:12px;padding:2px 9px;cursor:pointer;font-family:inherit" style-hover="background:#d2ebe7">→ note {{ lk.sid }}</button>
                     </sc-for>
                   </div>
                 </sc-if>
@@ -245,15 +251,15 @@
             <div style="display:flex;justify-content:flex-start;margin-top:6px">
               <div style="background:#fff;border:1.5px dashed #c22730;border-radius:16px;padding:10px 16px;display:flex;align-items:center;gap:8px">
                 <span style="width:8px;height:8px;border-radius:50%;background:#c22730;animation:pulse 1s infinite"></span>
-                <span style="font-size:12px;color:#a3202a;font-weight:600">Listening â€” next turn will appear hereâ€¦ {{ recClock }}</span>
+                <span style="font-size:12px;color:#a3202a;font-weight:600">Listening — next turn will appear here… {{ recClock }}</span>
               </div>
             </div>
           </sc-if>
           </div>
           <div style="display:flex;gap:9px;align-items:center;background:#dfe7ea;padding:8px 14px;flex-wrap:wrap">
-            <span style="{{ badgeStyle }}">2</span><span style="font-size:10.5px;color:#475569">â–¶ replays that exact audio span</span>
+            <span style="{{ badgeStyle }}">2</span><span style="font-size:10.5px;color:#475569">Play replays that exact audio span</span>
             <span style="{{ badgeStyle }}">3</span><span style="font-size:10.5px;color:#475569">amber = high-risk speech</span>
-            <span style="{{ badgeStyle }}">4</span><span style="font-size:10.5px;color:#475569">teal chip â†’ note sentence</span>
+            <span style="{{ badgeStyle }}">4</span><span style="font-size:10.5px;color:#475569">teal chip → note sentence</span>
           </div>
         </div>
 
@@ -261,7 +267,7 @@
         <div style="background:#fff;border:1px solid #dde4e8;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;position:sticky;top:14px">
           <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid #dde4e8;background:#fbfcfd">
             <span style="{{ badgeStyle }}">6</span>
-            <div style="flex:1"><div style="font-size:13px;font-weight:700">Live verification</div><div style="font-size:10.5px;color:#5b6b74">Flags raised as the AI listens â€” resolve them here, next to the evidence</div></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:700">Live verification</div><div style="font-size:10.5px;color:#5b6b74">Flags raised as the AI listens — resolve them here, next to the evidence</div></div>
             <span style="{{ flagChipStyle }}">{{ flagChipLabel }}</span>
           </div>
           <div style="padding:10px 12px;display:flex;flex-direction:column;gap:8px;overflow:auto">
@@ -272,7 +278,7 @@
                   <span style="font-size:10.5px;font-weight:700;color:#5b6b74;text-transform:uppercase;letter-spacing:.04em">{{ tk.cat }}</span>
                   <span style="font-size:9.5px;color:#8a979e;font-family:ui-monospace,Menlo,monospace;margin-left:auto">{{ tk.ref }}</span>
                 </div>
-                <div style="font-size:12px;margin-top:6px;line-height:1.45">â€œ{{ tk.sentence }}â€</div>
+                <div style="font-size:12px;margin-top:6px;line-height:1.45">“{{ tk.sentence }}”</div>
                 <div style="font-size:10.5px;color:#8a4b0f;background:#fdf3e0;border-radius:7px;padding:6px 9px;margin-top:6px">{{ tk.why }}</div>
                 <sc-if value="{{ tk.isOpen }}" hint-placeholder-val="{{ false }}">
                   <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
@@ -282,12 +288,12 @@
                   </div>
                 </sc-if>
                 <sc-if value="{{ tk.resolution }}" hint-placeholder-val="{{ false }}">
-                  <div style="font-size:11px;color:#1f7a3d;font-weight:600;margin-top:8px">âœ“ {{ tk.resolution }}</div>
+                  <div style="font-size:11px;color:#1f7a3d;font-weight:600;margin-top:8px">OK {{ tk.resolution }}</div>
                 </sc-if>
               </div>
             </sc-for>
             <sc-if value="{{ allResolved }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#e3f1e7;border:1px solid #b9dcc3;border-radius:10px;padding:10px 12px;font-size:11.5px;color:#1f7a3d;font-weight:600">âœ“ All flags resolved â€” the sign gate is open. <a href="#" onClick="{{ goWritebackLink }}" style="font-weight:700">Go to Write-back â†’</a></div>
+              <div style="background:#e3f1e7;border:1px solid #b9dcc3;border-radius:10px;padding:10px 12px;font-size:11.5px;color:#1f7a3d;font-weight:600">OK All flags resolved — the sign gate is open. <a href="#" onClick="{{ goWritebackLink }}" style="font-weight:700">Go to Write-back →</a></div>
             </sc-if>
           </div>
         </div>
@@ -300,8 +306,8 @@
         <div style="max-width:900px;margin:0 auto;padding:18px 22px 30px;display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;align-items:center;gap:10px">
             <span style="{{ badgeStyle }}">1</span>
-            <h2 style="margin:0;font-size:17px;font-weight:700">Draft note â€” SOAP</h2>
-            <span style="font-size:10.5px;color:#5b6b74;font-family:ui-monospace,Menlo,monospace">template: Primary-care SOAP v12 Â· model: scribe-v3.2</span>
+            <h2 style="margin:0;font-size:17px;font-weight:700">Draft note — SOAP</h2>
+            <span style="font-size:10.5px;color:#5b6b74;font-family:ui-monospace,Menlo,monospace">template: Primary-care SOAP v12 · model: scribe-v3.2</span>
             <div style="flex:1"></div>
             <span style="{{ badgeStyle }}">5</span>
             <button onClick="{{ trySign }}" style="{{ signBtnStyle }}" style-hover="filter:brightness(1.05)">{{ signBtnLabel }}</button>
@@ -329,7 +335,7 @@
           </sc-for>
           <div style="display:flex;gap:8px;align-items:center;background:#eaeef2;border-radius:10px;padding:8px 12px">
             <span style="{{ badgeStyle }}">3</span>
-            <span style="font-size:11px;color:#475569">Red / amber chips are unresolved review flags. The <strong>Sign</strong> button stays locked until every flag is cleared in the live verification panel (Transcript tab) â€” this is the safety gate.</span>
+            <span style="font-size:11px;color:#475569">Red / amber chips are unresolved review flags. The <strong>Sign</strong> button stays locked until every flag is cleared in the live verification panel (Transcript tab) — this is the safety gate.</span>
           </div>
         </div>
       </sc-if>
@@ -346,11 +352,11 @@
                   <div style="font-size:12px;font-weight:700;margin-top:6px">{{ st.name }}</div>
                   <div style="font-size:10.5px;color:#5b6b74;margin-top:2px;line-height:1.4">{{ st.desc }}</div>
                 </div>
-                <sc-if value="{{ st.arrow }}" hint-placeholder-val="{{ false }}"><div style="font-size:16px;color:#b9c4ca;flex:none">â†’</div></sc-if>
+                <sc-if value="{{ st.arrow }}" hint-placeholder-val="{{ false }}"><div style="font-size:16px;color:#b9c4ca;flex:none">→</div></sc-if>
               </div>
             </sc-for>
           </div>
-          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">1</span><h3 style="margin:0;font-size:14px;font-weight:700">The five provenance classes â€” every note sentence is exactly one of these</h3></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">1</span><h3 style="margin:0;font-size:14px;font-weight:700">The five provenance classes — every note sentence is exactly one of these</h3></div>
           <div style="display:flex;flex-direction:column;gap:8px">
             <sc-for list="{{ provLegend }}" as="p" hint-placeholder-count="5">
               <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:center">
@@ -361,7 +367,7 @@
               </div>
             </sc-for>
           </div>
-          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">3</span><h3 style="margin:0;font-size:14px;font-weight:700">Inspect any sentence</h3><span style="font-size:11.5px;color:#5b6b74">â€” tap one to open its full evidence card</span></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">3</span><h3 style="margin:0;font-size:14px;font-weight:700">Inspect any sentence</h3><span style="font-size:11.5px;color:#5b6b74">— tap one to open its full evidence card</span></div>
           <div style="display:flex;flex-wrap:wrap;gap:6px">
             <sc-for list="{{ allSentChips }}" as="sc" hint-placeholder-count="6">
               <button onClick="{{ sc.open }}" style="{{ sc.style }}" style-hover="filter:brightness(.97)">{{ sc.label }}</button>
@@ -376,7 +382,7 @@
         <div style="max-width:1064px;margin:0 auto;display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;align-items:center;gap:10px;justify-content:center">
             <span style="{{ badgeStyle }}">1</span>
-            <span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7a7261">Patient portal preview Â· what Adaeze sees on her phone</span>
+            <span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7a7261">Patient portal preview · what Adaeze sees on her phone</span>
           </div>
           <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start">
           <div style="min-width:0">
@@ -385,17 +391,17 @@
             <div style="padding:30px 42px 24px;border-bottom:1px solid #efe9dc">
               <div style="display:flex;align-items:baseline;justify-content:space-between">
                 <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#0f766e">Riverside Family Practice</div>
-                <div style="font-size:11.5px;color:#9a917e;font-family:Newsreader,Georgia,serif;font-style:italic">Monday 6 July Â· 09:15</div>
+                <div style="font-size:11.5px;color:#9a917e;font-family:Newsreader,Georgia,serif;font-style:italic">Monday 6 July · 09:15</div>
               </div>
               <div style="font-family:Newsreader,Georgia,serif;font-size:31px;font-weight:500;line-height:1.15;margin-top:14px;color:#241f14">Your visit summary, Adaeze</div>
-              <div style="font-size:12.5px;color:#7a7261;margin-top:8px">Written with your doctor Â· reviewed and signed by <strong style="color:#3d382a">Dr. Hassan</strong></div>
+              <div style="font-size:12.5px;color:#7a7261;margin-top:8px">Written with your doctor · reviewed and signed by <strong style="color:#3d382a">Dr. Hassan</strong></div>
             </div>
 
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid #efe9dc">
               <div style="padding:20px 24px 18px;border-right:1px solid #efe9dc">
                 <div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9a917e">Blood pressure today</div>
                 <div style="font-family:Newsreader,Georgia,serif;font-size:30px;font-weight:500;color:#241f14;margin-top:6px">142<span style="color:#b3a88f">/</span>88</div>
-                <div style="font-size:11px;color:#0f766e;font-weight:600;margin-top:3px">Improving â†˜</div>
+                <div style="font-size:11px;color:#0f766e;font-weight:600;margin-top:3px">Improving ↘</div>
               </div>
               <div style="padding:20px 24px 18px;border-right:1px solid #efe9dc">
                 <div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9a917e">Your target</div>
@@ -421,7 +427,7 @@
                   </div>
                 </div>
               </sc-for>
-              <div style="font-family:Newsreader,Georgia,serif;font-style:italic;font-size:12.5px;color:#9a917e;border-top:1px solid #efe9dc;padding-top:14px;margin-top:14px">Underlined medical terms open a glossary. If anything here doesn't match your memory of the visit, use â€œNot right?â€ beside it â€” your doctor will respond within five working days.</div>
+              <div style="font-family:Newsreader,Georgia,serif;font-style:italic;font-size:12.5px;color:#9a917e;border-top:1px solid #efe9dc;padding-top:14px;margin-top:14px">Underlined medical terms open a glossary. If anything here doesn't match your memory of the visit, use “Not right?” beside it — your doctor will respond within five working days.</div>
             </div>
           </div>
           </div>
@@ -432,12 +438,12 @@
               <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">2</span><div style="font-family:Newsreader,Georgia,serif;font-size:16px;font-weight:600;color:#241f14">Review &amp; sign</div></div>
               <div style="font-size:11.5px;color:#7a7261;line-height:1.55;margin-top:6px">{{ ackHint }}</div>
               <sc-if value="{{ notAcked }}" hint-placeholder-val="{{ false }}">
-                <button onClick="{{ patientAck }}" style="font-family:inherit;width:100%;margin-top:12px;font-size:12.5px;font-weight:700;border-radius:10px;padding:11px;border:none;cursor:pointer;background:#241f14;color:#fdfcf9;box-shadow:0 6px 14px rgba(36,31,20,.25)" style-hover="filter:brightness(1.25)">âœ I've read this â€” sign &amp; approve</button>
+                <button onClick="{{ patientAck }}" style="font-family:inherit;width:100%;margin-top:12px;font-size:12.5px;font-weight:700;border-radius:10px;padding:11px;border:none;cursor:pointer;background:#241f14;color:#fdfcf9;box-shadow:0 6px 14px rgba(36,31,20,.25)" style-hover="filter:brightness(1.25)">I've read this — sign &amp; approve</button>
               </sc-if>
               <sc-if value="{{ patientAcked }}" hint-placeholder-val="{{ false }}">
                 <div style="border:1px dashed #d8d0bd;border-radius:10px;padding:12px 14px;margin-top:12px;text-align:center;background:#fbf8f1">
                   <div style="font-family:Newsreader,Georgia,serif;font-style:italic;font-size:22px;color:#241f14">Adaeze Okafor</div>
-                  <div style="font-size:9.5px;color:#9a917e;margin-top:3px;letter-spacing:.09em">SIGNED Â· TODAY 09:56 Â· IDENTITY VERIFIED VIA PORTAL</div>
+                  <div style="font-size:9.5px;color:#9a917e;margin-top:3px;letter-spacing:.09em">SIGNED · TODAY 09:56 · IDENTITY VERIFIED VIA PORTAL</div>
                 </div>
               </sc-if>
             </div>
@@ -446,17 +452,17 @@
               <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">3</span><div style="font-family:Newsreader,Georgia,serif;font-size:16px;font-weight:600;color:#241f14">Send to my record</div></div>
               <div style="font-size:11.5px;color:#7a7261;line-height:1.55;margin-top:6px">{{ pushHint }}</div>
               <sc-if value="{{ notPushed }}" hint-placeholder-val="{{ false }}">
-                <button onClick="{{ pushEHR }}" style="{{ pushBtnStyle }}" style-hover="filter:brightness(1.08)">â¬† Push to EHR</button>
+                <button onClick="{{ pushEHR }}" style="{{ pushBtnStyle }}" style-hover="filter:brightness(1.08)">⬆ Push to EHR</button>
               </sc-if>
               <sc-if value="{{ pushed }}" hint-placeholder-val="{{ false }}">
-                <div style="background:#eaf3ec;border:1px solid #cfe3d4;border-radius:10px;padding:10px 13px;margin-top:12px;font-size:11.5px;color:#1f7a3d;font-weight:600;line-height:1.6">âœ“ In your medical record<br/><span style="font-family:ui-monospace,Menlo,monospace;font-weight:400;color:#4a7a58">Encounter #E-20481 Â· 09:58</span></div>
+                <div style="background:#eaf3ec;border:1px solid #cfe3d4;border-radius:10px;padding:10px 13px;margin-top:12px;font-size:11.5px;color:#1f7a3d;font-weight:600;line-height:1.6">OK In your medical record<br/><span style="font-family:ui-monospace,Menlo,monospace;font-weight:400;color:#4a7a58">Encounter #E-20481 · 09:58</span></div>
               </sc-if>
             </div>
 
           <sc-if value="{{ flaggingPara }}" hint-placeholder-val="{{ false }}">
             <div style="background:#fdfcf9;border:1px solid #e7e1d3;border-left:3px solid #0f766e;border-radius:16px;padding:20px 26px;box-shadow:0 12px 28px rgba(70,58,30,.08)">
               <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">4</span><div style="font-family:Newsreader,Georgia,serif;font-size:16px;font-weight:600;color:#241f14">Tell us what's not right</div></div>
-              <div style="font-size:12px;color:#9a917e;margin-top:3px;font-style:italic;font-family:Newsreader,Georgia,serif">â€œ{{ flaggingText }}â€</div>
+              <div style="font-size:12px;color:#9a917e;margin-top:3px;font-style:italic;font-family:Newsreader,Georgia,serif">“{{ flaggingText }}”</div>
               <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
                 <sc-for list="{{ correctionReasons }}" as="cr" hint-placeholder-count="4">
                   <button onClick="{{ cr.pick }}" style="{{ cr.style }}" style-hover="filter:brightness(.97)">{{ cr.label }}</button>
@@ -478,7 +484,7 @@
           <sc-if value="{{ noCorrection }}" hint-placeholder-val="{{ false }}">
             <div style="border:1px dashed #d8d0bd;border-radius:14px;padding:14px 18px">
               <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">4</span><div style="font-size:12px;font-weight:700;color:#7a7261">Corrections</div></div>
-              <div style="font-size:11px;color:#9a917e;line-height:1.55;margin-top:4px">Spotted something wrong? Tap â€œâš‘ Not right?â€ beside any line of the summary â€” it becomes a tracked request your doctor must answer.</div>
+              <div style="font-size:11px;color:#9a917e;line-height:1.55;margin-top:4px">Spotted something wrong? Tap “Not right?” beside any line of the summary — it becomes a tracked request your doctor must answer.</div>
             </div>
           </sc-if>
           </div>
@@ -491,7 +497,7 @@
       <sc-if value="{{ isWriteback }}" hint-placeholder-val="{{ false }}">
         <div style="padding:20px 22px;display:grid;grid-template-columns:1.35fr 1fr;gap:18px">
           <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">1</span><h3 style="margin:0;font-size:14px;font-weight:700">Field mapping â€” app note â†’ EHR chart</h3></div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">1</span><h3 style="margin:0;font-size:14px;font-weight:700">Field mapping — app note → EHR chart</h3></div>
             <div style="display:flex;flex-direction:column;gap:7px">
               <sc-for list="{{ mappings }}" as="m" hint-placeholder-count="6">
                 <div style="display:flex;align-items:center;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px">
@@ -517,18 +523,18 @@
             </div>
             <sc-if value="{{ signed }}" hint-placeholder-val="{{ false }}">
               <div style="background:#e3f1e7;border:1px solid #b9dcc3;border-radius:14px;padding:16px 18px">
-                <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">4</span><div style="font-size:14px;font-weight:700;color:#1f7a3d">Signed by Dr. Hassan âœ“</div></div>
-                <div style="font-size:11.5px;color:#3d6b4a;margin-top:6px;line-height:1.6">09:52 Â· Content hash <span style="font-family:ui-monospace,Menlo,monospace">a91fâ€¦c47e</span> Â· provenance frozen<br/>{{ wbPatientLine }}</div>
+                <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">4</span><div style="font-size:14px;font-weight:700;color:#1f7a3d">Signed by Dr. Hassan OK</div></div>
+                <div style="font-size:11.5px;color:#3d6b4a;margin-top:6px;line-height:1.6">09:52 · Content hash <span style="font-family:ui-monospace,Menlo,monospace">a91f…c47e</span> · provenance frozen<br/>{{ wbPatientLine }}</div>
                 <sc-if value="{{ notPushed }}" hint-placeholder-val="{{ false }}">
-                  <button onClick="{{ pushEHR }}" style="{{ pushBtnStyleWB }}" style-hover="filter:brightness(1.08)">â¬† Push to EHR</button>
+                  <button onClick="{{ pushEHR }}" style="{{ pushBtnStyleWB }}" style-hover="filter:brightness(1.08)">⬆ Push to EHR</button>
                 </sc-if>
                 <sc-if value="{{ pushed }}" hint-placeholder-val="{{ false }}">
-                  <div style="background:#fff;border:1px solid #cfe3d4;border-radius:10px;padding:9px 12px;margin-top:10px;font-size:11px;color:#1f7a3d;font-weight:600;line-height:1.6">âœ“ Written to EHR via FHIR DocumentReference Â· 09:58<br/><span style="font-family:ui-monospace,Menlo,monospace;font-weight:400;color:#4a7a58">audit pointer â†’ encounter #E-20481</span></div>
+                  <div style="background:#fff;border:1px solid #cfe3d4;border-radius:10px;padding:9px 12px;margin-top:10px;font-size:11px;color:#1f7a3d;font-weight:600;line-height:1.6">OK Written to EHR via FHIR DocumentReference · 09:58<br/><span style="font-family:ui-monospace,Menlo,monospace;font-weight:400;color:#4a7a58">audit pointer → encounter #E-20481</span></div>
                 </sc-if>
               </div>
             </sc-if>
             <sc-if value="{{ notSigned }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#eaeef2;border-radius:12px;padding:12px 14px;font-size:11.5px;color:#475569">Order of operations: clinician signs (hash + identity recorded) â†’ patient reads and counter-signs in her portal â†’ note is pushed to the EHR. Nothing reaches the legal record before both signatures.</div>
+              <div style="background:#eaeef2;border-radius:12px;padding:12px 14px;font-size:11.5px;color:#475569">Order of operations: clinician signs (hash + identity recorded) → patient reads and counter-signs in her portal → note is pushed to the EHR. Nothing reaches the legal record before both signatures.</div>
             </sc-if>
           </div>
         </div>
@@ -537,16 +543,16 @@
       <!-- ============ 9. GOVERNANCE ============ -->
       <sc-if value="{{ isGov }}" hint-placeholder-val="{{ false }}">
         <div style="padding:20px 22px;display:flex;flex-direction:column;gap:14px">
-          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">1</span><h2 style="margin:0;font-size:17px;font-weight:700">Governance analytics â€” for safety &amp; informatics leads, not clinicians</h2></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">1</span><h2 style="margin:0;font-size:17px;font-weight:700">Governance analytics — for safety &amp; informatics leads, not clinicians</h2></div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
             <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">Blocked sign attempts (wk)</div><div style="font-size:22px;font-weight:700;margin-top:4px">{{ govAttempts }}</div><div style="font-size:10.5px;color:#5b6b74;margin-top:2px">Each one is a prevented unsafe note</div></div>
             <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">Open patient corrections</div><div style="font-size:22px;font-weight:700;margin-top:4px">{{ govCorrections }}</div><div style="font-size:10.5px;color:#5b6b74;margin-top:2px">SLA: 5 working days</div></div>
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">Hallucination reports (mo)</div><div style="font-size:22px;font-weight:700;margin-top:4px">7</div><div style="font-size:10.5px;color:#92610c;margin-top:2px">3 traced to scribe-v3.1 â†’ vendor ticket</div></div>
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">After-hours charting</div><div style="font-size:22px;font-weight:700;margin-top:4px">âˆ’31%</div><div style="font-size:10.5px;color:#1f7a3d;margin-top:2px">vs pre-pilot baseline</div></div>
+            <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">Hallucination reports (mo)</div><div style="font-size:22px;font-weight:700;margin-top:4px">7</div><div style="font-size:10.5px;color:#92610c;margin-top:2px">3 traced to scribe-v3.1 → vendor ticket</div></div>
+            <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">After-hours charting</div><div style="font-size:22px;font-weight:700;margin-top:4px">−31%</div><div style="font-size:10.5px;color:#1f7a3d;margin-top:2px">vs pre-pilot baseline</div></div>
           </div>
           <div style="display:grid;grid-template-columns:1.1fr 1fr 0.95fr;gap:14px">
             <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">2</span><h3 style="margin:0;font-size:13.5px;font-weight:700">Error taxonomy â€” flags raised this month</h3></div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">2</span><h3 style="margin:0;font-size:13.5px;font-weight:700">Error taxonomy — flags raised this month</h3></div>
               <div style="display:flex;flex-direction:column;gap:9px">
                 <sc-for list="{{ govBars }}" as="b" hint-placeholder-count="5">
                   <div>
@@ -559,11 +565,11 @@
             <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">3</span><h3 style="margin:0;font-size:13.5px;font-weight:700">Model &amp; template version registry</h3></div>
               <div style="display:flex;flex-direction:column;gap:7px;font-size:12px">
-                <div style="display:flex;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px;align-items:center"><span style="font-family:ui-monospace,Menlo,monospace;font-weight:700">scribe-v3.2</span><span style="color:#5b6b74;flex:1">ASR + drafting Â· live since 12 Jun</span><span style="font-size:10.5px;font-weight:700;background:#e3f1e7;color:#1f7a3d;padding:3px 9px;border-radius:12px">Active</span></div>
-                <div style="display:flex;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px;align-items:center"><span style="font-family:ui-monospace,Menlo,monospace;font-weight:700">scribe-v3.1</span><span style="color:#5b6b74;flex:1">Retired Â· drift in negation handling</span><span style="font-size:10.5px;font-weight:700;background:#fdecec;color:#a3202a;padding:3px 9px;border-radius:12px">Under review</span></div>
-                <div style="display:flex;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px;align-items:center"><span style="font-family:ui-monospace,Menlo,monospace;font-weight:700">SOAP v12</span><span style="color:#5b6b74;flex:1">Note template Â· approved by informatics 02 May</span><span style="font-size:10.5px;font-weight:700;background:#e3f1e7;color:#1f7a3d;padding:3px 9px;border-radius:12px">Active</span></div>
+                <div style="display:flex;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px;align-items:center"><span style="font-family:ui-monospace,Menlo,monospace;font-weight:700">scribe-v3.2</span><span style="color:#5b6b74;flex:1">ASR + drafting · live since 12 Jun</span><span style="font-size:10.5px;font-weight:700;background:#e3f1e7;color:#1f7a3d;padding:3px 9px;border-radius:12px">Active</span></div>
+                <div style="display:flex;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px;align-items:center"><span style="font-family:ui-monospace,Menlo,monospace;font-weight:700">scribe-v3.1</span><span style="color:#5b6b74;flex:1">Retired · drift in negation handling</span><span style="font-size:10.5px;font-weight:700;background:#fdecec;color:#a3202a;padding:3px 9px;border-radius:12px">Under review</span></div>
+                <div style="display:flex;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px;align-items:center"><span style="font-family:ui-monospace,Menlo,monospace;font-weight:700">SOAP v12</span><span style="color:#5b6b74;flex:1">Note template · approved by informatics 02 May</span><span style="font-size:10.5px;font-weight:700;background:#e3f1e7;color:#1f7a3d;padding:3px 9px;border-radius:12px">Active</span></div>
               </div>
-              <div style="font-size:11px;color:#475569;background:#eaeef2;border-radius:8px;padding:8px 11px;margin-top:10px">Every signed note records which model + template versions produced it â€” so vendor behaviour changes can never silently alter the record.</div>
+              <div style="font-size:11px;color:#475569;background:#eaeef2;border-radius:8px;padding:8px 11px;margin-top:10px">Every signed note records which model + template versions produced it — so vendor behaviour changes can never silently alter the record.</div>
             </div>
             <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">4</span><h3 style="margin:0;font-size:13.5px;font-weight:700">Patient corrections (VOICE)</h3></div>
@@ -575,7 +581,7 @@
                   </div>
                 </sc-for>
               </div>
-              <div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;background:#eaeef2;border-radius:8px;padding:8px 11px;margin-top:10px"><span>Median response time</span><strong>2.1 days Â· SLA 5 days</strong></div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;background:#eaeef2;border-radius:8px;padding:8px 11px;margin-top:10px"><span>Median response time</span><strong>2.1 days · SLA 5 days</strong></div>
             </div>
           </div>
           <div style="background:#1a2b33;border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:28px;color:#fff">
@@ -584,7 +590,7 @@
             <div style="width:1px;height:36px;background:rgba(255,255,255,.16);flex:none"></div>
             <div style="flex:1"><div style="font-size:21px;font-weight:700">$1.84</div><div style="font-size:10.5px;color:#a9bcc4">cost per assisted note</div></div>
             <div style="flex:1"><div style="font-size:21px;font-weight:700">6.2 min</div><div style="font-size:10.5px;color:#a9bcc4">clinician time saved per visit</div></div>
-            <div style="flex:1"><div style="font-size:21px;font-weight:700">âˆ’31%</div><div style="font-size:10.5px;color:#a9bcc4">after-hours charting</div></div>
+            <div style="flex:1"><div style="font-size:21px;font-weight:700">−31%</div><div style="font-size:10.5px;color:#a9bcc4">after-hours charting</div></div>
             <div style="flex:1"><div style="font-size:21px;font-weight:700">$21k</div><div style="font-size:10.5px;color:#a9bcc4">quarterly reinvestment pool</div></div>
           </div>
         </div>
@@ -595,11 +601,11 @@
         <sc-if value="{{ drawerData }}" hint-placeholder-val="{{ false }}">
           <div style="display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid #dde4e8">
             <span style="{{ badgeStyle }}">4</span>
-            <div style="font-size:13px;font-weight:700;flex:1">Evidence Â· sentence {{ drawerData.sid }}</div>
-            <button onClick="{{ closeDrawer }}" style="background:#eef2f4;border:none;border-radius:8px;width:26px;height:26px;font-size:13px;cursor:pointer;color:#5b6b74;font-family:inherit">âœ•</button>
+            <div style="font-size:13px;font-weight:700;flex:1">Evidence · sentence {{ drawerData.sid }}</div>
+            <button onClick="{{ closeDrawer }}" style="background:#eef2f4;border:none;border-radius:8px;width:26px;height:26px;font-size:13px;cursor:pointer;color:#5b6b74;font-family:inherit">✕</button>
           </div>
           <div style="padding:14px 16px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:12px">
-            <div style="font-size:13px;line-height:1.55;background:#f6f9fa;border-radius:10px;padding:10px 12px">â€œ{{ drawerData.text }}â€</div>
+            <div style="font-size:13px;line-height:1.55;background:#f6f9fa;border-radius:10px;padding:10px 12px">“{{ drawerData.text }}”</div>
             <div style="display:flex;align-items:center;gap:8px">
               <span style="{{ drawerData.tokStyle }}">{{ drawerData.prov }}</span>
               <div><div style="font-size:12.5px;font-weight:700">{{ drawerData.provName }}</div><div style="font-size:11px;color:#5b6b74">{{ drawerData.provDesc }}</div></div>
@@ -611,7 +617,7 @@
                   <sc-for list="{{ drawerData.turns }}" as="dt" hint-placeholder-count="2">
                     <div style="border:1px solid #e4eaed;border-radius:10px;padding:8px 10px">
                       <div style="display:flex;align-items:center;gap:7px"><span style="{{ dt.nameStyle }}">{{ dt.name }}</span><span style="font-size:10px;color:#8a979e;font-family:ui-monospace,Menlo,monospace">{{ dt.time }}</span><button onClick="{{ dt.play }}" style="{{ dt.playStyle }}">{{ dt.playIcon }}</button></div>
-                      <div style="font-size:12px;margin-top:4px;line-height:1.5;color:#33454e">â€œ{{ dt.text }}â€</div>
+                      <div style="font-size:12px;margin-top:4px;line-height:1.5;color:#33454e">“{{ dt.text }}”</div>
                     </div>
                   </sc-for>
                 </div>
@@ -639,7 +645,7 @@
     <div style="background:#1a2b33;color:#fff;border-radius:14px 14px 0 0;padding:16px 18px">
       <div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7fb8b1">Engineer walkthrough</div>
       <div style="font-size:16px;font-weight:700;margin-top:4px">{{ explain.title }}</div>
-      <div style="font-size:11px;color:#a9bcc4;margin-top:2px">Screen {{ explain.step }} of 8 Â· numbered dots on the left match the list below</div>
+      <div style="font-size:11px;color:#a9bcc4;margin-top:2px">Screen {{ explain.step }} of 8 · numbered dots on the left match the list below</div>
     </div>
     <div style="background:#fff;border:1px solid #dde4e8;border-top:none;border-radius:0 0 14px 14px;padding:16px 18px;display:flex;flex-direction:column;gap:14px;overflow:auto;flex:1">
       <div>
@@ -665,11 +671,11 @@
         <div style="font-size:11px;font-weight:700;color:#0b5a54;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Try it now</div>
         <div style="display:flex;flex-direction:column;gap:4px">
           <sc-for list="{{ explain.tries }}" as="tr" hint-placeholder-count="2">
-            <div style="font-size:11.5px;line-height:1.55;color:#0b5a54">â–¸ {{ tr }}</div>
+            <div style="font-size:11.5px;line-height:1.55;color:#0b5a54">▸ {{ tr }}</div>
           </sc-for>
         </div>
       </div>
-      <div style="font-size:10.5px;color:#8a979e;line-height:1.55;border-top:1px solid #eef2f4;padding-top:10px">All patient data is synthetic. Concept follows the â€œAI scribe system design workbookâ€ â€” a governed documentation cockpit: <em>listen â†’ transcribe â†’ draft â†’ explain â†’ verify â†’ write back</em>, with nothing entering the legal record until flagged uncertainty is resolved by the clinician.</div>
+      <div style="font-size:10.5px;color:#8a979e;line-height:1.55;border-top:1px solid #eef2f4;padding-top:10px">All patient data is synthetic. Concept follows the “AI scribe system design workbook” — a governed documentation cockpit: <em>listen → transcribe → draft → explain → verify → write back</em>, with nothing entering the legal record until flagged uncertainty is resolved by the clinician.</div>
     </div>
   </div>
 
@@ -712,24 +718,24 @@ class Component extends DCLogic {
   // ---------- static data ----------
   get PROV() {
     return {
-      TG: { name: 'Transcript grounded', color: '#0f766e', bg: '#e4f2f0', bd: '#bcdcd7', desc: 'Taken directly from what was said. Verify by replaying the linked audio span.', sign: 'Sign-off: verifiable against the recording â€” lowest review burden.' },
+      TG: { name: 'Transcript grounded', color: '#0f766e', bg: '#e4f2f0', bd: '#bcdcd7', desc: 'Taken directly from what was said. Verify by replaying the linked audio span.', sign: 'Sign-off: verifiable against the recording — lowest review burden.' },
       MS: { name: 'Model summarised', color: '#6d4fa1', bg: '#efeaf7', bd: '#d8cdec', desc: 'The AI compressed or rephrased one or more utterances. Meaning may have shifted.', sign: 'Sign-off: clinician must check the abstraction and who actually said it.' },
       TP: { name: 'Template / copied forward', color: '#92610c', bg: '#faf0dc', bd: '#ecd9ab', desc: 'Came from a template or a previous note, not from this conversation.', sign: 'Sign-off: clinician must confirm it still applies to this encounter.' },
-      CA: { name: 'Clinician authored', color: '#475569', bg: '#eaeef2', bd: '#d3dbe1', desc: 'Typed by the clinician. Human authorship is recorded as such.', sign: 'Sign-off: no transcript support needed â€” the human is the source.' },
+      CA: { name: 'Clinician authored', color: '#475569', bg: '#eaeef2', bd: '#d3dbe1', desc: 'Typed by the clinician. Human authorship is recorded as such.', sign: 'Sign-off: no transcript support needed — the human is the source.' },
       CV: { name: 'Clinician verified', color: '#1f7a3d', bg: '#e3f1e7', bd: '#b9dcc3', desc: 'Machine text explicitly reviewed and accepted (or corrected) by the clinician.', sign: 'Sign-off: the review action is on the audit ledger with identity + time.' }
     };
   }
 
   get TURNS() {
     return [
-      { id: 'T1', role: 'c', time: '00:04', text: 'Good morning Adaeze â€” how have you been since we increased the lisinopril?', flags: [], links: ['S1'] },
+      { id: 'T1', role: 'c', time: '00:04', text: 'Good morning Adaeze — how have you been since we increased the lisinopril?', flags: [], links: ['S1'] },
       { id: 'T2', role: 'p', time: '00:11', text: 'Better, I think. But I get a bit dizzy in the mornings sometimes.', flags: [], links: ['S1', 'S2'] },
-      { id: 'T3', role: 'c', time: '00:26', text: 'Are you taking it ten milligrams, once daily?', flags: [{ label: 'âš  â€œten milligramsâ€ heard at 71%', kind: 'warn' }], links: ['S8'] },
-      { id: 'T4', role: 'p', time: '00:31', text: 'Yesâ€¦ well, most days. I missed a few last week.', flags: [{ label: 'âš  brief yes/no cue', kind: 'warn' }], links: ['S3'] },
+      { id: 'T3', role: 'c', time: '00:26', text: 'Are you taking it ten milligrams, once daily?', flags: [{ label: 'Check: “ten milligrams” heard at 71%', kind: 'warn' }], links: ['S8'] },
+      { id: 'T4', role: 'p', time: '00:31', text: 'Yes… well, most days. I missed a few last week.', flags: [{ label: 'Check: brief yes/no cue', kind: 'warn' }], links: ['S3'] },
       { id: 'T5', role: 'c', time: '00:48', text: 'Any chest pain, palpitations, or swelling in your ankles?', flags: [], links: [] },
-      { id: 'T6', role: 'p', time: '00:55', text: 'No chest pain. My ankles were a little puffy on Friday though.', flags: [{ label: 'âš  negation â€” check what was denied', kind: 'warn' }], links: ['S4', 'S5'] },
-      { id: 'T7', role: 'c', time: '02:10', text: 'Your blood pressure today is 142 over 88.', flags: [{ label: 'â„– number â€” verified 98%', kind: 'ok' }], links: ['S6'] },
-      { id: 'T8', role: 'p', time: '02:31', text: 'Is that still high? My sister says I should try garlic tablets.', flags: [{ label: 'âš  attribution â€” reported speech', kind: 'warn' }], links: ['S9'] },
+      { id: 'T6', role: 'p', time: '00:55', text: 'No chest pain. My ankles were a little puffy on Friday though.', flags: [{ label: 'Check: negation — check what was denied', kind: 'warn' }], links: ['S4', 'S5'] },
+      { id: 'T7', role: 'c', time: '02:10', text: 'Your blood pressure today is 142 over 88.', flags: [{ label: '№ number — verified 98%', kind: 'ok' }], links: ['S6'] },
+      { id: 'T8', role: 'p', time: '02:31', text: 'Is that still high? My sister says I should try garlic tablets.', flags: [{ label: 'Check: attribution — reported speech', kind: 'warn' }], links: ['S9'] },
       { id: 'T9', role: 'c', time: '03:02', text: 'It has improved but it is not at target yet. Let us check your kidney function and review in four weeks.', flags: [], links: ['S10', 'S11'] },
       { id: 'T10', role: 'p', time: '03:15', text: 'Okay, that works for me.', flags: [], links: [] }
     ];
@@ -754,22 +760,22 @@ class Component extends DCLogic {
 
   get TASKS() {
     return [
-      { id: 't1', sev: 'HIGH', cat: 'Medication', ref: 'S8 â† T3', sid: 'S8',
-        why: 'The dose â€œten milligramsâ€ was transcribed at only 71% ASR confidence. Wrong doses are the highest-harm scribe error, so this blocks signing until a human confirms it.',
-        actions: [{ label: 'â–¶ Replay T3', kind: 'ghost', act: 'play', turn: 'T3' }, { label: 'âœ“ Verify â€” dose is correct', kind: 'primary', act: 'verify' }],
-        resolvedMsg: 'Dose confirmed against audio â€” sentence promoted to CV' },
-      { id: 't2', sev: 'HIGH', cat: 'Negation', ref: 'S4 â† T5, T6', sid: 'S4',
-        why: 'The patient said â€œno chest painâ€ but never answered about palpitations. The AI generalised the denial â€” an invented negative finding is a classic hallucination.',
-        actions: [{ label: 'âœŽ Rephrase: â€œpalpitations not discussedâ€', kind: 'primary', act: 'rephrase', newText: 'Denies chest pain; palpitations not discussed.' }, { label: 'ðŸ—‘ Remove sentence', kind: 'ghost', act: 'remove' }],
-        resolvedMsg: 'Rephrased to match the evidence â€” sentence promoted to CV' },
-      { id: 't3', sev: 'MEDIUM', cat: 'Template carryover', ref: 'S7 Â· no utterance', sid: 'S7',
-        why: 'The weight was copied from the previous visit. Nothing in todayâ€™s conversation supports it, so the clinician must confirm it still applies.',
-        actions: [{ label: 'âœ“ Confirm â€” still applies', kind: 'primary', act: 'verify' }, { label: 'ðŸ—‘ Remove sentence', kind: 'ghost', act: 'remove' }],
-        resolvedMsg: 'Confirmed as applicable â€” sentence promoted to CV' },
-      { id: 't4', sev: 'MEDIUM', cat: 'Speaker attribution', ref: 'S9 â† T8', sid: 'S9',
-        why: 'The garlic-tablets idea came from the patientâ€™s sister, quoted by the patient. The draft turned reported speech into the patientâ€™s own intention.',
-        actions: [{ label: 'âœŽ Reattribute to reported speech', kind: 'primary', act: 'rephrase', newText: 'Patient mentions her sister suggested garlic supplements; discussed evidence and interactions.' }, { label: 'âœ“ Verify as-is', kind: 'ghost', act: 'verify' }],
-        resolvedMsg: 'Reattributed correctly â€” sentence promoted to CV' }
+      { id: 't1', sev: 'HIGH', cat: 'Medication', ref: 'S8 ← T3', sid: 'S8',
+        why: 'The dose “ten milligrams” was transcribed at only 71% ASR confidence. Wrong doses are the highest-harm scribe error, so this blocks signing until a human confirms it.',
+        actions: [{ label: 'Play Replay T3', kind: 'ghost', act: 'play', turn: 'T3' }, { label: 'OK Verify — dose is correct', kind: 'primary', act: 'verify' }],
+        resolvedMsg: 'Dose confirmed against audio — sentence promoted to CV' },
+      { id: 't2', sev: 'HIGH', cat: 'Negation', ref: 'S4 ← T5, T6', sid: 'S4',
+        why: 'The patient said “no chest pain” but never answered about palpitations. The AI generalised the denial — an invented negative finding is a classic hallucination.',
+        actions: [{ label: '✎ Rephrase: “palpitations not discussed”', kind: 'primary', act: 'rephrase', newText: 'Denies chest pain; palpitations not discussed.' }, { label: 'Remove sentence', kind: 'ghost', act: 'remove' }],
+        resolvedMsg: 'Rephrased to match the evidence — sentence promoted to CV' },
+      { id: 't3', sev: 'MEDIUM', cat: 'Template carryover', ref: 'S7 · no utterance', sid: 'S7',
+        why: 'The weight was copied from the previous visit. Nothing in today’s conversation supports it, so the clinician must confirm it still applies.',
+        actions: [{ label: 'OK Confirm — still applies', kind: 'primary', act: 'verify' }, { label: 'Remove sentence', kind: 'ghost', act: 'remove' }],
+        resolvedMsg: 'Confirmed as applicable — sentence promoted to CV' },
+      { id: 't4', sev: 'MEDIUM', cat: 'Speaker attribution', ref: 'S9 ← T8', sid: 'S9',
+        why: 'The garlic-tablets idea came from the patient’s sister, quoted by the patient. The draft turned reported speech into the patient’s own intention.',
+        actions: [{ label: '✎ Reattribute to reported speech', kind: 'primary', act: 'rephrase', newText: 'Patient mentions her sister suggested garlic supplements; discussed evidence and interactions.' }, { label: 'OK Verify as-is', kind: 'ghost', act: 'verify' }],
+        resolvedMsg: 'Reattributed correctly — sentence promoted to CV' }
     ];
   }
 
@@ -791,7 +797,7 @@ class Component extends DCLogic {
     } else {
       ov[task.sid] = Object.assign({}, ov[task.sid], { prov: 'CV' }, newText ? { text: newText } : {});
       this.setState(s => ({ overrides: ov, tasks: Object.assign({}, s.tasks, { [taskId]: 'done' }) }));
-      this.toast('Flag resolved Â· ' + task.sid + ' is now CV (clinician verified).');
+      this.toast('Flag resolved · ' + task.sid + ' is now CV (clinician verified).');
     }
   }
 
@@ -808,101 +814,101 @@ class Component extends DCLogic {
   }
 
   chipStyle(bg, color, bd) {
-    return { fontSize: '10.5px', fontWeight: 600, background: bg, color: color, padding: '3px 9px', borderRadius: '20px', border: bd ? '1px solid ' + bd : 'none', whiteSpace: 'nowrap' };
+    return { fontSize: '10.2px', fontWeight: 600, background: bg, color: color, padding: '3px 8px', borderRadius: '20px', border: bd ? '1px solid ' + bd : 'none', whiteSpace: 'normal', lineHeight: 1.16, textAlign: 'center', maxWidth: '100%' };
   }
   tokStyle(code) {
     const p = this.PROV[code];
     return { flex: 'none', fontFamily: 'ui-monospace,Menlo,monospace', fontSize: '10px', fontWeight: 700, color: p.color, background: p.bg, border: '1px solid ' + p.bd, borderRadius: '6px', padding: '2px 6px', width: '22px', textAlign: 'center', marginTop: '2px' };
   }
   btn(kind) {
-    if (kind === 'primary') return { background: '#0f766e', color: '#fff', border: 'none', borderRadius: '9px', padding: '7px 14px', fontSize: '12px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' };
-    return { background: '#fff', color: '#475569', border: '1px solid #d3dbe1', borderRadius: '9px', padding: '7px 14px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit' };
+    if (kind === 'primary') return { background: '#0f766e', color: '#fff', border: 'none', borderRadius: '9px', padding: '7px 12px', fontSize: '11.5px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'normal', lineHeight: 1.16 };
+    return { background: '#fff', color: '#475569', border: '1px solid #d3dbe1', borderRadius: '9px', padding: '7px 12px', fontSize: '11.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'normal', lineHeight: 1.16 };
   }
 
   // ---------- explainer content ----------
   get EXPLAIN() {
     return {
-      home: { step: 1, title: 'Home â€” safe-work triage', 
-        what: 'The clinicianâ€™s landing screen. One card per patient visit (â€œencounterâ€), each showing the state of its note: recorded, drafted, flagged, signed, exported.',
-        why: 'In hospitals, unfinished notes hide in scattered inboxes. This screen surfaces the riskiest work first â€” a note with an unverified drug dose outranks a merely old one.',
+      home: { step: 1, title: 'Home — safe-work triage', 
+        what: 'The clinician’s landing screen. One card per patient visit (“encounter”), each showing the state of its note: recorded, drafted, flagged, signed, exported.',
+        why: 'In hospitals, unfinished notes hide in scattered inboxes. This screen surfaces the riskiest work first — a note with an unverified drug dose outranks a merely old one.',
         components: [
           { n: 1, name: 'Encounter card', desc: 'One visit. Chips show consent, unresolved safety flags, and whether the note reached the hospital record system (EHR).' },
           { n: 2, name: 'Service indicators', desc: 'Health-of-the-service numbers: how fast drafts arrive, whether notes are getting bloated, how many unsafe sign attempts the gate blocked.' }
         ],
-        tries: ['Tap the top encounter card (Adaeze O.) to open its consent screen.', 'Note the red â€œ4 flagsâ€ chip â€” watch it count down as you resolve items in the live verification panel (Transcript tab).'] },
+        tries: ['Tap the top encounter card (Adaeze O.) to open its consent screen.', 'Note the red “4 flags” chip — watch it count down as you resolve items in the live verification panel (Transcript tab).'] },
       consent: { step: 2, title: 'Consent & Capture', 
         what: 'Everything that must be true before the microphone turns on: patient permission (split into five separate scopes) and device readiness.',
-        why: 'Recording a medical conversation is legally sensitive. Consent to record â‰  consent to AI drafting â‰  consent to portal release â€” so each is a separate, logged switch. Recording can only start when everything is green.',
+        why: 'Recording a medical conversation is legally sensitive. Consent to record ≠ consent to AI drafting ≠ consent to portal release — so each is a separate, logged switch. Recording can only start when everything is green.',
         components: [
           { n: 1, name: 'Consent scope switches', desc: 'Five independent permissions, each stored as a structured audit event.' },
           { n: 2, name: 'Consent method', desc: 'How permission was obtained (verbal / written / portal / declined).' },
-          { n: 3, name: 'Device readiness', desc: 'Mic, network, and EHR encounter match â€” pre-flight checklist.' },
+          { n: 3, name: 'Device readiness', desc: 'Mic, network, and EHR encounter match — pre-flight checklist.' },
           { n: 4, name: 'Ready state + record control', desc: 'Goes green only when consent + devices + encounter all align.' }
         ],
-        tries: ['Toggle â€œPortal releaseâ€ and watch the state chip flip.', 'Press â€œStart ambient recordingâ€ â€” a REC timer appears in the top strip and a live â€œlisteningâ€ bubble appears in the Transcript tab.'] },
+        tries: ['Toggle “Portal release” and watch the state chip flip.', 'Press “Start ambient recording” — a REC timer appears in the top strip and a live “listening” bubble appears in the Transcript tab.'] },
       transcript: { step: 3, title: 'Transcript + live verification', 
-        what: 'The visit as a mobile-style chat â€” patient bubbles left, clinician bubbles right â€” with a live verification panel beside it. Flags appear in the panel as the AI listens, and the clinician resolves them right next to the evidence.',
+        what: 'The visit as a mobile-style chat — patient bubbles left, clinician bubbles right — with a live verification panel beside it. Flags appear in the panel as the AI listens, and the clinician resolves them right next to the evidence.',
         why: 'Speech recognition mishears drug names, doses, negations and numbers. Verifying in real time, beside the replayable utterance, is faster and safer than hunting through the finished note later.',
         components: [
           { n: 1, name: 'Speaker bubbles', desc: 'Turn-by-turn record with speaker role, timestamp, and diarisation (who-spoke) attribution.' },
-          { n: 2, name: 'Per-turn replay', desc: 'â–¶ plays exactly that audio span â€” the unit of verification.' },
+          { n: 2, name: 'Per-turn replay', desc: 'Play plays exactly that audio span — the unit of verification.' },
           { n: 3, name: 'Risk flags', desc: 'Amber marks on high-risk speech: low-confidence dose, brief yes/no, negation, reported speech.' },
-          { n: 4, name: 'Note links', desc: 'Teal chips list every note sentence derived from this turn; tapping one opens that sentenceâ€™s evidence.' },
+          { n: 4, name: 'Note links', desc: 'Teal chips list every note sentence derived from this turn; tapping one opens that sentence’s evidence.' },
           { n: 5, name: 'Quality banner', desc: 'Audio and speaker-separation quality is preserved as provenance, never hidden.' },
-          { n: 6, name: 'Live verification panel', desc: 'The same flag queue as the Verify tab, docked beside the chat â€” resolve a flag while the utterance is one tap away.' }
+          { n: 6, name: 'Live verification panel', desc: 'The same flag queue as the Verify tab, docked beside the chat — resolve a flag while the utterance is one tap away.' }
         ],
-        tries: ['Press â–¶ on the 00:26 clinician bubble, then resolve the dose flag in the panel beside it.', 'Watch the flag counter in the top strip drop in real time as you resolve items.'] },
-      note: { step: 4, title: 'Note workspace â€” what will be signed', 
+        tries: ['Press Play on the 00:26 clinician bubble, then resolve the dose flag in the panel beside it.', 'Watch the flag counter in the top strip drop in real time as you resolve items.'] },
+      note: { step: 4, title: 'Note workspace — what will be signed', 
         what: 'The AI-drafted clinical note in SOAP structure (Subjective / Objective / Assessment / Plan). Each sentence is an addressable unit with a provenance token and, where needed, a risk chip.',
-        why: 'A note is a legal document. No sentence should look like neutral fact until you know where it came from â€” spoken, summarised, templated, or typed â€” and whether a human accepted it.',
+        why: 'A note is a legal document. No sentence should look like neutral fact until you know where it came from — spoken, summarised, templated, or typed — and whether a human accepted it.',
         components: [
           { n: 1, name: 'Note sections', desc: 'SOAP here, but the pattern works for any local template.' },
-          { n: 2, name: 'Provenance tokens', desc: 'TG / MS / TP / CA / CV in the gutter â€” colour + code + label, never colour alone.' },
+          { n: 2, name: 'Provenance tokens', desc: 'TG / MS / TP / CA / CV in the gutter — colour + code + label, never colour alone.' },
           { n: 3, name: 'Risk chips', desc: 'Unresolved flags shown inline, at the exact sentence they concern.' },
-          { n: 4, name: 'Evidence drawer', desc: 'Tap any sentence â†’ a drawer slides in with its supporting utterances, replay, model version and review history.' },
-          { n: 5, name: 'Sign state', desc: 'The Sign button is disabled while mandatory flags remain â€” the core safety mechanism.' }
+          { n: 4, name: 'Evidence drawer', desc: 'Tap any sentence → a drawer slides in with its supporting utterances, replay, model version and review history.' },
+          { n: 5, name: 'Sign state', desc: 'The Sign button is disabled while mandatory flags remain — the core safety mechanism.' }
         ],
-        tries: ['Tap sentence S4 (â€œDenies chest painâ€¦â€) to open its evidence drawer.', 'Try pressing Sign while flags remain â€” the gate blocks you and counts the attempt.'] },
-      evidence: { step: 5, title: 'Evidence â€” the provenance system', 
+        tries: ['Tap sentence S4 (“Denies chest pain…”) to open its evidence drawer.', 'Try pressing Sign while flags remain — the gate blocks you and counts the attempt.'] },
+      evidence: { step: 5, title: 'Evidence — the provenance system', 
         what: 'The reference screen: the five provenance classes, the utterance-to-signature pipeline, and an inspector for any sentence.',
-        why: 'This is the contract the whole system enforces. Engineers should treat provenance as a graph: audio span â†’ transcript turn â†’ note sentence â†’ review event â†’ signed hash. Every arrow is stored data, not decoration.',
+        why: 'This is the contract the whole system enforces. Engineers should treat provenance as a graph: audio span → transcript turn → note sentence → review event → signed hash. Every arrow is stored data, not decoration.',
         components: [
-          { n: 1, name: 'Provenance legend', desc: 'The five classes with their sign-off implications â€” TG, MS, TP, CA, CV.' },
+          { n: 1, name: 'Provenance legend', desc: 'The five classes with their sign-off implications — TG, MS, TP, CA, CV.' },
           { n: 2, name: 'Pipeline map', desc: 'The chain of custody from spoken word to legal record.' },
           { n: 3, name: 'Sentence inspector', desc: 'Every note sentence, colour-coded; tap to open its evidence card.' }
         ],
         tries: ['Tap any sentence chip to open its evidence drawer.', 'Compare S6 (TG, replayable) with S7 (TP, no utterance at all).'] },
-      patient: { step: 6, title: 'Patient view â€” read, challenge, counter-sign', 
+      patient: { step: 6, title: 'Patient view — read, challenge, counter-sign', 
         what: 'A preview of the premium portal summary the patient reads on her phone, partitioned into the summary document (left) and her action rail (right): sign & approve, push to record, and corrections.',
-        why: 'Patients increasingly read their own notes â€” and they are often first to spot an AI invention. Making the patient a counter-signatory closes the loop: the record enters the EHR only after both parties have seen the same text.',
+        why: 'Patients increasingly read their own notes — and they are often first to spot an AI invention. Making the patient a counter-signatory closes the loop: the record enters the EHR only after both parties have seen the same text.',
         components: [
           { n: 1, name: 'Visit summary document', desc: 'Same facts as the clinical note, patient-appropriate wording, vitals band up top. Billing fields hidden but auditable.' },
           { n: 2, name: 'Review & sign', desc: 'The patient counter-signature. Unlocks after the clinician signs; recorded on the provenance ledger against this exact text.' },
-          { n: 3, name: 'Push to EHR', desc: 'Enabled only when both signatures exist â€” the patient can send the note into her permanent record herself.' },
-          { n: 4, name: 'Corrections', desc: 'â€œâš‘ Not right?â€ beside any line â†’ reason â†’ tracked request with a 5-day SLA. Serious errors auto-escalate.' }
+          { n: 3, name: 'Push to EHR', desc: 'Enabled only when both signatures exist — the patient can send the note into her permanent record herself.' },
+          { n: 4, name: 'Corrections', desc: '“Not right?” beside any line → reason → tracked request with a 5-day SLA. Serious errors auto-escalate.' }
         ],
-        tries: ['Flag any line with â€œâš‘ Not right?â€ and submit a correction request.', 'After the doctor signs (Write-back tab), counter-sign here and push the note to the EHR.'] },
-      writeback: { step: 7, title: 'EHR write-back â€” draft becomes legal record', 
+        tries: ['Flag any line with “Not right?” and submit a correction request.', 'After the doctor signs (Write-back tab), counter-sign here and push the note to the EHR.'] },
+      writeback: { step: 7, title: 'EHR write-back — draft becomes legal record', 
         what: 'The final gate. Left: exactly which EHR fields each part of the note maps to (via FHIR interfaces where possible). Right: the six-item sign-off checklist, the clinician signature, and the EHR push.',
-        why: 'The EHR (Electronic Health Record) is the hospitalâ€™s system of record. Order of operations: clinician signs (content hash + identity frozen) â†’ patient counter-signs in her portal â†’ push to EHR. Weak paths like copy-paste are permitted only with a logged warning.',
+        why: 'The EHR (Electronic Health Record) is the hospital’s system of record. Order of operations: clinician signs (content hash + identity frozen) → patient counter-signs in her portal → push to EHR. Weak paths like copy-paste are permitted only with a logged warning.',
         components: [
-          { n: 1, name: 'Field mapping', desc: 'Narrative â†’ DocumentReference, problems â†’ Condition, meds â†’ MedicationStatement, and the fallback when an interface is missing.' },
-          { n: 2, name: 'Sign-off gate', desc: 'Consent âœ“, zero flags, mappings âœ“, both signatures â€” all six must pass before the push.' },
+          { n: 1, name: 'Field mapping', desc: 'Narrative → DocumentReference, problems → Condition, meds → MedicationStatement, and the fallback when an interface is missing.' },
+          { n: 2, name: 'Sign-off gate', desc: 'Consent OK, zero flags, mappings OK, both signatures — all six must pass before the push.' },
           { n: 3, name: 'Clinician signature', desc: 'Records signatory identity, timestamp, and content hash.' },
           { n: 4, name: 'Push to EHR', desc: 'Available here and on the patient side once both signatures exist; writes the audit pointer.' }
         ],
-        tries: ['Press Sign while flags remain â€” the block is counted as governance data.', 'Clear the flags (Transcript tab), sign here, counter-sign on the Patient tab, then push to the EHR.'] },
-      gov: { step: 8, title: 'Governance â€” patterns, not blame', 
+        tries: ['Press Sign while flags remain — the block is counted as governance data.', 'Clear the flags (Transcript tab), sign here, counter-sign on the Patient tab, then push to the EHR.'] },
+      gov: { step: 8, title: 'Governance — patterns, not blame', 
         what: 'The full-width management dashboard: safety KPIs, error taxonomy, model/template registry, the patient-correction queue, and the fiscal strip.',
-        why: 'When the AI errs, the clinician should not be the only shock absorber. Version registries and error trends make vendor drift visible and contractable â€” if v3.1 started mishandling negations, that is a ticket, not a mystery.',
+        why: 'When the AI errs, the clinician should not be the only shock absorber. Version registries and error trends make vendor drift visible and contractable — if v3.1 started mishandling negations, that is a ticket, not a mystery.',
         components: [
           { n: 1, name: 'Safety metrics', desc: 'Blocked signs, corrections, hallucination reports, after-hours charting.' },
-          { n: 2, name: 'Error taxonomy', desc: 'Flags by category â€” the input for tuning thresholds per specialty.' },
+          { n: 2, name: 'Error taxonomy', desc: 'Flags by category — the input for tuning thresholds per specialty.' },
           { n: 3, name: 'Version registry', desc: 'Every signed note records its model + template versions; behaviour changes can never silently rewrite history.' },
-          { n: 4, name: 'Patient corrections', desc: 'The VOICE queue with SLA tracking â€” submit one from the Patient tab and it appears here.' },
-          { n: 5, name: 'Fiscal strip', desc: 'Cost per note, time saved, after-hours reduction, reinvestment â€” reported as governance data, not marketing.' }
+          { n: 4, name: 'Patient corrections', desc: 'The VOICE queue with SLA tracking — submit one from the Patient tab and it appears here.' },
+          { n: 5, name: 'Fiscal strip', desc: 'Cost per note, time saved, after-hours reduction, reinvestment — reported as governance data, not marketing.' }
         ],
-        tries: ['Compare â€œBlocked sign attemptsâ€ with the counter you incremented on the Note tab.', 'Submit a patient correction, then watch CR-1042 appear in the corrections panel.'] }
+        tries: ['Compare “Blocked sign attempts” with the counter you incremented on the Note tab.', 'Submit a patient correction, then watch CR-1042 appear in the corrections panel.'] }
     };
   }
 
@@ -910,7 +916,7 @@ class Component extends DCLogic {
   renderVals() {
     const S = this.state;
     const labelsOn = this.props.showLabels ?? true;
-    const showExplainer = this.props.showExplainer ?? true;
+    const showExplainer = this.props.showExplainer ?? false;
     const flags = this.openFlags();
     const signReady = flags === 0;
     const go = t => () => this.setState({ tab: t, drawer: t === this.state.tab ? this.state.drawer : null });
@@ -929,7 +935,7 @@ class Component extends DCLogic {
       badge: id === 'transcript' && flags > 0 ? flags : null,
       style: {
         fontFamily: 'inherit', fontSize: '12.5px', fontWeight: S.tab === id ? 700 : 600, cursor: 'pointer',
-        padding: '9px 13px', border: 'none', background: 'transparent',
+        padding: '8px 8px', border: 'none', background: 'transparent', flex: '1 1 0', minWidth: '76px', textAlign: 'center', lineHeight: 1.15,
         color: S.tab === id ? '#0f766e' : '#5b6b74',
         borderBottom: S.tab === id ? '3px solid #0f766e' : '3px solid transparent',
         borderRadius: '6px 6px 0 0'
@@ -937,9 +943,9 @@ class Component extends DCLogic {
     }));
 
     // status strip
-    const noteStateLabel = S.pushed ? 'In EHR âœ“' : S.signed ? 'Signed â€” awaiting patient' : 'Draft â€” unsigned';
+    const noteStateLabel = S.pushed ? 'In EHR OK' : S.signed ? 'Signed — awaiting patient' : 'Draft — unsigned';
     const noteStateStyle = S.pushed ? this.chipStyle('#e3f1e7', '#1f7a3d') : S.signed ? this.chipStyle('#e4f2f0', '#0b5a54') : this.chipStyle('#eaf1f7', '#2b5d8a');
-    const flagChipLabel = flags > 0 ? flags + ' flags unresolved' : 'All flags resolved âœ“';
+    const flagChipLabel = flags > 0 ? flags + ' flags unresolved' : 'All flags resolved OK';
     const flagChipStyle = flags > 0 ? this.chipStyle('#fdecec', '#a3202a', '#f2c6c8') : this.chipStyle('#e3f1e7', '#1f7a3d');
 
     // consent
@@ -973,7 +979,7 @@ class Component extends DCLogic {
       const meta = (u.flags.length + u.links.length) > 0;
       return {
         id: u.id, time: u.time, text: u.text,
-        name: isC ? 'Dr. Hassan Â· Clinician' : 'Adaeze Â· Patient',
+        name: isC ? 'Dr. Hassan · Clinician' : 'Adaeze · Patient',
         rowStyle: { display: 'flex', justifyContent: isC ? 'flex-end' : 'flex-start', margin: '5px 0' },
         bubbleStyle: {
           maxWidth: '82%', padding: '9px 13px', borderRadius: isC ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
@@ -984,7 +990,7 @@ class Component extends DCLogic {
         nameStyle: { fontSize: '10.5px', fontWeight: 700, color: isC ? '#0b5a54' : '#6d4fa1' },
         play: () => this.playTurn(u.id),
         playing: S.playingTurn === u.id,
-        playIcon: S.playingTurn === u.id ? 'âšâš' : 'â–¶',
+        playIcon: S.playingTurn === u.id ? '❚❚' : 'Play',
         playStyle: { flex: 'none', width: '22px', height: '22px', borderRadius: '50%', border: 'none', cursor: 'pointer', fontSize: '9px', background: isC ? '#0f766e' : '#6d4fa1', color: '#fff', fontFamily: 'inherit', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' },
         hasMeta: meta,
         flags: u.flags.map(f => ({
@@ -1002,7 +1008,7 @@ class Component extends DCLogic {
       sentences: this.SENTENCES.filter(s => s.sec === title).map(base => {
         const s = this.sent(base.id);
         if (s.removed) return {
-          id: s.id, prov: 'â€”', text: '(removed by clinician â€” retained on audit ledger)', open: () => {},
+          id: s.id, prov: '—', text: '(removed by clinician — retained on audit ledger)', open: () => {},
           rowStyle: { display: 'flex', gap: '10px', padding: '6px 9px', borderRadius: '9px', opacity: .45, fontStyle: 'italic' },
           tokStyle: { flex: 'none', width: '22px', textAlign: 'center', fontSize: '10px', color: '#8a979e', marginTop: '2px' }, chip: null
         };
@@ -1016,7 +1022,7 @@ class Component extends DCLogic {
             outline: S.drawer === s.id ? '1.5px solid #0f766e' : 'none'
           },
           tokStyle: this.tokStyle(s.prov),
-          chip: taskOpen ? 'âš‘ needs review' : null,
+          chip: taskOpen ? 'Needs review' : null,
           chipStyle: this.chipStyle('#fdecec', '#a3202a', '#f2c6c8')
         };
       })
@@ -1035,14 +1041,14 @@ class Component extends DCLogic {
         this.toast('Sign blocked: ' + flags + ' unresolved safety flag' + (flags > 1 ? 's' : '') + '. Attempt logged. Resolve them in the Verify tab.');
       } else {
         this.setState({ signed: true, tab: 'writeback' });
-        this.toast('Note signed â€” hash a91fâ€¦c47e recorded. Now waiting for the patient to read and counter-sign before the EHR push.');
+        this.toast('Note signed — hash a91f…c47e recorded. Now waiting for the patient to read and counter-sign before the EHR push.');
       }
     };
     const signBase = { fontFamily: 'inherit', fontSize: '12.5px', fontWeight: 700, borderRadius: '10px', padding: '9px 18px', border: 'none', cursor: 'pointer' };
     const signBtnStyle = Object.assign({}, signBase, S.signed
       ? { background: '#e3f1e7', color: '#1f7a3d', cursor: 'default' }
       : signReady ? { background: '#1f7a3d', color: '#fff' } : { background: '#c6cfd4', color: '#fff' });
-    const signBtnLabel = S.signed ? 'Signed âœ“' : signReady ? 'Sign & export to EHR' : 'ðŸ”’ Sign locked Â· ' + flags + ' flags';
+    const signBtnLabel = S.signed ? 'Signed OK' : signReady ? 'Sign + export' : 'Locked: ' + flags + ' flags';
 
     // evidence tab
     const provLegend = Object.keys(this.PROV).map(code => {
@@ -1050,11 +1056,11 @@ class Component extends DCLogic {
       return { code, name: p.name, desc: p.desc, sign: p.sign, tokStyle: Object.assign({}, this.tokStyle(code), { width: '26px', fontSize: '11px', padding: '4px 6px' }) };
     });
     const pipeDefs = [
-      ['ðŸŽ™', 'Audio span', 'Recorded with consent; pausable; retained per policy'],
-      ['ðŸ“', 'Transcript turn', 'Speaker + timestamp + ASR confidence'],
-      ['ðŸ¤–', 'Draft sentence', 'Model + template versions recorded'],
-      ['ðŸ‘©â€âš•ï¸', 'Review event', 'Verify / edit / remove / reattribute â€” all logged'],
-      ['ðŸ”', 'Signed record', 'Hash + signatory + frozen provenance']
+      ['Audio', 'Audio span', 'Recorded with consent; pausable; retained per policy'],
+      ['Turn', 'Transcript turn', 'Speaker + timestamp + ASR confidence'],
+      ['Draft', 'Draft sentence', 'Model + template versions recorded'],
+      ['Review', 'Review event', 'Verify / edit / remove / reattribute — all logged'],
+      ['Signed', 'Signed record', 'Hash + signatory + frozen provenance']
     ];
     const pipeline = pipeDefs.map(([icon, name, desc], i) => ({
       icon, name, desc, arrow: i < pipeDefs.length - 1,
@@ -1065,7 +1071,7 @@ class Component extends DCLogic {
       if (s.removed) return { label: s.id + ' (removed)', open: () => {}, style: Object.assign({}, this.btn('ghost'), { opacity: .4, fontSize: '11px' }) };
       const p = this.PROV[s.prov];
       return {
-        label: s.id + ' Â· ' + s.prov,
+        label: s.id + ' · ' + s.prov,
         open: () => this.setState({ drawer: s.id }),
         style: { fontFamily: 'ui-monospace,Menlo,monospace', fontSize: '11px', fontWeight: 700, color: p.color, background: p.bg, border: '1px solid ' + p.bd, borderRadius: '9px', padding: '6px 11px', cursor: 'pointer' }
       };
@@ -1081,7 +1087,7 @@ class Component extends DCLogic {
         cardStyle: { background: '#fff', border: isOpen ? '1.5px solid ' + (t.sev === 'HIGH' ? '#e4a6aa' : '#ecd9ab') : '1px solid #dde4e8', borderRadius: '14px', padding: '14px 18px', opacity: isOpen ? 1 : .82 },
         cardStyleCompact: { background: isOpen ? '#fff' : '#f8fafb', border: isOpen ? '1.5px solid ' + (t.sev === 'HIGH' ? '#e4a6aa' : '#ecd9ab') : '1px solid #e4eaed', borderRadius: '12px', padding: '10px 12px', opacity: isOpen ? 1 : .8 },
         sevStyle: t.sev === 'HIGH' ? this.chipStyle('#fdecec', '#a3202a', '#f2c6c8') : this.chipStyle('#fdf3e0', '#8a4b0f', '#ecd9ab'),
-        state: isOpen ? 'Open' : st === 'removed' ? 'Resolved â€” removed' : 'Resolved',
+        state: isOpen ? 'Open' : st === 'removed' ? 'Resolved — removed' : 'Resolved',
         stateStyle: isOpen ? this.chipStyle('#eaf1f7', '#2b5d8a') : this.chipStyle('#e3f1e7', '#1f7a3d'),
         resolution: isOpen ? null : (st === 'removed' ? 'Sentence removed from the note' : t.resolvedMsg),
         actions: t.actions.map(a => ({
@@ -1089,7 +1095,7 @@ class Component extends DCLogic {
           style: this.btn(a.kind),
           styleCompact: Object.assign({}, this.btn(a.kind), { fontSize: '10.5px', padding: '5px 10px', borderRadius: '8px' }),
           run: () => {
-            if (a.act === 'play') { this.playTurn(a.turn); this.toast('Replaying ' + a.turn + ' â€” â€œAre you taking it ten milligrams, once daily?â€'); }
+            if (a.act === 'play') { this.playTurn(a.turn); this.toast('Replaying ' + a.turn + ' — “Are you taking it ten milligrams, once daily?”'); }
             else this.resolveTask(t.id, a.act, a.newText);
           }
         }))
@@ -1099,18 +1105,18 @@ class Component extends DCLogic {
     // patient view
     const paraDefs = [
       ['P1', 'How you have been', 'You told us you have been feeling better since we increased your blood-pressure tablet (lisinopril), though you sometimes feel a little dizzy in the mornings.'],
-      ['P2', null, 'Your blood pressure today was 142 over 88 â€” better than before, and getting close to the target we agreed together.'],
-      ['P3', 'Your medicine', 'We talked about taking your tablet at the same time each morning, and about checking with us before starting herbal supplements such as garlic tablets â€” some can interact with your medicine.'],
+      ['P2', null, 'Your blood pressure today was 142 over 88 — better than before, and getting close to the target we agreed together.'],
+      ['P3', 'Your medicine', 'We talked about taking your tablet at the same time each morning, and about checking with us before starting herbal supplements such as garlic tablets — some can interact with your medicine.'],
       ['P4', 'What happens next', 'We have ordered a simple blood test to check your kidneys are happy with the medicine, and we will see you again in four weeks.']
     ];
     const patientParas = paraDefs.map(([pid, heading, text]) => ({
       text, heading,
       rowStyle: { display: 'flex', gap: '14px', alignItems: 'flex-start', padding: '6px 10px', margin: '0 -10px', borderRadius: '10px', background: S.flaggingPara === pid ? '#f6f2e9' : 'transparent', transition: 'background .15s' },
       flag: () => this.setState({ flaggingPara: pid, pickedReason: null }),
-      btnStyle: { flex: 'none', fontFamily: 'inherit', fontSize: '10.5px', fontWeight: 600, color: '#9a917e', background: 'transparent', border: '1px solid #e0d9c8', borderRadius: '14px', padding: '4px 11px', cursor: 'pointer', marginTop: '4px', opacity: S.flaggingPara === pid ? 1 : .75, whiteSpace: 'nowrap' },
-      btnLabel: 'âš‘ Not right?'
+      btnStyle: { flex: '0 1 auto', fontFamily: 'inherit', fontSize: '10.5px', fontWeight: 600, color: '#9a917e', background: 'transparent', border: '1px solid #e0d9c8', borderRadius: '14px', padding: '4px 10px', cursor: 'pointer', marginTop: '4px', opacity: S.flaggingPara === pid ? 1 : .75, whiteSpace: 'normal', lineHeight: 1.16 },
+      btnLabel: 'Not right?'
     }));
-    const reasonDefs = ['This is factually wrong', 'I never said this', 'I donâ€™t understand this', 'This feels unfair or sensitive'];
+    const reasonDefs = ['This is factually wrong', 'I never said this', 'I don’t understand this', 'This feels unfair or sensitive'];
     const correctionReasons = reasonDefs.map(r => ({
       label: r,
       pick: () => this.setState({ pickedReason: r }),
@@ -1118,7 +1124,7 @@ class Component extends DCLogic {
         ? { fontFamily: 'inherit', fontSize: '11.5px', fontWeight: 700, color: '#fdfcf9', background: '#0f766e', border: '1px solid #0f766e', borderRadius: '18px', padding: '7px 15px', cursor: 'pointer' }
         : { fontFamily: 'inherit', fontSize: '11.5px', fontWeight: 600, color: '#3d382a', background: '#fdfcf9', border: '1px solid #e0d9c8', borderRadius: '18px', padding: '7px 15px', cursor: 'pointer' }
     }));
-    const flaggingText = S.flaggingPara ? (paraDefs.find(p => p[0] === S.flaggingPara)[2].slice(0, 70) + 'â€¦') : '';
+    const flaggingText = S.flaggingPara ? (paraDefs.find(p => p[0] === S.flaggingPara)[2].slice(0, 70) + '…') : '';
     const submitCorrection = () => {
       if (!S.pickedReason) { this.toast('Pick a reason first.'); return; }
       this.setState({ correctionSent: true, flaggingPara: null });
@@ -1128,16 +1134,16 @@ class Component extends DCLogic {
 
     // write-back
     const mapDefs = [
-      ['Note narrative', 'FHIR DocumentReference â†’ Progress Notes', 'ok'],
-      ['Problem: Hypertension', 'FHIR Condition â†’ Problem list', 'ok'],
+      ['Note narrative', 'FHIR DocumentReference → Progress Notes', 'ok'],
+      ['Problem: Hypertension', 'FHIR Condition → Problem list', 'ok'],
       ['Med: lisinopril 10 mg', 'FHIR MedicationStatement', flags > 0 ? 'hold' : 'ok'],
       ['Allergies', 'No changes this visit', 'na'],
-      ['Follow-up 4 weeks', 'Scheduling API â†’ task created', 'ok'],
-      ['Audit pointer', 'Encounter #E-20481 â†’ provenance ledger', 'ok']
+      ['Follow-up 4 weeks', 'Scheduling API → task created', 'ok'],
+      ['Audit pointer', 'Encounter #E-20481 → provenance ledger', 'ok']
     ];
     const mappings = mapDefs.map(([what, route, st]) => ({
       what, route,
-      status: st === 'ok' ? 'Mapped âœ“' : st === 'hold' ? 'Held â€” flag open' : 'N/A',
+      status: st === 'ok' ? 'Mapped OK' : st === 'hold' ? 'Held — flag open' : 'N/A',
       stStyle: st === 'ok' ? this.chipStyle('#e3f1e7', '#1f7a3d') : st === 'hold' ? this.chipStyle('#fdf3e0', '#8a4b0f', '#ecd9ab') : this.chipStyle('#eaeef2', '#5b6b74')
     }));
     const gateDefs = [
@@ -1150,7 +1156,7 @@ class Component extends DCLogic {
     ];
     const gateItems = gateDefs.map(([label, ok]) => ({
       label,
-      icon: ok ? 'âœ“' : 'âœ•',
+      icon: ok ? 'OK' : '✕',
       dotStyle: { flex: 'none', width: '20px', height: '20px', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, background: ok ? '#e3f1e7' : '#fdecec', color: ok ? '#1f7a3d' : '#a3202a' }
     }));
     const signBtnStyleWide = Object.assign({}, signBtnStyle, { flex: 1 });
@@ -1173,26 +1179,26 @@ class Component extends DCLogic {
           const u = this.TURNS.find(x => x.id === tid);
           const isC = u.role === 'c';
           return {
-            name: (isC ? 'Clinician' : 'Patient') + ' Â· ' + tid, time: u.time, text: u.text,
+            name: (isC ? 'Clinician' : 'Patient') + ' · ' + tid, time: u.time, text: u.text,
             nameStyle: { fontSize: '10px', fontWeight: 700, color: isC ? '#0b5a54' : '#6d4fa1' },
             play: () => this.playTurn(tid),
-            playIcon: S.playingTurn === tid ? 'âšâš' : 'â–¶',
+            playIcon: S.playingTurn === tid ? '❚❚' : 'Play',
             playStyle: { flex: 'none', width: '18px', height: '18px', borderRadius: '50%', border: 'none', cursor: 'pointer', fontSize: '7px', background: isC ? '#0f766e' : '#6d4fa1', color: '#fff', fontFamily: 'inherit', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginLeft: 'auto' }
           };
         });
         const base = this.SENTENCES.find(x => x.id === S.drawer);
         const taskOpen = base.task && S.tasks[base.task] === 'open';
         const acts = [];
-        if (taskOpen) acts.push({ label: 'âš‘ Resolve in live verification', style: this.btn('primary'), run: () => this.setState({ tab: 'transcript', drawer: null }) });
-        else if (s.prov !== 'CV' && s.prov !== 'CA') acts.push({ label: 'âœ“ Verify unchanged â†’ CV', style: this.btn('primary'), run: () => { const ov = Object.assign({}, this.state.overrides); ov[s.id] = Object.assign({}, ov[s.id], { prov: 'CV' }); this.setState({ overrides: ov }); this.toast(s.id + ' verified â€” provenance is now CV.'); } });
+        if (taskOpen) acts.push({ label: 'Resolve flag', style: this.btn('primary'), run: () => this.setState({ tab: 'transcript', drawer: null }) });
+        else if (s.prov !== 'CV' && s.prov !== 'CA') acts.push({ label: 'Verify CV', style: this.btn('primary'), run: () => { const ov = Object.assign({}, this.state.overrides); ov[s.id] = Object.assign({}, ov[s.id], { prov: 'CV' }); this.setState({ overrides: ov }); this.toast(s.id + ' verified — provenance is now CV.'); } });
         if (supTurns.length) acts.push({ label: 'View in transcript', style: this.btn('ghost'), run: () => this.setState({ tab: 'transcript', drawer: null }) });
         drawerData = {
           sid: s.id, text: s.text, prov: s.prov, provName: p.name, provDesc: p.desc,
           tokStyle: Object.assign({}, this.tokStyle(s.prov), { width: '26px', fontSize: '11px', padding: '4px 6px' }),
           hasTurns: supTurns.length > 0, turns: supTurns,
           noTurns: supTurns.length === 0,
-          noTurnsMsg: s.prov === 'TP' ? 'No supporting utterance â€” this text was copied forward from the previous visit (template source: last encounter, 08 Apr).' : 'No transcript support required â€” clinician-authored text.',
-          history: s.prov === 'CV' ? 'verified by Dr. Hassan, just now' : taskOpen ? 'flagged by rule engine Â· unresolved' : 'drafted 09:41 Â· not yet reviewed',
+          noTurnsMsg: s.prov === 'TP' ? 'No supporting utterance — this text was copied forward from the previous visit (template source: last encounter, 08 Apr).' : 'No transcript support required — clinician-authored text.',
+          history: s.prov === 'CV' ? 'verified by Dr. Hassan, just now' : taskOpen ? 'flagged by rule engine · unresolved' : 'drafted 09:41 · not yet reviewed',
           actions: acts
         };
       }
@@ -1216,21 +1222,21 @@ class Component extends DCLogic {
       recording: S.recording, recClock: this.fmtClock(S.recSeconds), toast: S.toast,
       // home
       openFeatured: go('consent'),
-      homeFlagLabel: flags > 0 ? 'âš‘ ' + flags + ' flags' : 'Flags clear âœ“',
+      homeFlagLabel: flags > 0 ? '' + flags + ' flags' : 'Flags clear OK',
       homeFlagStyle: flags > 0 ? this.chipStyle('#fdecec', '#a3202a', '#f2c6c8') : this.chipStyle('#e3f1e7', '#1f7a3d'),
       unsafeAttempts: S.unsafeAttempts,
       // consent
       consentItems, readyCardStyle,
-      readyTitle: coreConsent ? (S.recording ? 'Recording in progress' : 'Ready to record') : 'Not ready â€” core consent missing',
-      readyDesc: coreConsent ? 'Consent âœ“ Â· devices âœ“ Â· EHR encounter matched âœ“' : 'Ambient recording and transcription consent are required before capture can start.',
+      readyTitle: coreConsent ? (S.recording ? 'Recording in progress' : 'Ready to record') : 'Not ready — core consent missing',
+      readyDesc: coreConsent ? 'Consent OK · devices OK · EHR encounter matched OK' : 'Ambient recording and transcription consent are required before capture can start.',
       toggleRec: () => {
         if (!coreConsent) { this.toast('Cannot start: recording/transcription consent not granted.'); return; }
         if (S.recording) { this.setState({ recording: false }); this.toast('Recording stopped at ' + this.fmtClock(S.recSeconds) + '. Segment logged.'); }
-        else { this.setState({ recording: true, recSeconds: 0 }); this.toast('Ambient recording started â€” consent scope and device state logged.'); }
+        else { this.setState({ recording: true, recSeconds: 0 }); this.toast('Ambient recording started — consent scope and device state logged.'); }
       },
       recBtnStyle: Object.assign({ fontFamily: 'inherit', width: '100%', marginTop: '12px', fontSize: '13px', fontWeight: 700, borderRadius: '10px', padding: '11px', border: 'none', cursor: 'pointer' },
         S.recording ? { background: '#c22730', color: '#fff' } : coreConsent ? { background: '#0f766e', color: '#fff' } : { background: '#c6cfd4', color: '#fff' }),
-      recBtnLabel: S.recording ? 'â–  Stop recording' : 'â— Start ambient recording',
+      recBtnLabel: S.recording ? '■ Stop recording' : '● Start ambient recording',
       // transcript
       turns,
       // note
@@ -1249,7 +1255,7 @@ class Component extends DCLogic {
       ackHint: S.patientAcked
         ? 'Your signature is attached to this exact version of the summary. Any later amendment will ask you to sign again.'
         : S.signed
-          ? 'Dr. Hassan has signed. Confirm you have read your summary â€” your signature is recorded alongside the note.'
+          ? 'Dr. Hassan has signed. Confirm you have read your summary — your signature is recorded alongside the note.'
           : 'You can read your summary now. Signing unlocks the moment your doctor signs the clinical note.',
       patientAck: () => {
         if (!S.signed) { this.toast('Signing is locked until Dr. Hassan signs the clinical note (Write-back tab).'); return; }
@@ -1260,13 +1266,13 @@ class Component extends DCLogic {
       pushHint: S.pushed
         ? 'This visit is now part of your permanent medical record.'
         : S.signed && S.patientAcked
-          ? 'Both signatures are in place â€” the note is ready to enter your medical record.'
+          ? 'Both signatures are in place — the note is ready to enter your medical record.'
           : 'Available after both you and Dr. Hassan have signed.',
       pushEHR: () => {
         if (!S.signed) { this.toast('Push blocked: the clinician has not signed yet (Write-back tab).'); return; }
         if (!S.patientAcked) { this.toast('Push blocked: waiting for the patient\u2019s counter-signature (Patient tab).'); return; }
         this.setState({ pushed: true });
-        this.toast('Note written to the EHR via FHIR DocumentReference Â· audit pointer #E-20481.');
+        this.toast('Note written to the EHR via FHIR DocumentReference · audit pointer #E-20481.');
       },
       pushBtnStyle: Object.assign(
         { fontFamily: 'inherit', width: '100%', marginTop: '12px', fontSize: '12.5px', fontWeight: 700, borderRadius: '10px', padding: '11px', border: 'none', cursor: 'pointer' },
@@ -1276,17 +1282,17 @@ class Component extends DCLogic {
         { fontFamily: 'inherit', width: '100%', marginTop: '10px', fontSize: '12px', fontWeight: 700, borderRadius: '9px', padding: '9px', border: 'none', cursor: 'pointer' },
         S.patientAcked ? { background: '#1f7a3d', color: '#fff' } : { background: '#c6cfd4', color: '#fff' }
       ),
-      wbPatientLine: S.pushed ? 'Patient counter-signed 09:56 âœ“ Â· pushed 09:58 âœ“' : S.patientAcked ? 'Patient counter-signed 09:56 âœ“ â€” ready to push' : 'Patient counter-signature: pending (Patient tab)',
+      wbPatientLine: S.pushed ? 'Patient counter-signed 09:56 OK · pushed 09:58 OK' : S.patientAcked ? 'Patient counter-signed 09:56 OK — ready to push' : 'Patient counter-signature: pending (Patient tab)',
       // writeback
       mappings, gateItems, signBtnStyleWide, signed: S.signed, notSigned: !S.signed,
-      ehrChipLabel: S.pushed ? 'EHR: written âœ“' : 'EHR: not written',
+      ehrChipLabel: S.pushed ? 'EHR: written OK' : 'EHR: not written',
       ehrChipStyle: S.pushed ? this.chipStyle('#e3f1e7', '#1f7a3d') : this.chipStyle('#eaeef2', '#475569'),
       // governance
       govAttempts: S.unsafeAttempts, govCorrections: S.correctionSent ? 3 : 2, govBars,
       govCorrList: [
-        ...(S.correctionSent ? [{ id: 'CR-1042', desc: 'Visit summary wording Â· Adaeze O. Â· routed to signatory', state: 'Open Â· due 13 Jul', stStyle: this.chipStyle('#eaf1f7', '#2b5d8a') }] : []),
-        { id: 'CR-1037', desc: 'Medication list error Â· resolved with amendment', state: 'Resolved Â· 1.8 d', stStyle: this.chipStyle('#e3f1e7', '#1f7a3d') },
-        { id: 'CR-1031', desc: 'Confusing terminology Â· explanation added', state: 'Resolved Â· 3.2 d', stStyle: this.chipStyle('#e3f1e7', '#1f7a3d') }
+        ...(S.correctionSent ? [{ id: 'CR-1042', desc: 'Visit summary wording · Adaeze O. · routed to signatory', state: 'Open · due 13 Jul', stStyle: this.chipStyle('#eaf1f7', '#2b5d8a') }] : []),
+        { id: 'CR-1037', desc: 'Medication list error · resolved with amendment', state: 'Resolved · 1.8 d', stStyle: this.chipStyle('#e3f1e7', '#1f7a3d') },
+        { id: 'CR-1031', desc: 'Confusing terminology · explanation added', state: 'Resolved · 3.2 d', stStyle: this.chipStyle('#e3f1e7', '#1f7a3d') }
       ],
       // drawer
       drawerData, drawerStyle, closeDrawer: () => this.setState({ drawer: null }),
@@ -1299,6 +1305,7 @@ class Component extends DCLogic {
   }
 }
 </script>
+
 <script>
   (function () {
     function fitPrototype() {
