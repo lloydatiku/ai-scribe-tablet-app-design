@@ -1,0 +1,1208 @@
+AI scribe system design workbook
+A 50 page architecture and interface workbook for a tab based clinical documentation system
+Prepared from the uploaded research papers, workflow notes, evaluation notes, and the TEETH provenance interface design asset. The workbook uses synthetic examples only and should be reviewed by clinical safety, privacy, legal, procurement, and informatics leads before implementation.
+Intended reader
+How to use this workbook
+Product, clinical informatics, engineering, governance, and evaluation teams
+Read pages 1 to 8 to agree the design hypothesis, use pages 9 to 19 to review the tab app interface, then use pages 20 to 42 to convert the architecture into build tasks and safety gates. Pages 43 to 53 provide evaluation, rollout, and workbook canvases.
+Page 1, purpose and design hypothesis
+The goal is to design an AI scribe system that behaves less like a dictation shortcut and more like a governed documentation cockpit. The system listens, transcribes, drafts, explains, verifies, and writes back to the EHR only after the human record owner has resolved flagged uncertainty. This position follows the uploaded evidence, which shows that documentation burden is real, yet also that speech recognition and AI drafting remain unsafe when treated as autonomous authors. The design hypothesis is simple. If the interface makes origin, uncertainty, and review state visible at sentence level, and if the architecture blocks unsigned or unsupported text from entering the legal record, then clinicians may gain time without surrendering control over meaning.
+The workbook therefore specifies a tab based app rather than a single free text editor. Each tab owns one work activity, consent, capture, transcript review, note assembly, provenance inspection, verification, EHR write back, patient correction, analytics, and administration. The tabs share a common provenance graph so that a clinician can move from a sentence in the note to the supporting utterance, audio span, model version, template source, and review decision. Some details will need local adaptation because EHR products, consent rules, and billing regimes differ across settings.
+Design assumption
+System response
+AI output is assistive
+The clinician remains the signatory, yet the system records what the clinician actually reviewed, edited, or verified.
+Errors are predictable
+The system treats hallucination, omission, misattribution, note bloat, and template drift as expected failure modes.
+Transparency alone is weak
+The system connects disclosure to challenge routes and enforcement rules, rather than displaying labels without consequence.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 2, evidence synthesis across the corpus
+The uploaded papers converge on one design gap. Existing EHRs already fragment attention through excessive navigation, dispersed information, repeated data entry, and workarounds. AI scribes can reduce typing and after hours charting, but they often move labour into consent, setup, editing, replay, verification, and final EHR transfer. The ASR evidence warns that medication names, negation, laterality, numbers, accents, brief yes or no cues, and multi-speaker turns remain vulnerable. The OpenNotes paper adds a further pressure, because generated notes may be read by patients, become legal artefacts, and create disputes over what was said, inferred, copied, or invented.
+The architecture must therefore manage three coupled problems. First, it must decrease documentation burden without increasing task switching. Second, it must create a verifiable chain from utterance to transcript, transcript to draft sentence, and draft sentence to signed record. Third, it must turn passive visibility into enforceable workflow rules. This means that labels, flags, replay controls, and contestation routes are not decorative interface elements. They are the operating surface of accountability, and they must be bound to audit events, role permissions, quality thresholds, and vendor issue management.
+Evidence strand
+Design consequence
+EHR usability burden
+Minimise cross screen movement and display transcript, draft, evidence, and signing state in one connected workspace.
+ASR reliability limits
+Keep human review as a default requirement and create safety flags for high risk language.
+OpenNotes governance
+Expose provenance and route patient correction requests into a managed review workflow.
+Transparency and TEETH
+Block, audit, escalate, and correct when evidence is missing or risk thresholds are breached.
+Fiscal credibility
+Report cost, productivity, safety, and reinvestment metrics as part of product governance.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 3, source map and design consequences
+This page translates the evidence base into direct build requirements. The EHR usability review is used to justify low navigation design, persistent context, and fewer manual transfers. The OpenNotes analysis is used to justify provenance, contestation, and a patient visible explanation layer. The ASR review is used to justify audio linked transcript inspection, medication recall checks, and cautious use of generated text in complex encounters. The fiscal credibility review is used to justify cost traceability and budget reporting. The transparency review is used to structure the governance pattern as Passive, VOICE, and TEETH. The two uploaded notes are used to specify workflow bottlenecks and socio-technical failure pathways.
+The workbook does not assume that one vendor model can solve the whole problem. It proposes a modular system in which model services may be swapped, whereas the provenance ledger, review rules, audit data, patient challenge workflow, and EHR integration contracts remain under health system governance. That separation prevents the interface from becoming a thin wrapper around a vendor black box. It also allows procurement teams to test each component against acceptance criteria before scale up.
+Uploaded source
+What it contributes to the design
+Usability challenges in EHRs
+Navigation burden, workflow mismatch, workarounds, duplicated entry, and fragmented information.
+AI-generated clinical notes in OpenNotes
+Accountability vacuum, dual audience notes, provenance need, correction need, and vendor accountability.
+Reliability of AI speech recognition
+Assistive use only, high risk utterances, demographic variation, and human oversight.
+Digital health and fiscal credibility
+Digital platforms as investable infrastructure with cost reporting and governance.
+Contingent payoff of transparency
+Passive labels are insufficient without VOICE or TEETH mechanisms.
+AI scribe usability review
+Reduced burden is possible, but errors, note length, formatting, and poor EHR fit remain.
+Workflow and failure mechanism notes
+Consent, latency, signature readiness, copy paste friction, and TOP-E risk analysis.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 4, problem statement for the clinic
+The target clinic problem is not only that clinicians type too much. The deeper problem is that clinical meaning is assembled across multiple fragile surfaces. A patient speaks in a room, the ASR system guesses words and speakers, the model compresses or expands the content, the clinician edits under time pressure, the EHR requires billing and compliance structure, and the patient may later read the final note. At each handoff, meaning can be lost, exaggerated, misattributed, copied forward, or converted into a billing oriented phrase that is poorly suited to peer communication.
+The proposed system should make these handoffs explicit. A sentence in the generated note must not appear as a neutral fact until its source and review state are known. The user should see whether a sentence is transcript grounded, model summarised, template or copied forward, clinician authored, or clinician verified. This provenance should be visible at the reading locus, not buried in a log. The system should also explain what action is available, verify, edit, remove, reattribute, ask the patient, send to coding review, open an incident, or block sign off.
+Failure in current practice
+Design response in the workbook
+Unsupported denial or invented symptom enters the note
+Sentence level evidence check and sign off block until resolved.
+Transcript and note live in separate systems
+Dual pane workspace with click to evidence tie back.
+Clinician must remember consent and device setup
+Consent tab, encounter checklist, and capture status at the top of the workflow.
+Patient sees confusing or wrong text
+Patient view tab with plain language explanation and correction route.
+Vendor changes model behaviour
+Model version registry, template version registry, and drift review queue.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 5, user roles and accountability boundaries
+The product should identify roles before features. The clinician signatory is accountable for the signed note, but the system should not hide organisational and vendor contributions behind that signature. Nurses, residents, scribes, coders, privacy officers, safety officers, patients, and vendor support teams each interact with different parts of the record lifecycle. Role definitions prevent two common errors, too much access for everyone, or too little authority for people who need to correct errors before harm occurs.
+A clean accountability model also protects clinicians from becoming the only shock absorber for system failure. When the system creates an error, the audit ledger should show the model version, input evidence, template source, configuration state, and human review action. When an organisation configures productivity rules that disincentivise review, those rules should be visible in evaluation metrics. When a patient disputes a note, the correction task should route to the right owner with time limits and an auditable decision.
+Role
+Primary rights
+Accountability evidence
+Clinician signatory
+Verify, edit, sign, reject, reattribute, and export note content.
+Review events, edits, sign off state, and unresolved flags.
+Resident or trainee
+Draft and edit within supervision rules.
+Supervisor approval and learning mode metadata.
+Patient
+View patient facing note, request correction, see resolution status.
+Correction request, response time, and amendment trail.
+Clinical safety lead
+Review incident trends and approve safety rules.
+Error taxonomy, severity, and recurring vendor patterns.
+Information governance lead
+Set retention, consent, access, and vendor constraints.
+Consent logs, data movement, and access audit.
+Vendor support
+Receive de-identified defect packets where allowed.
+Ticket ID, model version, failure type, and resolution status.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 6, non-negotiable product principles
+The first product principle is evidence proximity. The user should never need to leave the sentence they are reading to understand why it exists. The second principle is review before release. Unsigned drafts are working artefacts, and patient facing or EHR committed artefacts require explicit closure. The third principle is local uncertainty. A whole note confidence score is avoided because it can conceal high risk unsupported sentences inside an apparently safe document. The fourth principle is minimum transfer. Copy and paste should be treated as a temporary fallback, not the final architecture.
+The fifth principle is accountability with consequence. A label without a workflow action is passive transparency. A label that lets a clinician verify, remove, contest, route, or block is a stronger design. The sixth principle is useful restraint. The system should make concise clinically meaningful notes easier than bloated notes. The seventh principle is patient readability without erasing clinical voice. Peer communication and patient comprehension can coexist, but sometimes they need separate views, section labels, or explanation layers.
+Principle
+What the app must do
+Evidence proximity
+Place provenance tokens beside each sentence and bind them to transcript turns and audio spans.
+Review before release
+Disable sign off while required verification tasks remain open.
+Local uncertainty
+Show uncertainty per sentence, entity, or section rather than as a global score.
+Minimum transfer
+Prefer structured write back to the EHR over copy and paste.
+Accountability with consequence
+Create contestation, escalation, and vendor defect routes.
+Useful restraint
+Measure note length, redundancy, and irrelevant detail as product quality signals.
+Dual audience care
+Support a clinician note and a patient explanation layer without blending their purposes.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 7, clinical encounter lifecycle model
+The system lifecycle begins before the patient enters the room. It checks whether the patient is scheduled, whether consent is required, whether the room device is online, whether the EHR context is available, and whether the correct note template has been selected. During the encounter, the system captures audio, segments speakers, builds transcript turns, identifies potential high risk utterances, and maintains a running draft state. After the encounter, the system generates or updates the note, maps sentences to evidence, flags gaps, presents the verification queue, writes approved content to the EHR, and stores audit events.
+This lifecycle framing prevents the app from over focusing on the impressive middle act of note generation. The uploaded workflow note shows that friction accumulates at the start and end as much as during drafting. Consent conversations, app launch, draft latency, manual transfer, formatting repair, and audio replay can remove the expected time saving. The architecture therefore treats preparation, interaction, verification, and closure as first class stages.
+Stage
+Main user task
+System task
+Prepare
+Open encounter and confirm consent pathway.
+Load patient context, room status, prior relevant notes, and template.
+Capture
+Conduct the visit while maintaining patient rapport.
+Record with consent state, diarise, transcribe, and timestamp turns.
+Draft
+Review generated structure and clinical fit.
+Generate note sections, label provenance, and detect unsupported content.
+Verify
+Resolve flagged sentences and high risk entities.
+Tie evidence to each sentence and record review actions.
+Close
+Sign, export, or return for amendment.
+Write back to EHR, update audit ledger, and open follow up tasks.
+Learn
+Review metrics and improve configuration.
+Track errors, note bloat, latency, and model or template drift.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 8, documentation burden map
+Documentation burden should be measured as displaced work, not only minutes saved. A scribe may reduce typing while increasing cognitive checking, consent explanation, app management, audio replay, and EHR transfer. The burden map separates production labour from curation labour. Production labour includes typing, dictating, finding old information, and formatting. Curation labour includes checking whether generated text is faithful, pruning irrelevant detail, confirming high risk content, and reconciling a draft with billing or quality fields.
+The app should instrument both categories. It should capture time to draft, time to first review, time to sign, number of unresolved flags, number of audio replays, edits per sentence, copy paste transfers, EHR screens visited, and patient correction requests. These metrics should be visible to service managers, but they should not be used to pressure clinicians into faster unsafe sign off. Measurement needs governance. A metric that improves productivity while lowering review quality should be treated as a safety signal, not as success.
+Burden type
+Observable signal
+Possible design countermeasure
+Task switching
+Repeated movement between transcript, note, portal, and EHR.
+Single review workspace with persistent patient and encounter context.
+Cognitive checking
+High number of sentence edits and replay events.
+Risk sorted verification queue with evidence snippets and audio shortcuts.
+Note bloat
+Rising character count, irrelevant narrative, duplicated template text.
+Conciseness rules, section caps, and redundancy flags.
+Transfer friction
+Copy paste, formatting repair, missing discrete EHR fields.
+FHIR write back, template mapping, and structured field population.
+Patient dispute
+Correction requests after portal release.
+Patient view, explanation, correction routing, and amendment tracking.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 9, tab app shell
+The app should be designed as a tablet first clinical cockpit. A left rail can hold the encounter list and patient context, while top level tabs structure the documentation work. The centre pane changes by tab, and a right drawer holds the active verification, evidence, or task context. The shell should remain stable across tabs so clinicians are not repeatedly reorienting themselves. Patient identity, encounter time, note state, consent state, recording state, unresolved flag count, and EHR connection state should always be visible.
+The tab model should reduce cognitive load by grouping actions around work states. Consent and capture should not compete with note editing controls. Transcript review should not be mixed with governance analytics. The verification queue should be reachable from every tab because unresolved safety issues are cross cutting. The shell should also support keyboard and touch use, because clinicians may move between desktop, tablet, room device, and mobile fallback.
+Tab
+Primary question answered
+Main artefact
+Home
+What needs attention now?
+Encounter list, status chips, and unresolved tasks.
+Consent and capture
+Can recording lawfully and practically start?
+Consent decision, audio readiness, and capture controls.
+Transcript
+What was said, by whom, and when?
+Speaker turns, audio spans, and ASR confidence by segment.
+Note workspace
+What will be signed?
+SOAP or local note sections with sentence tokens.
+Evidence
+Why does this sentence exist?
+Transcript tie back, audio replay, provenance history.
+Verification
+What must be checked before sign off?
+Risk sorted task queue.
+Patient view
+How will this read to the patient?
+Plain language view and correction workflow.
+EHR write back
+What is ready to enter the chart?
+Field mapping, export preview, and sign gate.
+Governance
+What patterns require management action?
+Safety, privacy, quality, fiscal, and vendor dashboards.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 10, home dashboard tab
+The home dashboard should not be a sales style productivity screen. It should be a safe work triage screen. Each encounter card needs patient initials or permitted identifier, time, specialty, note state, consent state, draft age, unresolved flag count, EHR write back state, and patient correction state. The highest priority card is not always the oldest note. It may be the note with a missing medication confirmation, unsupported denial, failed EHR transfer, or approaching release deadline.
+A dashboard with safety sorting helps avoid another EHR problem, invisible queues scattered across inboxes, portals, and local apps. The dashboard should support filters for my unsigned drafts, team drafts, patient correction requests, failed exports, high risk sentences, and vendor defect candidates. It should also display a restraint metric, such as note length compared with local norms, because note bloat is a system cost.
+Dashboard component
+Required behaviour
+Encounter cards
+Show note state, consent state, unresolved flags, draft age, and EHR status.
+Safety sort
+Prioritise high risk unresolved content over simple recency.
+Team queue
+Allow delegated review according to supervision and role rules.
+Export failures
+Expose write back problems rather than hiding them inside logs.
+Patient corrections
+Display open correction requests and deadlines.
+Service indicators
+Show trend lines for latency, note bloat, replay burden, and unsafe sign attempts.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 11, consent and capture tab
+The consent and capture tab handles the recurring work that occurs before the model can assist. The interface should provide the approved consent script, patient questions, decline reasons, local policy links, recording device status, microphone selection, network status, language preference, and whether a human interpreter is present. Consent should be recorded as a structured event, not a free text afterthought. The system should make it clear whether the patient consented to ambient recording, transcription, draft generation, model improvement use, and patient portal release, because these are not identical permissions.
+The capture controls should be simple enough to use at the start of a busy consultation. A clinician should see a green ready state only when the room device, patient context, consent requirement, and EHR encounter are matched. When the patient declines recording, the system should offer a non-recording workflow such as manual note support, typed template, or post-visit dictation. This prevents patient refusal from becoming workflow failure.
+Consent object
+Data captured
+Why it matters
+Consent scope
+Recording, transcription, note generation, portal release, secondary use.
+Different uses may need different authorisation.
+Consent method
+Verbal, written, portal pre-consent, withdrawn, declined.
+The audit trail must show how permission was obtained.
+Interpreter state
+Interpreter present, language, channel, consent repeated.
+ASR and speaker attribution risks change in interpreted encounters.
+Device state
+Room microphone, tablet, phone fallback, network status.
+Poor capture conditions explain later ASR or diarisation errors.
+Pause events
+Paused segment reason and who resumed.
+Sensitive moments should not silently enter the transcript.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 12, live transcript tab
+The transcript tab should behave like a clinical conversation record, not like a generic meeting transcript. Turns are grouped by speaker and timestamp, with role labels and audio replay controls. The system should mark low confidence spans, possible medication names, numerals, negation, laterality, allergies, diagnoses, and short affirmative or negative cues. These marks should not interrupt the visit excessively, but they should be available immediately after the encounter when the clinician verifies the note.
+The transcript also needs a correction loop. If the clinician edits a transcript turn, the system should record the edit as transcript correction and distinguish it from a note edit. If a speaker attribution is wrong, reattribution should update all downstream evidence links. If audio quality is poor, the system should preserve that fact as part of the provenance record. A polished transcript without uncertainty metadata creates false confidence.
+Transcript feature
+Build requirement
+Speaker turns
+Each turn stores speaker role, speaker ID where known, start time, end time, and confidence.
+High risk cues
+Flag medication, dose, allergy, negation, laterality, number, date, and brief yes or no cues.
+Audio replay
+Replay exact span, plus five second context option where policy permits.
+Correction event
+Record original text, corrected text, author, time, and reason.
+Turn to sentence links
+Expose all note sentences that rely on a selected turn.
+Quality warnings
+Show poor audio, overlapping speech, background noise, and low diarisation confidence.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 13, note workspace tab
+The note workspace is the clinician's main editing surface. It can support SOAP, SBAR, problem oriented notes, discharge summaries, procedure notes, mental health notes, or local templates, yet the interaction pattern remains the same. Each sentence or structured field has a provenance token in the gutter. The token is a button. Selecting it opens the evidence popover and highlights the supporting transcript turns. Unsupported or uncertain sentences show a visible review chip and enter the verification queue.
+The note should support a clinical voice layer and a compliance layer. The uploaded OpenNotes analysis suggests that AI text can blur peer communication, billing compliance, and patient comprehension into one overburdened document. A good design allows local governance to specify which sections are patient visible as written, which sections need explanatory translation, and which billing or coding support fields are hidden from the patient note but still auditable.
+Workspace element
+Function
+Sentence blocks
+Each sentence is addressable, selectable, and linked to evidence.
+Provenance gutter
+TG, MS, TP, CA, and CV tokens are visible beside text.
+Risk chips
+Medication, safety, billing, privacy, and unsupported inference flags appear inline.
+Section controls
+Local templates define required sections and patient visibility.
+Edit modes
+Clinician can rewrite, verify unchanged, remove, reattribute, or route for review.
+Sign state
+The sign button remains disabled while mandatory flags remain unresolved.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 14, provenance evidence tab
+The evidence tab is the investigative surface. It answers what the system knows, where it came from, and who accepted it. The core artefact is a sentence evidence card. The card displays the note sentence, provenance class, evidence turns, transcript confidence, audio span, model prompt or template version, extraction or summarisation method, and review history. A clinician should be able to move from card to transcript, card to note, or card to incident report without reopening a separate audit tool.
+The TEETH interface notes propose five provenance classes. TG means transcript grounded. MS means model summarised. TP means template or copied forward. CA means clinician authored. CV means clinician verified. These classes are not simply colours. They should be conveyed through text code, label, border pattern, and plain language, so that they remain usable for accessibility and for printed review packs.
+Code
+Class
+Sign off implication
+TG
+Transcript grounded
+Can be verified by reviewing the supporting turn and audio span.
+MS
+Model summarised
+Requires review of abstraction and speaker attribution.
+TP
+Template or copied forward
+Requires confirmation that the statement applies to this encounter.
+CA
+Clinician authored
+Records human authorship and does not need transcript support, unless local rules require rationale.
+CV
+Clinician verified
+Indicates machine text was explicitly accepted unchanged after review.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 15, verification queue tab
+The verification queue converts uncertainty into work. The queue should group tasks by risk, not by their appearance in the note. A medication dose mismatch, unsupported absence of chest pain, allergy uncertainty, or a generated differential diagnosis should rise above a low risk formatting issue. Each queue item includes the sentence, why it was flagged, evidence status, possible actions, and the likely consequence if unresolved. The clinician should not need to hunt through the whole note to find unresolved safety items.
+Verification should also be configurable by specialty and local governance. A dermatology follow up and an emergency department chest pain visit should not have identical flag thresholds. However, local configuration must be versioned and reviewable. If a service lowers thresholds to accelerate signing, that change should be visible to clinical safety leaders and evaluators.
+Verification category
+Example trigger
+Allowed actions
+Medication
+Dose heard with low confidence or conflicting prior medication.
+Replay, edit, verify, ask patient, route pharmacy review.
+Negation
+Denies symptom inserted without supporting turn.
+Remove, verify with evidence, rephrase as not discussed.
+Speaker attribution
+Patient speculation converted into clinician assessment.
+Reattribute, edit, verify with patient speech label.
+Template carryover
+Prior history copied into current note without encounter support.
+Confirm applies, mark historic, or remove.
+Billing sensitivity
+AI expands complexity language without evidence.
+Route coding review or require clinician authored rationale.
+Privacy
+Sensitive third party detail captured in patient facing note.
+Redact, restrict, or move to internal section per policy.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 16, patient view and correction tab
+The patient view is not a second full EHR. It is a controlled preview of what the patient will see and how they can challenge possible errors. The clinician can inspect whether generated language is understandable, whether sensitive content needs context, and whether a statement might appear accusatory or confusing. The system should preserve clinical accuracy, yet it can add explanations, glossary terms, and patient oriented summaries when local policy permits.
+The correction workflow is the VOICE layer. A patient can flag a sentence, select a reason, attach a comment, and submit a correction request. The request becomes a task for the clinical team with status, deadline, resolution, and amendment trail. If a patient reports a clinically serious error, the system should raise the task priority and may trigger a safety review. The patient should receive a clear response, not a generic portal message.
+Patient action
+System route
+Governance record
+Flag a factual error
+Send to clinician signatory or delegated reviewer.
+Correction request ID, sentence ID, patient comment, outcome.
+Ask for clarification
+Send to care team message pool or glossary response.
+Question category and response time.
+Contest sensitive language
+Route to clinician and information governance if needed.
+Review decision and any amendment or explanation.
+Report harm or urgent error
+Escalate to safety lead according to severity rules.
+Safety triage, action taken, and patient notification.
+Request audit explanation
+Show provenance summary where policy permits.
+Disclosure event and access scope.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 17, EHR write back tab
+The EHR write back tab is where the AI draft becomes a clinical record. The tab should show a side by side preview of the app note and the destination EHR fields. Narrative text, problem list entries, medications, allergies, diagnoses, orders, follow up instructions, and billing support fields should be mapped explicitly. If a field cannot be written through an interface, the app should show the fallback method and the added risk. Copy and paste should be logged as a weaker integration path.
+The write back tab is also the last sign off gate. The system checks unresolved verification tasks, missing consent, unsupported high risk sentences, failed field mappings, and patient visibility settings. Signing should create a final hash of the exported content, record the clinician identity, and store the provenance state. If the EHR allows only text insertion, the provenance ledger should remain available in the app and linked by encounter ID.
+Write back object
+Preferred integration
+Fallback
+Progress note narrative
+FHIR DocumentReference or EHR vendor note API.
+Human reviewed copy paste with logged warning.
+Problems
+FHIR Condition or native problem list API.
+Suggested entry for clinician manual entry.
+Medications
+FHIR MedicationStatement or MedicationRequest context.
+Medication mention flag without automated update.
+Allergies
+FHIR AllergyIntolerance with required verification.
+High risk manual entry task.
+Follow up
+Appointment or task interface where available.
+Instruction text only with follow up reminder.
+Audit pointer
+Encounter linked provenance record.
+Documented app encounter ID in note footer where permitted.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 18, governance analytics tab
+The governance analytics tab helps leaders see whether the system is reducing burden safely. It should avoid vanity metrics such as total drafts generated. More useful measures include time to sign, unresolved flag rate, medication flag resolution time, note length drift, copy paste frequency, patient correction volume, safety incident count, vendor defect recurrence, language or accent performance gaps, and clinician reported workload. This tab is for learning and governance, not surveillance of individual clinicians without agreed policy.
+The analytics layer should join transparency with TEETH. If a vendor update causes a rise in unsupported sentences or failed EHR mappings, the system should trigger a drift review. If a service shows repeated unsafe sign attempts, the issue may be training, configuration, workload, or productivity pressure. Governance dashboards must therefore support drill down into mechanisms rather than blame.
+Dashboard domain
+Example metrics
+Safety
+High risk flag rate, unresolved sign attempts, serious correction requests, incident severity.
+Workflow
+Time to draft, time to review, time to sign, replay burden, task switching proxies.
+Quality
+Note length, redundancy, unsupported sentences, clinician edit distance, patient readability.
+Equity
+ASR error flags by language, interpreter state, accent proxy where lawful, and visit type.
+Fiscal
+Cost per signed note, reclaimed clinician time, non-cashable effort, reinvestment plan.
+Vendor
+Defect tickets, drift events, model version comparisons, service uptime, response time.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 19, administration and configuration tab
+The administration tab is where the organisation controls templates, specialty rules, consent scripts, retention settings, model routing, patient view rules, and EHR mapping. It should not be a hidden technical console used only by vendors. Clinical governance, informatics, privacy, and coding teams need controlled access to approve changes. Every configuration change should have an owner, rationale, start date, rollback plan, and test evidence.
+Configuration is a safety surface. The uploaded evaluation note describes how template rigidity, formatting changes, weak integration, and documentation targets can shape failure. Therefore prompt templates, note formats, and coding logic should be versioned like clinical decision support artefacts. A change that improves formatting but increases hallucinated denials should fail review.
+Configuration object
+Owner
+Required control
+Consent script
+Information governance and clinical service
+Approved wording, version history, language variants.
+Note template
+Clinical service and informatics
+Section logic, patient visibility, risk fields.
+Prompt and model
+AI operations and safety lead
+Model version, evaluation report, rollback rule.
+Verification rules
+Clinical safety lead
+Risk categories, thresholds, mandatory actions.
+EHR mapping
+Integration lead
+Field mapping tests and failure behaviour.
+Retention
+Information governance
+Audio, transcript, draft, audit, and patient request retention periods.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 20, overall system architecture
+The architecture should separate clinical interface, orchestration, AI services, evidence store, EHR integration, and governance ledger. The interface should never depend on a single model response as the source of truth. The source of truth for provenance is the event and evidence graph, which records how audio became transcript, how transcript became draft sentences, how humans changed or verified those sentences, and how content was exported. The AI services are replaceable components inside a governed pipeline.
+This separation matters for procurement and safety. A health system may change ASR providers, LLM providers, or EHR vendors, but it should retain the same verification logic, audit data, patient correction process, and evaluation model. The architecture below uses event driven messaging so that capture, transcription, note generation, verification, write back, and analytics can fail independently without corrupting the signed record.
+[Clinical tab app] -&gt; [Encounter orchestration service] -&gt; [Consent and capture service] -&gt; [Audio store] -&gt; [ASR and diarisation] -&gt; [Transcript service] -&gt; [Evidence index] -&gt; [Draft generation service] -&gt; [Provenance engine] -&gt; [Verification and sign off service] -&gt; [EHR integration service] -&gt; [Audit ledger and analytics] -&gt; [Patient correction workflow]
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 21, data capture layer
+The capture layer begins with a governed recording state. Each encounter can be not started, ready, recording, paused, stopped, failed, or discarded. The state is tied to consent, patient context, device identity, user identity, and room context. Audio should be segmented as it is captured so that later replay can be scoped to the minimum necessary span. When policy permits, raw audio can be retained for a defined period; otherwise the system may retain only transcript, confidence, and audit metadata.
+Capture quality affects every later stage. The app should detect missing microphone access, poor signal, excessive background noise, overlapping speech, and device movement. It should warn the clinician without disrupting the visit unless recording is unusable. A poor capture warning should propagate into provenance, because a sentence grounded in low quality audio deserves a different review status from a sentence grounded in clear speech.
+Capture event
+Stored metadata
+Downstream use
+Recording started
+User, patient, encounter, device, room, time, consent state.
+Establishes lawful and technical start point.
+Pause or resume
+Actor, time, reason, segment affected.
+Prevents hidden sensitive content capture.
+Audio quality warning
+Noise, clipping, silence, overlap, signal strength.
+Raises ASR and verification risk.
+Device switch
+Old device, new device, reason.
+Explains potential transcript discontinuity.
+Recording stopped
+Time, duration, segments, processing status.
+Starts transcription and draft workflow.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 22, ASR and diarisation layer
+The ASR and diarisation layer converts audio into timestamped turns with speakers. It should support streaming where feasible, but the system must accept that final transcripts may arrive after the encounter. The layer should produce multiple confidence signals, including word confidence, turn confidence, speaker confidence, and flags for overlapping speech or uncertain segmentation. It should not hide uncertainty inside a single transcript text object.
+The ASR review indicates that high risk language requires special attention. The architecture should therefore include targeted detectors for medication names, doses, allergies, dates, measurements, negation, laterality, and brief affirmative or negative cues. These detectors can compare ASR output against local dictionaries, prior EHR data, and contextual rules. The output is not an automated correction. It is a verification task with evidence.
+ASR output
+Required field
+Rationale
+Transcript token
+Text, start, end, word confidence.
+Allows local evidence highlighting.
+Speaker segment
+Speaker role, diarisation confidence, overlap flag.
+Prevents misattribution of patient speculation as clinician assessment.
+Clinical term candidate
+Term, category, dictionary match, confidence.
+Flags medication, diagnosis, allergy, or measurement risk.
+Cue detector
+Yes, no, negation, uncertainty, laterality, number.
+Protects short or easily deleted utterances.
+ASR version
+Provider, model, language, configuration.
+Supports drift monitoring and vendor issue reports.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 23, clinical NLP and entity layer
+The clinical NLP layer should transform transcript turns into structured candidates, not final facts. It identifies symptoms, diagnoses, medications, allergies, tests, plans, social context, patient concerns, clinician assessment, and follow up instructions. Each candidate remains linked to source spans and speaker roles. The layer should distinguish patient reported information from clinician assessment, and it should tag uncertainty words such as possibly, maybe, denies, worsening, improved, and not taking.
+This layer supports safer drafting by providing the note generator with bounded inputs. It can also validate the generator output by asking whether each sentence has evidence, whether the speaker is correct, and whether high risk entities match the transcript. The result is a machine readable evidence graph. The graph does not remove clinician judgement, but it makes the basis of judgement inspectable.
+Entity type
+Example source
+Validation rule
+Medication
+Patient says amlodipine five milligrams
+Dose, route, and frequency require explicit evidence or prior EHR confirmation.
+Allergy
+Clinician asks about penicillin reaction
+Do not create allergy absence unless explicitly discussed or verified.
+Symptom negation
+Patient says no chest pain
+Bind denial to patient utterance and timestamp.
+Patient concern
+Patient wonders if headache is blood pressure
+Label as patient speculation unless clinician endorses.
+Plan
+Clinician says we will check renal function
+Attribute plan to clinician speech or clinician authored edit.
+Social detail
+Third party or family detail
+Check patient visibility and privacy rules.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 24, draft generation layer
+The draft generation layer produces text from transcript evidence, prior EHR context, and local templates. It should use constrained prompts or task specific generation steps rather than asking a model to write a whole note from raw transcript. A safer pipeline generates candidate sections, then sentence level claims, then evidence links, then style and conciseness passes. Each step should be logged with model version, prompt version, input IDs, and output IDs.
+The generator should prefer omission over invention. If an item is not discussed, the model should either stay silent or create a verification task rather than inserting normal review of systems text. It should be discouraged from filling unknown denials, expanding complexity language, or producing billing phrases without evidence. Local templates can still be used, but copied forward content must be labelled as TP and must not masquerade as encounter specific evidence.
+Generation step
+Input
+Output
+Section selection
+Visit type, specialty, EHR template, clinician preference.
+Required sections and patient visibility settings.
+Claim extraction
+Transcript and entity candidates.
+Claim list with source spans and speaker roles.
+Sentence drafting
+Claim list and style rules.
+Sentence blocks with provisional provenance class.
+Safety scan
+Draft sentences and evidence graph.
+Flags for unsupported claims and high risk terms.
+Conciseness pass
+Draft and local note length norms.
+Suggested removals of duplicated or irrelevant detail.
+Human review
+Provisional note and queue.
+Edited, verified, rejected, or routed sentence states.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 25, provenance engine
+The provenance engine is the backbone of the product. It records sentence origin, supporting evidence, uncertainty, review state, and export state. It should operate at sentence and structured field level, because clinicians and patients do not reason over whole notes when finding errors. A provenance object links a note sentence to one or more transcript turns, audio spans, template sources, prior note sources, model outputs, or human edits. The object also records what action has been taken.
+The engine should make absence of evidence visible. If a sentence has no supporting turn, the interface should not silently accept it. The sentence may be clinician authored, template based, or unsupported. Each case means something different. Clinician authored text can be valid because clinicians know things not spoken aloud. Template based text can be useful, but it needs confirmation. Unsupported model text should be blocked or removed unless the clinician rewrites it with accountability.
+Provenance field
+Definition
+Example
+sentence_id
+Stable ID for one note sentence or structured field.
+S-HPI-004
+origin_class
+TG, MS, TP, CA, or CV.
+MS
+evidence_refs
+Transcript turn IDs, audio spans, prior note IDs, or template IDs.
+T-05, audio 00:48-00:57
+risk_flags
+Medication, negation, privacy, billing, unsupported, speaker uncertainty.
+speaker uncertainty
+review_state
+Needs review, verified, edited, removed, routed, signed.
+verified
+review_event
+Actor, time, action, reason, before text, after text.
+Clinician edited for attribution.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 26, verification and sign off engine
+The verification engine determines which items must be resolved before sign off. It should combine hard rules and local configuration. A hard rule might block unsupported high risk medication changes. A local rule might require verification of all TP sentences in paediatrics, mental health, or emergency medicine. The engine should compute a sign off readiness state that explains exactly which conditions block closure. A disabled sign button without explanation will create frustration and workarounds.
+The sign off event should be more than a timestamp. It should store the final note text, provenance state, unresolved items allowed by policy, clinician identity, EHR destination, export status, and hash of the signed artefact. If a later patient correction or safety review amends the note, the system creates an amendment chain rather than overwriting history.
+Readiness check
+Block condition
+Resolution
+Consent
+Recording or transcription lacks valid consent state.
+Confirm consent, mark non-recording workflow, or discard capture.
+High risk unsupported text
+Medication, allergy, diagnosis, denial, or plan lacks source or human authoring.
+Verify, edit, remove, or route.
+Template carryover
+Template text treated as current encounter evidence.
+Confirm applies or mark historic.
+EHR mapping
+Required destination field missing or failed.
+Fix mapping, use approved fallback, or sign note only.
+Patient visibility
+Sensitive text lacks visibility decision.
+Set patient view, explanation, or restriction.
+Incident state
+Open severe defect linked to note.
+Safety lead review or override with reason.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 27, EHR integration architecture
+The integration architecture should treat the EHR as a partner system, not merely a destination for pasted text. It should use standards and vendor APIs where available, with a mapping layer that understands local note templates and discrete fields. The interface should show clinicians what will be written, and the integration service should record success or failure for each object. This is necessary because an AI scribe that cannot write back safely may increase closure work.
+The system should support two paths. In a fully integrated path, it can launch from the EHR, receive patient and encounter context, write approved content to the note, and populate structured fields after clinician confirmation. In a constrained path, it can produce a signed review packet and approved copy text, but it must label the path as weaker and report transfer burden. The product roadmap should move organisations from constrained to integrated paths.
+Integration function
+Requirement
+Failure behaviour
+Context launch
+Open app from EHR with patient, encounter, user, and role context.
+Block recording if patient context is ambiguous.
+Template retrieval
+Load note type, specialty, required sections, and coding fields.
+Use approved default template and record mismatch.
+Write back
+Submit narrative and structured fields through API.
+Show failed object, reason, and safe fallback.
+Identity
+Use single sign on and role mapping.
+Deny sign off if user cannot be verified.
+Audit link
+Store EHR note ID and app provenance ID.
+Retain app ID and create reconciliation task.
+Read back
+Confirm final EHR content equals exported content.
+Open discrepancy alert and prevent silent divergence.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 28, audit ledger and evidence store
+The audit ledger records events, while the evidence store holds supporting artefacts. They should be designed together but separated by retention and access rules. The ledger may need longer retention because it proves who did what and when. Audio may need shorter retention because it is sensitive. Transcript and provenance data may sit between these extremes depending on policy. The architecture should allow local organisations to set retention without breaking audit continuity.
+The ledger is also the basis for vendor accountability. A defect packet can include de-identified sentence text where allowed, evidence status, model version, prompt version, ASR version, template version, risk class, and human correction. This makes a vendor issue reproducible without sending more patient data than necessary. It also helps procurement teams compare systems using real error patterns.
+Store
+Contains
+Access rule
+Audio store
+Segmented encounter audio with time spans.
+Restricted, time limited, access logged, deletion policy enforced.
+Transcript store
+Turns, speaker roles, confidence, corrections.
+Clinical team access and safety review access.
+Provenance graph
+Sentence to evidence links, origin class, review state.
+Clinical, audit, and patient disclosure subset.
+Audit ledger
+Immutable event log, user actions, export hashes.
+Governance and legal access according to role.
+Incident store
+Defects, severity, vendor tickets, root cause notes.
+Safety, informatics, vendor subset where permitted.
+Analytics mart
+Aggregated metrics and de-identified trends.
+Service governance with suppression for small counts.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 29, patient contestation workflow
+A patient correction workflow should be designed as a service pathway, not as an inbox message with no owner. The patient selects a sentence or section, states whether the problem is factual, context, tone, privacy, or missing information, and submits the request. The system assigns a severity based on content, then routes it to a clinician or team. The response can amend the note, add explanation, decline with reason, or escalate to a safety review.
+The workflow operationalises VOICE. It gives patients a way to act on transparency and creates a record of institutional response. To avoid adversarial dynamics, the language should be respectful and clear. The patient is not asked to prove a technical hallucination. They are asked what seems wrong or incomplete. The clinician receives the original sentence, evidence links, and patient statement, which reduces rework and makes correction more precise.
+Step
+System action
+Output
+Select text
+Bind patient concern to sentence ID or section ID.
+Targeted correction request.
+Classify reason
+Factual, missing, tone, privacy, medication, appointment, other.
+Routing and severity.
+Review evidence
+Show clinician transcript, audio span, and provenance state.
+Decision context.
+Resolve
+Amend, explain, decline, route safety, or request more information.
+Patient response and audit event.
+Measure
+Track request type, severity, response time, and amendment rate.
+Quality and governance signal.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 30, vendor accountability and incident management
+The vendor accountability model should treat repeated documentation defects as contract and safety matters. A vendor should receive structured defect reports when permitted, and the organisation should track whether defects are resolved, recur, or worsen after model updates. Incidents should be classified by failure type, severity, evidence condition, and downstream outcome. This design prevents all errors from being absorbed as clinician proofreading failures.
+Incident management needs both technical and organisational pathways. Technical incidents include ASR deletion, diarisation error, model hallucination, unsupported template insertion, EHR mapping failure, latency, crash, or lost note. Organisational incidents include unclear consent, productivity pressure, insufficient training, unsafe configuration change, or contested patient visibility. The incident review should ask how the error became possible and why it was or was not intercepted.
+Incident type
+Minimum defect packet
+ASR deletion
+Audio span, transcript output, corrected text, ASR version, audio quality.
+Speaker misattribution
+Transcript turns, speaker roles, note sentence, diarisation state.
+Model hallucination
+Input evidence, output sentence, prompt version, model version, review outcome.
+Template drift
+Template ID, copied text, encounter evidence, local rule breached.
+EHR export failure
+Destination field, payload, error code, manual fallback used.
+Governance failure
+Consent state, policy version, user role, training state, action taken.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 31, data model overview
+The data model should be designed around encounters, evidence, note sentences, review events, and exports. Traditional note systems often treat the note as one blob of text. A provenance first scribe treats each sentence and structured field as an object with source, status, and history. This object model supports precise UI actions, patient correction, analytics, and audit. It also prevents a later edit from breaking the evidence chain without detection.
+The model should avoid storing more sensitive data than needed. Audio segments, transcript turns, and patient identifiers should be linked through encounter IDs and access rules. Analytics should use aggregated or de-identified data when possible. Where small services or rare conditions create re-identification risk, analytics should suppress or aggregate. The design must be assessed against local privacy law and clinical record policies.
+Entity
+Purpose
+Key relationships
+Encounter
+Container for visit, patient context, consent, note, and export.
+Patient, clinician, device, EHR encounter.
+ConsentRecord
+Structured permission and limitations.
+Encounter, patient, policy version.
+AudioSegment
+Source speech span.
+Encounter, transcript turns, quality events.
+TranscriptTurn
+Speaker labelled text with time span.
+Audio segment, note sentences, corrections.
+NoteSentence
+Unit of signed or draft meaning.
+Provenance objects, review events, export objects.
+ReviewEvent
+Human action and rationale.
+User, sentence, timestamp, before and after state.
+EHRExport
+Destination mapping and success state.
+Note version, EHR note ID, export hash.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 32, core entities and fields
+This page offers a build ready data dictionary. Engineering teams can convert it into database tables, event schemas, or FHIR adjacent resources. The key pattern is immutable history with current state views. For example, a NoteSentence can have current text and current review state, but prior text should remain available through ReviewEvent records. A TranscriptTurn can be corrected, but original ASR output should remain auditable where retention policy permits.
+The data model should also support versioning of prompts, models, templates, and rules. Without versioning, the team cannot explain why similar encounters produced different outputs after a vendor update. Versioning should be visible to governance users and hidden from clinicians unless it affects review.
+Entity
+Fields
+Encounter
+encounter_id, patient_ref, clinician_ref, specialty, visit_type, start_time, end_time, status.
+ConsentRecord
+consent_id, encounter_id, scope, method, language, script_version, granted, withdrawn_time.
+TranscriptTurn
+turn_id, encounter_id, speaker_role, start_ms, end_ms, text, confidence, corrected.
+NoteSentence
+sentence_id, note_id, section, text, origin_class, risk_flags, review_state.
+ProvenanceLink
+link_id, sentence_id, source_type, source_id, start_offset, end_offset, strength.
+ReviewEvent
+event_id, actor, role, action, reason, before_state, after_state, timestamp.
+RuleVersion
+rule_id, version, owner, active_from, active_to, approval_ref, rollback_ref.
+ModelRun
+run_id, model_name, model_version, prompt_version, input_hash, output_hash.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 33, API and event contracts
+The API design should make state transitions explicit. Recording starts only after an encounter context and consent state are present. Draft generation consumes transcript and context objects and produces sentence objects. Verification updates sentence state through controlled actions rather than arbitrary text replacement. EHR write back consumes a signed note version and creates export events. Analytics consumes events and does not mutate clinical artefacts.
+Events should be idempotent where possible. Clinical environments are noisy, networks fail, and clinicians move across devices. The system should be able to replay events and reconstruct state. It should also keep failed events visible. A failed export, failed model run, or unresolved verification task is a clinical workflow item, not an engineering log only.
+Endpoint or event
+Payload summary
+State change
+POST /encounters/{id}/consent
+Scope, method, script version, actor, decision.
+Consent pending to granted, declined, or withdrawn.
+POST /capture/start
+Encounter, device, user, consent ID.
+Ready to recording.
+TRANSCRIPT_TURN_CREATED
+Turn ID, speaker, time span, text, confidence.
+Adds evidence node.
+POST /drafts/generate
+Encounter ID, template ID, transcript version.
+Creates draft note and sentence IDs.
+POST /sentences/{id}/review
+Action, reason, edited text, evidence refs.
+Updates review state and audit event.
+POST /ehr/export
+Signed note ID, destination map, user.
+Creates export attempt and result.
+PATIENT_CORRECTION_SUBMITTED
+Sentence ID, reason, comment, severity.
+Opens correction task.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 34, security and privacy model
+Security should be designed around the fact that ambient recording is more sensitive than conventional typing. The system should apply least privilege, role based access, encryption in transit and at rest, short lived tokens, device registration, audit of every access to audio, and separation between identifiable data and analytics where possible. Audio replay should require a clinical or governance reason and should be logged. Bulk export of transcripts should be restricted.
+Privacy is not solved by consent alone. The app should allow pause and redaction, support patient decline, restrict third party details in patient facing views, and prevent unapproved secondary use. Vendor processing must be governed through contracts, data processing terms, access restrictions, retention periods, subprocessor disclosure, and breach processes. In some settings, a local deployment or private cloud path may be preferable to remote processing.
+Risk
+Control
+Unwanted recording
+Visible recording state, pause control, consent check, device status, and policy prompts.
+Excessive audio retention
+Segment retention rules, deletion job, legal hold exception, and deletion audit.
+Vendor over-access
+Minimum necessary payloads, de-identification where feasible, contract controls, and logging.
+Uncontrolled patient data in prompts
+Prompt gateway that strips unnecessary identifiers and records input hashes.
+Inappropriate user access
+Role based access, break glass workflow, and anomaly reporting.
+Patient facing disclosure error
+Visibility rules, sensitive content checks, and review before portal release.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 35, consent model and retention rules
+The consent model should treat recording, transcription, draft generation, portal release, quality review, and model improvement as separate uses. A patient may accept a clinical recording for note drafting but decline secondary use. The system should allow this granularity rather than bundling all uses into one yes or no. It should also capture withdrawal, interpreter assisted consent, guardian or proxy consent, and emergency exceptions where local policy allows.
+Retention rules should be expressed by artefact type. Raw audio may have the shortest retention. Transcript may remain until the note is signed or until the correction window closes. Provenance and audit events may need retention closer to clinical record requirements. The exact periods must be decided locally, but the application should make them configurable, tested, and reportable.
+Artefact
+Suggested policy question
+Design setting
+Audio
+How long is raw speech needed for verification and disputes?
+Retention period, access roles, deletion job.
+Transcript
+Is transcript part of the clinical record or a drafting artefact?
+Record status, visibility, export rules.
+Draft note
+When does a draft become part of the record?
+Draft expiry, sign off gate, deletion or retention.
+Provenance
+What evidence of review must be preserved?
+Ledger retention, patient disclosure subset.
+Patient correction
+How long must requests and responses be retained?
+Task retention, amendment linkage.
+Analytics
+Can data be aggregated without identifiers?
+Aggregation level, suppression rule, access list.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 36, role based access and delegation
+Role based access should support real clinical work, including team care and supervision. A consultant may sign. A resident may draft and request supervisor approval. A nurse may verify parts of a nursing note or add patient reported context. A coder may review billing sensitive sections without audio access. A safety lead may inspect incidents and evidence. A vendor may receive a restricted defect packet. These differences should be encoded in permissions rather than managed through informal workarounds.
+Delegation also needs clear responsibility. If a delegated user verifies a sentence, the signatory should see that action and decide whether it is sufficient. The audit record should show who did what. This protects against the false impression that the final signature alone describes the whole chain of work.
+Permission
+Clinician
+Trainee
+Coder
+Safety lead
+Patient
+Vendor
+View transcript
+Yes
+With role
+No
+Case based
+No
+No
+Replay audio
+Yes
+With role
+No
+Case based
+No
+No
+Edit note
+Yes
+Draft only
+Coding fields
+No
+No
+No
+Verify sentence
+Yes
+Draft verification
+Billing verification
+Review only
+No
+No
+Submit correction
+No
+No
+No
+No
+Yes
+No
+View defect packet
+No
+No
+No
+Yes
+No
+Restricted
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 37, note quality and safety controls
+Note quality should be treated as a clinical safety and usability outcome. The system should check completeness, conciseness, relevance, attribution, factuality, patient readability, and structured field fit. A note that is longer and more polished can still be worse if it buries clinically useful information under irrelevant text. The app should show note bloat warnings, duplicated content, unsupported denials, and boilerplate drift. It should encourage clinically useful synthesis rather than transcript dumping.
+Safety controls should be specific. Medication, allergy, diagnosis, procedure, test result, red flag symptom, and follow up plan require stronger evidence checks than generic background information. The system should avoid generating clinical decision recommendations unless the organisation has separately approved that function. If decision support is introduced later, it should be isolated from the scribe function and evaluated under a separate safety case.
+Quality dimension
+Check
+Completeness
+Required sections present and high risk omissions flagged.
+Factuality
+Claims linked to evidence or human authoring.
+Attribution
+Patient, clinician, interpreter, and prior record sources are distinguished.
+Conciseness
+Redundancy, irrelevant narrative, and copied forward text identified.
+Readability
+Patient facing text checked for jargon and potentially confusing phrasing.
+Clinical usefulness
+Assessment and plan remain concise, problem oriented, and peer readable.
+Billing restraint
+Coding language is supported and not generated as unsupported complexity.
+Safety closure
+No mandatory high risk verification tasks remain before sign off.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 38, handling uncertainty and confidence
+Uncertainty should be expressed where it acts. A clinician needs to know which sentence, entity, speaker attribution, or audio span is uncertain. Raw probabilities are often poorly interpreted, so the interface should use plain language, source class, confidence bands, and clear actions. For example, rather than showing 0.62, it can say speaker uncertain, evidence from two overlapping turns, replay recommended. A technical panel can retain raw values for auditors.
+The system should avoid green washing uncertainty. A note should not show an overall safe score while containing an unsupported medication change. Confidence must also be calibrated by context. A routine blood pressure follow up, emergency department resuscitation, mental health assessment, interpreted visit, paediatric encounter, or noisy ward round may need different thresholds.
+Uncertainty object
+User facing display
+Action
+Low ASR confidence
+Transcript span marked as uncertain.
+Replay or correct.
+Speaker uncertainty
+Speaker role needs review.
+Reattribute or confirm.
+Evidence gap
+No supporting source found.
+Remove, rewrite, or mark clinician authored.
+Model summary
+Abstractive summary, review meaning.
+Verify summary or edit.
+Template text
+Copied or boilerplate, confirm applies.
+Confirm, mark historic, or remove.
+High risk entity
+Medication or allergy needs verification.
+Confirm against audio, patient, or EHR.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 39, automation bias countermeasures
+Automation bias appears when users over trust fluent output. AI generated clinical notes can be especially persuasive because they look complete and professionally written. The interface should interrupt fluency at the right moments. Provenance tokens, evidence popovers, missing evidence states, high risk flags, and sign off blocks all slow the user down where error consequences are higher. These controls should be targeted, because constant warnings will create alert fatigue and workarounds.
+The app should use interaction design to keep clinicians engaged in clinical synthesis. It can ask the clinician to confirm the assessment and plan in their own words, show changed meaning after edits, and flag when the model produces long generic text. It can also hide low value suggestions until requested. The goal is not to make clinicians suspicious of every sentence, but to make trust proportional to evidence.
+Bias pathway
+Countermeasure
+Fluent hallucination
+Unsupported sentence token, evidence absence display, and sign off block.
+Over reliance on global score
+No whole note confidence score, only local evidence states.
+Alert fatigue
+Risk sorted queue and specialty specific thresholds.
+Hidden template carryover
+TP labels with dashed pattern and confirmation requirement.
+Passive proofreading
+Active actions, verify, edit, remove, reattribute, route.
+Productivity pressure
+Governance dashboard showing unsafe sign attempts and review time constraints.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 40, specialty and setting adaptation
+The system should offer a common backbone and specialty specific configurations. A primary care hypertension follow up, emergency medicine visit, maternity review, neonatal consultation, mental health session, and surgical procedure note differ in rhythm, risk language, patient visibility, and EHR fields. The core engine remains the same, but templates, verification thresholds, consent scripts, section visibility, and analytics should vary.
+Specialty adaptation must be governed, not improvised by individual users only. Clinician personalisation can improve usability, but vendor or user changes can also destabilise note quality. Each specialty pack should include note templates, high risk term dictionaries, section rules, patient view settings, evaluation metrics, and a sign off policy. Small services can begin with a generic pack and add local rules through approved change control.
+Setting
+Specific design emphasis
+Primary care
+Longitudinal context, medication reconciliation, follow up plans, patient readability.
+Emergency medicine
+High throughput capture, rapid sign off, red flag symptoms, triage context.
+Mental health
+Privacy, therapeutic language, patient access sensitivity, nuance preservation.
+Paediatrics
+Proxy consent, caregiver speech, safeguarding sensitivity, age appropriate terms.
+Inpatient ward
+Team authorship, handover, mobile workflow, multi source evidence.
+Surgery or procedure
+Procedure steps, consent, complications, device or implant details.
+Interpreted visits
+Language state, interpreter attribution, ASR limits, patient confirmation.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 41, offline low bandwidth and LMIC deployment
+The fiscal credibility paper supports treating digital health tools as infrastructure rather than short lived projects. For lower resource or low bandwidth environments, the AI scribe should degrade safely. A clinic may capture audio locally, process when network returns, or use on device ASR for selected languages if approved. The system should make processing state visible and should never imply a draft is ready when transcription has failed or is delayed.
+A public digital infrastructure approach favours reusable components, open standards, local capacity, and clear financing. The scribe should not force every clinic into high recurring vendor charges without budget justification. Deployment options can include local hosting for sensitive services, shared national identity and facility registries where available, and modular procurement so that ASR, note generation, EHR integration, and analytics can be purchased or replaced separately.
+Constraint
+Safe design response
+Intermittent network
+Offline capture queue, local encryption, processing status, and retry logic.
+Limited devices
+Room kiosk mode, shared tablet mode, and clear user sign in boundaries.
+Low EHR maturity
+Structured export packet and staged integration roadmap.
+Language diversity
+Language detection, interpreter metadata, human review thresholds, local terminology dictionaries.
+Fiscal constraints
+Modular procurement, cost per note reporting, and reinvestment plan.
+Limited informatics staff
+Admin templates, guided configuration, and remote support with restricted data access.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 42, fiscal and procurement model
+The procurement model should ask whether the system produces cashable savings, non-cashable time relief, safety gains, or capacity gains. AI scribes may reduce after hours work without immediately reducing salary expenditure. That can still be valuable, but fiscal reporting should be honest. The product should measure what work is removed, what work is relocated, and what new governance work is introduced. This prevents a system from being justified through inflated efficiency claims.
+Procurement should include acceptance tests for integration, provenance, retention, patient correction, error handling, uptime, drift reporting, and export fidelity. Vendor pricing should be connected to performance and accountability terms. Where possible, the organisation should avoid lock in by owning its provenance ledger, configuration records, and audit data.
+Procurement question
+Evidence to request
+Does it reduce burden safely?
+Time to sign, edit burden, replay burden, unresolved flags, clinician workload survey.
+Does it fit the EHR?
+Write back tests, field mapping coverage, failed export rate, read back checks.
+Can errors be traced?
+Sentence provenance, model version logs, defect packet workflow.
+Can patients contest errors?
+Correction workflow, response dashboard, amendment trail.
+Is the cost justified?
+Cost per signed note, implementation cost, governance labour, reinvestment plan.
+Can the organisation exit?
+Data export, audit retention, model replacement, contract termination terms.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 43, evaluation framework
+Evaluation should begin before the pilot and continue after scale up. The evaluation question is not simply whether clinicians like the scribe. It is whether the system reduces burden, maintains or improves note quality, supports patient trust, prevents unsafe content from reaching the record, and creates useful governance evidence. The framework should combine technical measures, human factors measures, workflow measures, patient measures, fiscal measures, and safety outcomes.
+The evaluation design can use phased rollout, matched clinics, pre and post measurement, or randomisation where feasible. Qualitative work remains important because workflow friction often appears in narratives before it appears in aggregate metrics. Evaluation should also measure harms avoided, such as unsupported high risk sentences intercepted before sign off.
+Evaluation domain
+Measures
+Technical
+WER, diarisation error, high risk entity recall, latency, uptime.
+Workflow
+Time to draft, time to review, time to sign, task switching, export failures.
+Quality
+Unsupported sentence rate, note length, edit distance, clinical usefulness ratings.
+Safety
+High risk flags, patient serious corrections, incidents, unsafe sign attempts.
+Experience
+Clinician workload, patient comprehension, trust, and correction experience.
+Fiscal
+Cost per note, governance labour, after hours work change, capacity effect.
+Equity
+Error rates by language, interpreter state, visit type, and other lawful categories.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 44, metric definitions and dashboard
+A good metric definition includes numerator, denominator, threshold, owner, and interpretation rule. Without these details, dashboard numbers become ambiguous. For example, a reduced time to sign may be good if unresolved flags also fall. It may be worrying if unsafe sign attempts rise or patient correction requests increase. Metrics should therefore be read in families rather than alone.
+The dashboard should also display caveats. Reddit based evidence and scoping reviews point towards likely mechanisms, but local validation is required. A metric that looks good in routine outpatient visits may not generalise to emergency, mental health, or multilingual contexts. The dashboard should allow stratification without exposing small groups to privacy risk.
+Metric
+Definition
+Interpretation
+Unsupported sentence rate
+Sentences with no evidence link and no clinician authored state divided by all sentences.
+Should fall after provenance rules mature.
+High risk flag resolution time
+Median time from flag creation to resolution for medication, allergy, diagnosis, or denial.
+Long tails may signal workflow overload.
+Replay burden
+Audio replay events per signed note.
+High values may reflect poor ASR or high clinician caution.
+Copy paste dependency
+Exports using manual transfer divided by total exports.
+Should fall as integration improves.
+Note bloat ratio
+Generated note length compared with local baseline for visit type.
+Sustained rise needs template or model review.
+Patient amendment rate
+Patient corrections resulting in amendments divided by released notes.
+High rates may reveal note quality or communication issues.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 45, pilot protocol
+A pilot should start in a setting with manageable risk, engaged clinicians, and measurable documentation pain. Straightforward outpatient visits can test capture, draft generation, sentence provenance, and EHR export. A second phase can include more complex visits once the safety case is stronger. The pilot should not begin by forcing the tool into the highest pressure setting, because weak integration and verification burden may be magnified there.
+The pilot protocol should include baseline measurement, training, consent workflow testing, silent mode testing where the app drafts but does not write back, supervised write back, patient view testing, incident review meetings, and a stop rule. A stop rule might be triggered by repeated high risk hallucinations, export mismatch, consent failure, or unacceptable clinician burden.
+Pilot phase
+Activities
+Exit criterion
+Preparation
+Map workflow, configure template, approve consent script, test EHR mapping.
+Safety and privacy sign off.
+Baseline
+Measure current documentation time, after hours work, note length, and corrections.
+Baseline report accepted.
+Silent mode
+Generate drafts without EHR write back and compare to clinician notes.
+Quality threshold met.
+Supervised use
+Clinicians verify and sign selected AI drafts with daily review.
+No severe unresolved safety pattern.
+Expanded use
+Add more visit types and patient correction workflow.
+Sustained safety and workload performance.
+Decision
+Procurement, scale, redesign, or stop.
+Governance board decision with evidence.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 46, implementation roadmap
+Implementation should proceed through staged capability, not a single launch. The first stage is foundation, where identity, consent, capture, transcript, draft, and audit basics work. The second stage is provenance and verification, where sentence evidence links, review queue, and sign off gates become mandatory. The third stage is EHR write back, where structured integration reduces manual transfer. The fourth stage is patient correction and governance analytics. The fifth stage is optimisation, with specialty packs and vendor comparisons.
+Each stage should have a measurable acceptance test and a rollback route. A system that cannot safely write back should still allow reviewed copy workflows, but it should label them as transitional. A system that cannot produce reliable transcript in a setting should not be forced into that setting.
+Stage
+Build focus
+Acceptance test
+Foundation
+SSO, encounter launch, consent, capture, transcript, draft store.
+End to end synthetic encounter captured and drafted.
+Provenance
+Sentence tokens, evidence popover, review queue, sign gate.
+Unsupported high risk sentence is blocked.
+Integration
+EHR context, export preview, write back, read back check.
+Exported content equals EHR content.
+Patient
+Patient view, correction request, amendment workflow.
+Patient correction routes and closes correctly.
+Governance
+Dashboards, incident management, vendor defect packets.
+Monthly safety review generated from live data.
+Scale
+Specialty packs, low bandwidth mode, procurement comparison.
+New service configured without custom code where feasible.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 47, change management and training
+Training should focus on new work patterns rather than only button clicks. Clinicians need to know when to use the tool, how to obtain consent, how to interpret provenance tokens, how to verify high risk sentences, how to avoid over trusting fluent prose, how to handle patient questions, and how to escalate defects. Training should also tell clinicians what the system will not do. Overpromising creates disappointment and unsafe shortcuts.
+Change management should include peer champions, informatics support, protected time for feedback, and a rapid defect review loop. The governance team should watch for productivity pressure that discourages careful review. It should also avoid blaming individual clinicians for workarounds that signal poor integration or unrealistic configuration.
+Training module
+Audience
+Competency
+Consent and capture
+Clinicians and support staff
+Can start, pause, decline, and document consent correctly.
+Provenance reading
+Clinicians, trainees, safety leads
+Can distinguish TG, MS, TP, CA, and CV.
+Verification workflow
+Clinicians and delegates
+Can resolve high risk flags and use evidence popovers.
+Patient correction
+Care team and governance
+Can respond to correction requests and amend notes.
+Incident reporting
+All clinical users
+Can classify and route defects without over sharing data.
+Configuration governance
+Admins and informatics
+Can change templates and rules through approval and rollback.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 48, risk register
+The risk register should be maintained as a living artefact linked to incidents and evaluation metrics. Each risk has a trigger, mitigation, owner, monitoring signal, and residual risk. The register should not be limited to technical failures. It should include consent burden, patient trust, billing inflation, review fatigue, training gaps, weak EHR integration, vendor lock in, and unequal ASR performance.
+The register should also state when the system should not be used. Examples may include patients who decline recording, visits with highly sensitive third party information where recording is inappropriate, environments with unusable audio, unsupported languages without interpreter workflow, or settings where clinician review time is not available. Non-use can be a safe design outcome.
+Risk
+Mitigation
+Monitoring
+Unsupported generated claim
+Sentence provenance, verification queue, sign off block.
+Unsupported sentence rate and unsafe sign attempts.
+ASR misses medication or negation
+High risk cue detector, replay, dictionary checks.
+Medication correction rate and ASR defect tickets.
+Review fatigue
+Risk sorted queue, threshold tuning, concise notes.
+Flag volume, override rate, clinician workload survey.
+Poor EHR integration
+Write back tests, read back checks, staged roadmap.
+Copy paste dependency and export failures.
+Patient confusion
+Patient view preview, glossary, correction route.
+Correction requests and patient feedback.
+Billing inflation
+Coding sensitivity flags and audit review.
+Coding variance and unsupported complexity language.
+Vendor drift
+Version registry, regression tests, defect packets.
+Post-update error trends.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 49, regulatory and ethics checklist
+This checklist is a design aid, not legal advice. Each organisation must review local law, professional standards, patient access rules, medical device guidance where applicable, record retention rules, privacy law, information security requirements, and procurement obligations. The app should be built to document compliance decisions, because governance cannot be reconstructed after an incident if the system never recorded the basis for those decisions.
+The ethics checklist should include patient autonomy, clinician workload, error correction, proportional data use, fairness, accessibility, and accountability. It should also ask whether the system increases pressure to see more patients without providing enough time for review. Efficiency that depends on rushed signing is not a safe benefit.
+Checklist item
+Design evidence to produce
+Consent
+Approved scripts, consent records, withdrawal process, decline workflow.
+Privacy
+Data flow map, retention schedule, vendor contract, access controls.
+Clinical safety
+Safety case, risk register, incident process, sign off rules.
+Patient access
+Patient view policy, correction process, amendment trail.
+Fairness
+ASR and note quality monitoring by context and lawful categories.
+Accessibility
+Token labels not dependent on colour, keyboard use, screen reader states.
+Procurement
+Exit plan, service levels, data ownership, defect response obligations.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 50, product backlog and MVP scope
+The MVP should prove the backbone, not every specialty feature. It should include encounter launch, consent capture, audio recording, transcript turns, draft note generation, sentence provenance classes, evidence popover, verification queue, sign off gate, manual export with audit, and basic analytics. It should not initially automate orders, diagnoses, billing, or clinical decision recommendations. These functions create higher risk and need separate evaluation.
+The backlog should be ordered by safety dependency. A beautiful patient portal is not useful if the system cannot trace note sentences to evidence. Likewise, EHR write back should follow export preview and read back tests. Early technical debt in provenance is expensive because every later feature depends on sentence IDs, evidence links, and review events.
+MVP item
+Must have
+Later
+Encounter launch
+Patient and encounter context with SSO.
+Multi-site federation.
+Consent
+Structured consent and decline workflow.
+Portal pre-consent and multilingual scripts.
+Transcript
+Speaker turns, timestamps, replay, correction.
+Real time live note suggestions.
+Draft note
+SOAP template and editable sentence blocks.
+Specialty packs and multi note types.
+Provenance
+TG, MS, TP, CA, CV and evidence popover.
+Advanced provenance analytics.
+Verification
+High risk queue and sign off block.
+Adaptive thresholds by clinician and setting.
+Export
+Approved manual export with audit.
+Full FHIR or vendor API write back.
+Analytics
+Basic safety and workflow metrics.
+Cost and equity dashboards at scale.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 51, workbook templates and canvases
+This page gives the implementation team reusable prompts. Each canvas should be completed by clinical, product, engineering, and governance representatives together. A shared workbook prevents the usual split where engineers optimise models, clinicians discover workflow friction later, and governance teams receive only a completed product. The point is to identify design decisions while they can still be changed.
+The canvases should be revisited after pilot data. Initial assumptions about consent time, note quality, draft latency, and review burden may be wrong. The workbook should record the decision, the evidence, the owner, the date, and the trigger for revision.
+Canvas
+Questions to answer
+Workflow canvas
+Where does work move before, during, and after the encounter?
+Evidence canvas
+Which sentences need transcript support, prior record support, or clinician authorship?
+Consent canvas
+What is asked, when, by whom, in what languages, and how is refusal handled?
+EHR canvas
+Which fields are written back, which remain text, and which cannot be automated?
+Patient view canvas
+What is shown, what is explained, and how can the patient contest?
+Safety canvas
+Which failures block sign off, which route review, and which are monitored?
+Fiscal canvas
+What costs, benefits, and new governance labour are being measured?
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 52, data dictionary appendix
+A shared vocabulary reduces confusion across disciplines. The terms below should be adapted into product tickets, training, and governance documents. Each term should map to interface copy, database fields, and evaluation metrics. For example, unsupported sentence should mean the same thing in the clinician UI, the audit dashboard, and the incident process.
+The vocabulary should also prevent misleading claims. The system should avoid calling a note AI verified. It can say clinician verified, transcript grounded, model summarised, or template copied. Words matter because they shape reliance and liability expectations.
+Term
+Working definition
+AI scribe
+Assistive system that captures speech and drafts documentation under human review.
+Transcript grounded
+A sentence directly supported by one or more transcript turns.
+Model summarised
+A sentence that compresses or abstracts one or more evidence spans.
+Template text
+Boilerplate or copied forward content not created from this encounter alone.
+Clinician authored
+Text written or materially rewritten by a human clinician.
+Clinician verified
+Machine generated text accepted unchanged after explicit human review.
+Unsupported sentence
+Generated text without evidence link or human authored status.
+Sign off gate
+Rule set that prevents finalisation until mandatory checks are resolved.
+Patient correction
+Patient initiated request to review or amend a note statement.
+Workbook decision space. Owner: __________________ Decision: __________________ Evidence needed: __________________
+Page 53, references and limitations
+The workbook synthesises the uploaded EHR usability review, OpenNotes AI note analysis, ASR reliability review, digital health fiscal credibility review, transparency review, AI scribe usability review, workflow note, socio-technical evaluation note, and TEETH provenance interface design asset. The design is intentionally conservative. It treats AI drafting as useful but fallible, and it builds verification, provenance, correction, and governance into the core architecture rather than as later add ons.
+Limitations should be made explicit. Several uploaded studies are scoping reviews or analyses of clinician discourse, including Reddit based data, so they explain patterns and risks but do not establish population prevalence. Local pilot evidence is still needed. The workbook also does not replace legal, medical device, cybersecurity, EHR vendor, or clinical safety review. Its purpose is to give the development team a complete architecture and decision framework from which to build and evaluate a tab based AI scribe app.
+Reference source
+Use in workbook
+Olakotan et al., EHR usability challenges
+Problem framing for navigation, task switching, workarounds, and documentation burden.
+Atiku and Olakotan, AI-generated notes in OpenNotes
+Governance framing for provenance, contestation, liability, and dual audience design.
+Atiku, Owolanke and Olakotan, ASR reliability
+Technical safety framing for ASR limits and human oversight.
+Atiku and Olakotan, digital health and fiscal credibility
+Fiscal and procurement framing for infrastructure and investment reporting.
+Atiku et al., contingent payoff of transparency
+VOICE and TEETH framing for accountable transparency.
+Atiku, Olakotan and Owolanke, AI scribe usability
+Usability framing for errors, verbosity, formatting, and EHR integration.
+Workflow and socio-technical notes
+Operational framing for consent, latency, write back, configuration, and harm pathways.
+TEETH interface design asset
+Provenance classes and sentence level interface mechanics.
