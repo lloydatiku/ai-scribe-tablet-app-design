@@ -3,1328 +3,825 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Scribe Tablet App Design</title>
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  html,body{margin:0;padding:0;background:#e8ecef;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:#1a2b33;}
-  a{color:#0f766e;text-decoration:none;} a:hover{color:#0b5a54;text-decoration:underline;}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-  @keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
-  ::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-thumb{background:#c6cfd4;border-radius:4px}
-
-  /* Browser-fit and wrapping guardrails added after export. */
-  *{box-sizing:border-box;min-width:0}
-  button,span{max-width:100%}
-  button{white-space:normal!important;line-height:1.16!important;overflow:visible!important}
-  div,span,button,p,h1,h2,h3,strong{overflow-wrap:anywhere;word-break:normal}
+html, body { margin: 0; padding: 0; height: 100%; background: #F6F1EA; }
+* { box-sizing: border-box; }
+a { color: #E1704B; } a:hover { color: #B9532F; }
+@keyframes recpulse { 0% { opacity: 1; } 50% { opacity: 0.35; } 100% { opacity: 1; } }
+button { font-family: 'Nunito', sans-serif; }
+input { font-family: 'Nunito', sans-serif; }
+::selection { background: #F3D9CC; }
 </style>
 </helmet>
+<div data-screen-label="AI Scribe App" style="display:flex; width:100%; height:100vh; min-height:700px; background:#F6F1EA; color:#3B342C; font-family:'Nunito',sans-serif; overflow:hidden; position:relative;">
 
-<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#0f766e"/><circle cx="50" cy="41" r="11" fill="#fdfcf9"/><rect x="33" y="58" width="34" height="5.5" rx="2.75" fill="#fdfcf9"/><rect x="39" y="69" width="22" height="5.5" rx="2.75" fill="#9fd8d0"/></svg></template>
-
-<div style="display:flex;gap:28px;padding:32px;align-items:flex-start;justify-content:center;min-height:100vh;box-sizing:border-box">
-
-  <!-- ===================== TABLET DEVICE ===================== -->
-  <div style="background:#14181b;border-radius:34px;padding:18px;box-shadow:0 24px 60px rgba(20,30,40,.28);flex:none">
-    <div style="width:1180px;height:840px;background:#f4f7f8;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;position:relative">
-
-      <!-- Persistent status strip -->
-      <div style="display:flex;align-items:center;gap:14px;padding:10px 18px;background:#ffffff;border-bottom:1px solid #dde4e8;flex:none">
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:30px;height:30px;border-radius:50%;background:#0f766e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">AO</div>
-          <div>
-            <div style="font-size:13px;font-weight:700">Adaeze O. · 54F</div>
-            <div style="font-size:10.5px;color:#5b6b74">Hypertension follow-up · Today 09:15</div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center;margin-left:8px">
-          <span style="font-size:10.5px;font-weight:600;background:#e3f1e7;color:#1f7a3d;padding:3px 9px;border-radius:20px">Consent OK</span>
-          <span style="{{ noteStateStyle }}">{{ noteStateLabel }}</span>
-          <span style="{{ flagChipStyle }}">{{ flagChipLabel }}</span>
-          <span style="font-size:10.5px;font-weight:600;background:#eaeef2;color:#475569;padding:3px 9px;border-radius:20px">EHR: Connected</span>
-        </div>
-        <div style="flex:1"></div>
-        <sc-if value="{{ recording }}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex;align-items:center;gap:7px;background:#fdecec;border:1px solid #f2c6c8;padding:4px 12px;border-radius:20px">
-            <span style="width:9px;height:9px;border-radius:50%;background:#c22730;animation:pulse 1.1s infinite"></span>
-            <span style="font-size:11.5px;font-weight:700;color:#a3202a">REC {{ recClock }}</span>
-          </div>
-        </sc-if>
-        <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
-          <div style="position:absolute;top:58px;right:20px;z-index:60;background:#1a2b33;color:#fff;font-size:12px;padding:9px 14px;border-radius:9px;box-shadow:0 8px 20px rgba(0,0,0,.25);max-width:340px">{{ toast }}</div>
-        </sc-if>
+  <!-- ========== LEFT RAIL: ENCOUNTERS ========== -->
+  <div style="{{ railStyle }}">
+    <div style="padding:20px 18px 12px 18px;">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div style="font-size:21px; font-weight:900; letter-spacing:-0.2px;">Encounters</div>
+        <div style="font-size:12px; font-weight:700; color:#8E8275; background:#F1EADF; border-radius:999px; padding:4px 10px;">Today · {{ todayCount }}</div>
       </div>
+      <input placeholder="Search patients or notes" style="margin-top:12px; width:100%; border:1px solid #EBE2D4; background:#FFFFFF; border-radius:14px; padding:10px 14px; font-size:14px; color:#3B342C; outline:none;">
+    </div>
+    <div style="flex:1; overflow-y:auto; padding:2px 10px 10px 10px; min-height:0;">
+      <sc-for list="{{ railItems }}" as="e" hint-placeholder-count="4">
+        <div style="{{ e.rowStyle }}" onClick="{{ e.onClick }}">
+          <div style="{{ e.avStyle }}">{{ e.initials }}</div>
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; gap:8px;">
+              <div style="font-size:15px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ e.name }}</div>
+              <div style="font-size:12px; font-weight:700; color:#A99C8C; flex:0 0 auto;">{{ e.time }}</div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:3px;">
+              <div style="{{ e.prevStyle }}">{{ e.preview }}</div>
+              <sc-if value="{{ e.hasBadge }}" hint-placeholder-val="{{ false }}">
+                <div style="{{ e.badgeStyle }}">{{ e.badge }}</div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="padding:14px 18px; border-top:1px solid #EBE2D4; display:flex; align-items:center; gap:10px;">
+      <div style="width:36px; height:36px; border-radius:12px; background:#3D9083; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:900;">LO</div>
+      <div style="flex:1;">
+        <div style="font-size:14px; font-weight:800;">Dr. Lena Osei</div>
+        <div style="font-size:12px; color:#8E8275; font-weight:600;">Hypertension clinic</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#4E9B6F;"><span style="width:8px; height:8px; border-radius:99px; background:#4E9B6F; display:inline-block;"></span>EHR</div>
+    </div>
+  </div>
 
-      <!-- Tab bar -->
-      <div style="display:flex;gap:2px;padding:6px 12px 0;background:#ffffff;border-bottom:1px solid #dde4e8;flex:none">
-        <sc-for list="{{ tabsNav }}" as="t" hint-placeholder-count="9">
-          <button style="{{ t.style }}" onClick="{{ t.go }}">{{ t.label }}<sc-if value="{{ t.badge }}" hint-placeholder-val="{{ false }}"><span style="margin-left:6px;background:#c22730;color:#fff;border-radius:12px;padding:1px 7px;font-size:10px;font-weight:700">{{ t.badge }}</span></sc-if></button>
+  <!-- ========== CENTER COLUMN ========== -->
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column; min-height:0;">
+
+    <!-- Patient header -->
+    <div style="padding:16px 24px 12px 24px; background:#FFFDFA; border-bottom:1px solid #EBE2D4; display:flex; align-items:center; gap:16px;">
+      <div style="{{ headAvStyle }}">{{ headInitials }}</div>
+      <div style="min-width:0; overflow:hidden;">
+        <div style="font-size:20px; font-weight:900; letter-spacing:-0.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ headName }}</div>
+        <div style="font-size:13px; color:#8E8275; font-weight:700; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ headMeta }}</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; flex:1; justify-content:flex-end;">
+        <sc-for list="{{ headChips }}" as="c" hint-placeholder-count="4">
+          <div style="{{ c.style }}">{{ c.label }}</div>
         </sc-for>
+        <button onClick="{{ onSign }}" disabled="{{ signDisabled }}" style="{{ signStyle }}">{{ signLabel }}</button>
       </div>
+    </div>
 
-      <!-- Content -->
-      <div style="flex:1;overflow:auto;position:relative">
+    <!-- Tab bar -->
+    <div style="display:flex; align-items:center; gap:4px; padding:10px 20px 0 20px; background:#FFFDFA; border-bottom:1px solid #EBE2D4;">
+      <sc-for list="{{ tabItems }}" as="t" hint-placeholder-count="6">
+        <button onClick="{{ t.onClick }}" style="{{ t.style }}">{{ t.label }}<sc-if value="{{ t.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="{{ t.badgeStyle }}">{{ t.badge }}</span></sc-if></button>
+      </sc-for>
+    </div>
 
-      <!-- ============ 1. HOME ============ -->
-      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
-        <div style="min-height:100%;box-sizing:border-box;background:linear-gradient(180deg,#f9fbfb 0%,#edf2f3 100%);padding:28px 34px 34px;display:flex;flex-direction:column;gap:20px">
+    <!-- Content area -->
+    <div style="flex:1; overflow-y:auto; min-height:0; padding:20px 24px 40px 24px;">
 
-          <div style="display:flex;align-items:flex-end;gap:16px">
-            <div style="flex:1">
-              <div style="font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#0f766e">Riverside Family Practice · Room 4</div>
-              <div style="font-family:Newsreader,Georgia,serif;font-size:30px;font-weight:500;color:#12242b;margin-top:7px;line-height:1.1">Good morning, Dr. Hassan</div>
-              <div style="font-size:12.5px;color:#5b6b74;margin-top:6px">Monday 6 July · 3 encounters today · <strong style="color:#a3202a">1 needs your attention</strong> · sorted by safety, not recency</div>
-            </div>
-            <div style="display:flex;gap:4px;background:#ffffff;border:1px solid #d8e2e4;border-radius:22px;padding:4px;box-shadow:0 2px 8px rgba(18,50,60,.05)">
-              <span style="font-size:11px;font-weight:700;padding:6px 14px;border-radius:18px;background:#12242b;color:#fff">My drafts</span>
-              <span style="font-size:11px;font-weight:600;padding:6px 14px;border-radius:18px;color:#5b6b74;cursor:pointer">Team queue</span>
-              <span style="font-size:11px;font-weight:600;padding:6px 14px;border-radius:18px;color:#5b6b74;cursor:pointer">Corrections</span>
-              <span style="font-size:11px;font-weight:600;padding:6px 14px;border-radius:18px;color:#5b6b74;cursor:pointer">Failed exports</span>
+      <!-- ===== CONSENT & CAPTURE ===== -->
+      <sc-if value="{{ paneConsent }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:760px;">
+          <div style="{{ readyBanner.style }}">
+            <div style="font-size:16px; font-weight:900;">{{ readyBanner.title }}</div>
+            <div style="font-size:13px; font-weight:600; margin-top:2px; opacity:0.85;">{{ readyBanner.sub }}</div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBE2D4; border-radius:18px; padding:18px 20px; margin-top:16px;">
+            <div style="font-size:15px; font-weight:900;">Consent scopes</div>
+            <div style="font-size:13px; color:#8E8275; font-weight:600; margin-top:2px;">Each use needs its own permission. Recorded as a structured event with method and time.</div>
+            <div style="display:flex; flex-direction:column; margin-top:10px;">
+              <sc-for list="{{ consentRows }}" as="s" hint-placeholder-count="5">
+                <div style="display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid #F3EDE2;">
+                  <div style="flex:1;">
+                    <div style="font-size:14px; font-weight:800;">{{ s.label }}</div>
+                    <div style="font-size:12px; color:#8E8275; font-weight:600;">{{ s.sub }}</div>
+                  </div>
+                  <div style="font-size:12px; font-weight:700; color:#A99C8C;">{{ s.method }}</div>
+                  <button onClick="{{ s.onToggle }}" style="{{ s.switchStyle }}"><span style="{{ s.knobStyle }}"></span></button>
+                </div>
+              </sc-for>
             </div>
           </div>
-
-          <div onClick="{{ openFeatured }}" style="background:#ffffff;border:1px solid #d8e2e4;border-radius:20px;cursor:pointer;box-shadow:0 18px 44px rgba(18,50,60,.09),0 2px 6px rgba(18,50,60,.04);overflow:hidden" style-hover="box-shadow:0 22px 52px rgba(15,118,110,.16),0 2px 6px rgba(18,50,60,.05)">
-            <div style="display:flex;align-items:center;gap:18px;padding:20px 26px">
-              <span style="{{ badgeStyle }}">1</span>
-              <div style="width:48px;height:48px;border-radius:50%;background:#0f766e;color:#fdfcf9;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:16px;font-family:Newsreader,Georgia,serif">AO</div>
-              <div style="flex:1">
-                <div style="font-family:Newsreader,Georgia,serif;font-size:19px;font-weight:600;color:#12242b">Adaeze O. <span style="color:#8a979e;font-size:14px;font-weight:400">· 54F · Hypertension follow-up</span></div>
-                <div style="font-size:11.5px;color:#5b6b74;margin-top:3px">09:15 · Primary care · draft ready 24 min ago</div>
-              </div>
-              <span style="{{ homeFlagStyle }}">{{ homeFlagLabel }}</span>
-              <span style="background:#0f766e;color:#fff;font-size:12px;font-weight:700;border-radius:12px;padding:10px 20px;box-shadow:0 6px 14px rgba(15,118,110,.25)">Open note →</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:10px;border-top:1px solid #edf2f3;background:#fbfdfd;padding:11px 26px;flex-wrap:wrap">
-              <span style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#8a979e">Journey</span>
-              <span style="font-size:11px;font-weight:700;color:#1f7a3d">Consent OK</span><span style="color:#c2ccd1">→</span>
-              <span style="font-size:11px;font-weight:700;color:#1f7a3d">Recorded OK</span><span style="color:#c2ccd1">→</span>
-              <span style="font-size:11px;font-weight:700;color:#1f7a3d">Drafted OK</span><span style="color:#c2ccd1">→</span>
-              <span style="{{ noteStateStyle }}">{{ noteStateLabel }}</span><span style="color:#c2ccd1">→</span>
-              <span style="{{ ehrChipStyle }}">{{ ehrChipLabel }}</span>
-            </div>
-          </div>
-
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-            <div style="background:#ffffff;border:1px solid #dfe7e9;border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:14px">
-              <div style="width:40px;height:40px;border-radius:50%;background:#efeaf7;color:#6d4fa1;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;font-family:Newsreader,Georgia,serif">MB</div>
-              <div style="flex:1">
-                <div style="font-family:Newsreader,Georgia,serif;font-size:15px;font-weight:600;color:#12242b">Musa B. <span style="color:#8a979e;font-size:12px;font-weight:400">· Diabetes annual review</span></div>
-                <div style="font-size:11px;color:#5b6b74;margin-top:2px">10:00 · recording finished</div>
-              </div>
-              <span style="font-size:10.5px;font-weight:600;background:#efeaf7;color:#6d4fa1;padding:4px 11px;border-radius:16px">Transcript processing…</span>
-            </div>
-            <div style="background:#ffffff;border:1px solid #dfe7e9;border-radius:16px;padding:16px 20px;display:flex;align-items:center;gap:14px">
-              <div style="width:40px;height:40px;border-radius:50%;background:#eaeef2;color:#475569;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;font-family:Newsreader,Georgia,serif">KE</div>
-              <div style="flex:1">
-                <div style="font-family:Newsreader,Georgia,serif;font-size:15px;font-weight:600;color:#12242b">Kemi E. <span style="color:#8a979e;font-size:12px;font-weight:400">· Chest pain review</span></div>
-                <div style="font-size:11px;color:#5b6b74;margin-top:2px">08:30 · signed 08:58</div>
-              </div>
-              <span style="font-size:10.5px;font-weight:600;background:#e3f1e7;color:#1f7a3d;padding:4px 11px;border-radius:16px">Signed · Exported OK</span>
-            </div>
-          </div>
-
-          <div>
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-              <span style="{{ badgeStyle }}">2</span>
-              <span style="font-size:11px;font-weight:700;color:#5b6b74;text-transform:uppercase;letter-spacing:.09em">Service indicators — this week</span>
-            </div>
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);background:#ffffff;border:1px solid #d8e2e4;border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(18,50,60,.04)">
-              <div style="padding:16px 20px;border-right:1px solid #edf2f3"><div style="font-size:10.5px;color:#8a979e;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Draft latency</div><div style="font-family:Newsreader,Georgia,serif;font-size:26px;font-weight:500;color:#12242b;margin-top:5px">38 s</div><div style="font-size:10.5px;color:#1f7a3d;margin-top:2px;font-weight:600">▼ 6 s vs last week</div></div>
-              <div style="padding:16px 20px;border-right:1px solid #edf2f3"><div style="font-size:10.5px;color:#8a979e;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Note length vs norm</div><div style="font-family:Newsreader,Georgia,serif;font-size:26px;font-weight:500;color:#12242b;margin-top:5px">+9%</div><div style="font-size:10.5px;color:#92610c;margin-top:2px;font-weight:600">Watch for note bloat</div></div>
-              <div style="padding:16px 20px;border-right:1px solid #edf2f3"><div style="font-size:10.5px;color:#8a979e;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Replay burden / note</div><div style="font-family:Newsreader,Georgia,serif;font-size:26px;font-weight:500;color:#12242b;margin-top:5px">2.1 min</div><div style="font-size:10.5px;color:#5b6b74;margin-top:2px;font-weight:600">Stable</div></div>
-              <div style="padding:16px 20px"><div style="font-size:10.5px;color:#8a979e;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Blocked sign attempts</div><div style="font-family:Newsreader,Georgia,serif;font-size:26px;font-weight:500;color:#12242b;margin-top:5px">{{ unsafeAttempts }}</div><div style="font-size:10.5px;color:#5b6b74;margin-top:2px;font-weight:600">Sign gate working</div></div>
-            </div>
-          </div>
-        </div>
-      </sc-if>
-
-      <!-- ============ 2. CONSENT & CAPTURE ============ -->
-      <sc-if value="{{ isConsent }}" hint-placeholder-val="{{ false }}">
-        <div style="padding:20px 22px;display:grid;grid-template-columns:1.2fr 1fr;gap:18px">
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="{{ badgeStyle }}">1</span><h3 style="margin:0;font-size:14px;font-weight:700">Consent scope — each permission is separate</h3></div>
-              <div style="display:flex;flex-direction:column;gap:8px">
-                <sc-for list="{{ consentItems }}" as="c" hint-placeholder-count="5">
-                  <div onClick="{{ c.toggle }}" style="display:flex;align-items:center;gap:12px;padding:9px 12px;border:1px solid #e4eaed;border-radius:10px;cursor:pointer" style-hover="background:#f6f9fa">
-                    <div style="{{ c.swStyle }}"><div style="{{ c.knobStyle }}"></div></div>
-                    <div style="flex:1"><div style="font-size:13px;font-weight:600">{{ c.label }}</div><div style="font-size:11px;color:#5b6b74">{{ c.desc }}</div></div>
-                    <span style="{{ c.stateStyle }}">{{ c.stateLabel }}</span>
+          <div style="display:flex; gap:16px; margin-top:16px;">
+            <div style="flex:1; background:#FFFFFF; border:1px solid #EBE2D4; border-radius:18px; padding:18px 20px;">
+              <div style="font-size:15px; font-weight:900;">Capture readiness</div>
+              <div style="display:flex; flex-direction:column; margin-top:8px;">
+                <sc-for list="{{ deviceRows }}" as="d" hint-placeholder-count="4">
+                  <div style="display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid #F3EDE2;">
+                    <div style="font-size:14px; font-weight:700;">{{ d.label }}</div>
+                    <div style="{{ d.valStyle }}">{{ d.val }}</div>
                   </div>
                 </sc-for>
               </div>
             </div>
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="{{ badgeStyle }}">2</span><h3 style="margin:0;font-size:14px;font-weight:700">How consent was obtained</h3></div>
-              <div style="display:flex;gap:8px">
-                <span style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:18px;background:#0f766e;color:#fff">Verbal, scripted</span>
-                <span style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:18px;background:#fff;border:1px solid #dde4e8;color:#5b6b74">Written</span>
-                <span style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:18px;background:#fff;border:1px solid #dde4e8;color:#5b6b74">Portal pre-consent</span>
-                <span style="font-size:12px;font-weight:600;padding:6px 14px;border-radius:18px;background:#fff;border:1px solid #dde4e8;color:#5b6b74">Declined</span>
-              </div>
-              <div style="margin-top:10px;font-size:11.5px;color:#5b6b74;background:#f6f9fa;border-radius:8px;padding:9px 12px">Logged as a structured event: who asked, script version 4.1, patient response, time 09:14:02. If the patient declines, the app offers a non-recording workflow (typed template / post-visit dictation) so refusal never blocks care.</div>
+            <div style="flex:1; background:#FFFFFF; border:1px solid #EBE2D4; border-radius:18px; padding:18px 20px;">
+              <div style="font-size:15px; font-weight:900;">If the patient declines</div>
+              <div style="font-size:13px; color:#6E6355; font-weight:600; line-height:1.55; margin-top:8px;">Refusal is not workflow failure. Offer the non-recording path: typed template, manual note support, or post-visit dictation.</div>
+              <button style="margin-top:12px; border:1px solid #EBE2D4; background:#FBF7F0; color:#3B342C; border-radius:12px; padding:9px 16px; font-size:13px; font-weight:800; cursor:pointer;">Switch to non-recording workflow</button>
             </div>
-          </div>
-
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="{{ badgeStyle }}">3</span><h3 style="margin:0;font-size:14px;font-weight:700">Device &amp; room readiness</h3></div>
-              <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px">
-                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Room microphone</span><span style="color:#1f7a3d;font-weight:700">Connected OK</span></div>
-                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Network</span><span style="color:#1f7a3d;font-weight:700">Good OK</span></div>
-                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>EHR encounter matched</span><span style="color:#1f7a3d;font-weight:700">#E-20481 OK</span></div>
-                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Interpreter present</span><span style="color:#5b6b74;font-weight:600">No</span></div>
-                <div style="display:flex;justify-content:space-between;padding:7px 10px;background:#f6f9fa;border-radius:8px"><span>Language</span><span style="color:#5b6b74;font-weight:600">English</span></div>
-              </div>
-            </div>
-            <div style="{{ readyCardStyle }}">
-              <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">4</span><div style="font-size:14px;font-weight:700">{{ readyTitle }}</div></div>
-              <div style="font-size:11.5px;margin-top:4px;opacity:.85">{{ readyDesc }}</div>
-              <button onClick="{{ toggleRec }}" style="{{ recBtnStyle }}" style-hover="filter:brightness(1.08)">{{ recBtnLabel }}</button>
-              <sc-if value="{{ recording }}" hint-placeholder-val="{{ false }}">
-                <div style="display:flex;align-items:center;gap:6px;margin-top:10px;justify-content:center">
-                  <div style="width:4px;height:18px;background:#c22730;border-radius:2px;animation:eq .7s infinite"></div>
-                  <div style="width:4px;height:18px;background:#c22730;border-radius:2px;animation:eq .7s .15s infinite"></div>
-                  <div style="width:4px;height:18px;background:#c22730;border-radius:2px;animation:eq .7s .3s infinite"></div>
-                  <div style="width:4px;height:18px;background:#c22730;border-radius:2px;animation:eq .7s .45s infinite"></div>
-                  <span style="font-size:12px;font-weight:700;color:#a3202a;margin-left:6px">Listening · {{ recClock }}</span>
-                </div>
-              </sc-if>
-            </div>
-            <div style="background:#fdf3e0;border:1px solid #ecd9ab;border-radius:12px;padding:12px 14px;font-size:11.5px;color:#6b4a10">Pause control hands the clinician a hard mute for sensitive moments. Paused spans are logged with a reason and never enter the transcript.</div>
           </div>
         </div>
       </sc-if>
 
-      <!-- ============ 3. TRANSCRIPT ============ -->
-      <sc-if value="{{ isTranscript }}" hint-placeholder-val="{{ false }}">
-        <div style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);gap:18px;padding:18px 22px 30px;max-width:1080px;margin:0 auto;align-items:start">
-
-        <!-- Chat column, styled like a mobile messaging app -->
-        <div style="background:#e9eef0;border:1px solid #d5dde1;border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
-          <div style="background:#0f766e;color:#fff;padding:11px 16px;display:flex;align-items:center;gap:10px">
-            <span style="{{ badgeStyle }}">1</span>
-            <div style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">AO</div>
-            <div style="flex:1"><div style="font-size:13px;font-weight:700">Encounter · Adaeze O.</div><div style="font-size:10.5px;opacity:.8">Patient left · Clinician right · tap Play to replay any turn</div></div>
-            <span style="font-size:10.5px;font-weight:700;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:14px">03:15</span>
+      <!-- ===== TRANSCRIPT ===== -->
+      <sc-if value="{{ paneTranscript }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:820px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+            <div style="font-size:13px; color:#8E8275; font-weight:700;">Speaker turns with confidence and risk cues. Tap a turn to replay its audio span.</div>
+            <div style="font-size:12px; font-weight:800; color:#8E8275; background:#F1EADF; border-radius:999px; padding:5px 12px;">{{ turnCount }} turns · {{ audioLen }}</div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;background:#fdf3e0;border-bottom:1px solid #ecd9ab;padding:7px 14px">
-            <span style="{{ badgeStyle }}">5</span>
-            <span style="font-size:10.5px;color:#6b4a10;font-weight:600">Audio: good · Diarisation: 96% · 1 overlapping span at 04:12</span>
-          </div>
-          <div style="padding:12px 14px 16px;display:flex;flex-direction:column;gap:2px">
-          <sc-for list="{{ turns }}" as="u" hint-placeholder-count="6">
-            <div style="{{ u.rowStyle }}">
-              <div style="{{ u.bubbleStyle }}">
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-                  <span style="{{ u.nameStyle }}">{{ u.name }}</span>
-                  <span style="font-size:10px;color:#8a979e;font-family:ui-monospace,Menlo,monospace">{{ u.time }}</span>
-                  <button onClick="{{ u.play }}" style="{{ u.playStyle }}" style-hover="filter:brightness(1.1)">{{ u.playIcon }}</button>
-                  <sc-if value="{{ u.playing }}" hint-placeholder-val="{{ false }}">
-                    <span style="display:inline-flex;gap:2px;align-items:flex-end;height:12px">
-                      <span style="width:3px;height:12px;background:#0f766e;border-radius:2px;animation:eq .6s infinite;display:inline-block"></span>
-                      <span style="width:3px;height:12px;background:#0f766e;border-radius:2px;animation:eq .6s .12s infinite;display:inline-block"></span>
-                      <span style="width:3px;height:12px;background:#0f766e;border-radius:2px;animation:eq .6s .24s infinite;display:inline-block"></span>
-                    </span>
-                  </sc-if>
+          <sc-for list="{{ turns }}" as="t" hint-placeholder-count="6">
+            <div style="{{ t.rowStyle }}">
+              <div style="{{ t.avStyle }}">{{ t.who }}</div>
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <div style="font-size:13px; font-weight:900;">{{ t.role }}</div>
+                  <div style="font-size:12px; color:#A99C8C; font-weight:700;">{{ t.time }}</div>
+                  <div style="flex:1;"></div>
+                  <div style="display:flex; align-items:center; gap:6px;">
+                    <div style="width:56px; height:6px; border-radius:99px; background:#F1EADF; overflow:hidden;"><div style="{{ t.confBar }}"></div></div>
+                    <div style="{{ t.confTextStyle }}">{{ t.confPct }}</div>
+                  </div>
                 </div>
-                <div style="font-size:13.5px;line-height:1.5">{{ u.text }}</div>
-                <sc-if value="{{ u.hasMeta }}" hint-placeholder-val="{{ false }}">
-                  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:7px">
-                    <sc-for list="{{ u.flags }}" as="f" hint-placeholder-count="1">
-                      <span style="{{ f.style }}">{{ f.label }}</span>
-                    </sc-for>
-                    <sc-for list="{{ u.links }}" as="lk" hint-placeholder-count="1">
-                      <button onClick="{{ lk.go }}" style="font-size:10.5px;font-weight:700;color:#0f766e;background:#e4f2f0;border:1px solid #bcdcd7;border-radius:12px;padding:2px 9px;cursor:pointer;font-family:inherit" style-hover="background:#d2ebe7">→ note {{ lk.sid }}</button>
+                <div style="font-size:15px; font-weight:600; line-height:1.5; margin-top:4px;">{{ t.text }}</div>
+                <sc-if value="{{ t.hasChips }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;">
+                    <sc-for list="{{ t.chips }}" as="ch" hint-placeholder-count="1">
+                      <div style="{{ ch.style }}">{{ ch.label }}</div>
                     </sc-for>
                   </div>
                 </sc-if>
               </div>
             </div>
           </sc-for>
-          <sc-if value="{{ recording }}" hint-placeholder-val="{{ false }}">
-            <div style="display:flex;justify-content:flex-start;margin-top:6px">
-              <div style="background:#fff;border:1.5px dashed #c22730;border-radius:16px;padding:10px 16px;display:flex;align-items:center;gap:8px">
-                <span style="width:8px;height:8px;border-radius:50%;background:#c22730;animation:pulse 1s infinite"></span>
-                <span style="font-size:12px;color:#a3202a;font-weight:600">Listening — next turn will appear here… {{ recClock }}</span>
-              </div>
-            </div>
-          </sc-if>
-          </div>
-          <div style="display:flex;gap:9px;align-items:center;background:#dfe7ea;padding:8px 14px;flex-wrap:wrap">
-            <span style="{{ badgeStyle }}">2</span><span style="font-size:10.5px;color:#475569">Play replays that exact audio span</span>
-            <span style="{{ badgeStyle }}">3</span><span style="font-size:10.5px;color:#475569">amber = high-risk speech</span>
-            <span style="{{ badgeStyle }}">4</span><span style="font-size:10.5px;color:#475569">teal chip → note sentence</span>
-          </div>
-        </div>
-
-        <!-- Live verification side panel -->
-        <div style="background:#fff;border:1px solid #dde4e8;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;position:sticky;top:14px">
-          <div style="display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid #dde4e8;background:#fbfcfd">
-            <span style="{{ badgeStyle }}">6</span>
-            <div style="flex:1"><div style="font-size:13px;font-weight:700">Live verification</div><div style="font-size:10.5px;color:#5b6b74">Flags raised as the AI listens — resolve them here, next to the evidence</div></div>
-            <span style="{{ flagChipStyle }}">{{ flagChipLabel }}</span>
-          </div>
-          <div style="padding:10px 12px;display:flex;flex-direction:column;gap:8px;overflow:auto">
-            <sc-for list="{{ taskCards }}" as="tk" hint-placeholder-count="4">
-              <div style="{{ tk.cardStyleCompact }}">
-                <div style="display:flex;align-items:center;gap:7px">
-                  <span style="{{ tk.sevStyle }}">{{ tk.sev }}</span>
-                  <span style="font-size:10.5px;font-weight:700;color:#5b6b74;text-transform:uppercase;letter-spacing:.04em">{{ tk.cat }}</span>
-                  <span style="font-size:9.5px;color:#8a979e;font-family:ui-monospace,Menlo,monospace;margin-left:auto">{{ tk.ref }}</span>
-                </div>
-                <div style="font-size:12px;margin-top:6px;line-height:1.45">“{{ tk.sentence }}”</div>
-                <div style="font-size:10.5px;color:#8a4b0f;background:#fdf3e0;border-radius:7px;padding:6px 9px;margin-top:6px">{{ tk.why }}</div>
-                <sc-if value="{{ tk.isOpen }}" hint-placeholder-val="{{ false }}">
-                  <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-                    <sc-for list="{{ tk.actions }}" as="a" hint-placeholder-count="2">
-                      <button onClick="{{ a.run }}" style="{{ a.styleCompact }}" style-hover="filter:brightness(1.06)">{{ a.label }}</button>
-                    </sc-for>
-                  </div>
-                </sc-if>
-                <sc-if value="{{ tk.resolution }}" hint-placeholder-val="{{ false }}">
-                  <div style="font-size:11px;color:#1f7a3d;font-weight:600;margin-top:8px">OK {{ tk.resolution }}</div>
-                </sc-if>
-              </div>
-            </sc-for>
-            <sc-if value="{{ allResolved }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#e3f1e7;border:1px solid #b9dcc3;border-radius:10px;padding:10px 12px;font-size:11.5px;color:#1f7a3d;font-weight:600">OK All flags resolved — the sign gate is open. <a href="#" onClick="{{ goWritebackLink }}" style="font-weight:700">Go to Write-back →</a></div>
-            </sc-if>
-          </div>
-        </div>
-
         </div>
       </sc-if>
 
-      <!-- ============ 4. NOTE WORKSPACE ============ -->
-      <sc-if value="{{ isNote }}" hint-placeholder-val="{{ false }}">
-        <div style="max-width:900px;margin:0 auto;padding:18px 22px 30px;display:flex;flex-direction:column;gap:14px">
-          <div style="display:flex;align-items:center;gap:10px">
-            <span style="{{ badgeStyle }}">1</span>
-            <h2 style="margin:0;font-size:17px;font-weight:700">Draft note — SOAP</h2>
-            <span style="font-size:10.5px;color:#5b6b74;font-family:ui-monospace,Menlo,monospace">template: Primary-care SOAP v12 · model: scribe-v3.2</span>
-            <div style="flex:1"></div>
-            <span style="{{ badgeStyle }}">5</span>
-            <button onClick="{{ trySign }}" style="{{ signBtnStyle }}" style-hover="filter:brightness(1.05)">{{ signBtnLabel }}</button>
+      <!-- ===== NOTE WORKSPACE ===== -->
+      <sc-if value="{{ paneNote }}" hint-placeholder-val="{{ true }}">
+        <sc-if value="{{ noteEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="max-width:640px; margin:80px auto; text-align:center; background:#FFFFFF; border:1px dashed #E0D5C4; border-radius:20px; padding:44px 36px;">
+            <div style="font-size:34px;">●</div>
+            <div style="font-size:18px; font-weight:900; margin-top:8px;">No draft yet</div>
+            <div style="font-size:14px; color:#8E8275; font-weight:600; margin-top:6px; line-height:1.5;">The note draft appears here after capture ends. Finish consent and start recording from the Consent &amp; Capture tab.</div>
           </div>
-          <div style="display:flex;gap:8px;align-items:center;background:#eaeef2;border-radius:10px;padding:8px 12px">
-            <span style="{{ badgeStyle }}">2</span>
-            <span style="font-size:11px;color:#475569">Every sentence carries a provenance token:</span>
-            <sc-for list="{{ provLegendMini }}" as="p" hint-placeholder-count="5"><span style="{{ p.tokStyle }}">{{ p.code }}</span><span style="font-size:10.5px;color:#5b6b74;margin-right:6px">{{ p.short }}</span></sc-for>
-            <span style="font-size:11px;color:#475569;margin-left:auto">Tap any sentence to open its evidence <span style="{{ badgeStyle }}">4</span></span>
-          </div>
-          <sc-for list="{{ noteSections }}" as="sec" hint-placeholder-count="4">
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:14px 18px">
-              <div style="font-size:11px;font-weight:700;color:#0f766e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">{{ sec.title }}</div>
-              <div style="display:flex;flex-direction:column;gap:6px">
+        </sc-if>
+        <sc-if value="{{ noteReady }}" hint-placeholder-val="{{ true }}">
+          <div style="max-width:820px;">
+            <sc-if value="{{ signedBanner }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#EAF3EC; border:1px solid #CBE2D1; color:#2E6B48; border-radius:14px; padding:12px 18px; font-size:14px; font-weight:800; margin-bottom:16px;">✓ {{ signedBannerText }}</div>
+            </sc-if>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; flex-wrap:wrap;">
+              <div style="display:flex; background:#F1EADF; border-radius:12px; padding:3px; gap:2px;">
+                <sc-for list="{{ layoutBtns }}" as="lb" hint-placeholder-count="3">
+                  <button onClick="{{ lb.onClick }}" style="{{ lb.style }}">{{ lb.label }}</button>
+                </sc-for>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <sc-for list="{{ legend }}" as="lg" hint-placeholder-count="5">
+                  <div style="display:flex; align-items:center; gap:5px; font-size:11px; font-weight:800; color:#8E8275;"><span style="{{ lg.dot }}">{{ lg.code }}</span>{{ lg.label }}</div>
+                </sc-for>
+              </div>
+            </div>
+            <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="4">
+              <div style="background:#FFFFFF; border:1px solid #EBE2D4; border-radius:18px; padding:16px 20px; margin-bottom:14px;">
+                <div style="font-size:12px; font-weight:900; letter-spacing:1.4px; text-transform:uppercase; color:#A99C8C; margin-bottom:6px;">{{ sec.title }}</div>
                 <sc-for list="{{ sec.sentences }}" as="s" hint-placeholder-count="3">
-                  <div onClick="{{ s.open }}" style="{{ s.rowStyle }}" style-hover="background:#f2f7f6">
-                    <span style="{{ s.tokStyle }}">{{ s.prov }}</span>
-                    <span style="font-size:10px;color:#8a979e;font-family:ui-monospace,Menlo,monospace;width:24px;flex:none;padding-top:3px">{{ s.id }}</span>
-                    <span style="flex:1;font-size:13.5px;line-height:1.5">{{ s.text }}</span>
-                    <sc-if value="{{ s.chip }}" hint-placeholder-val="{{ false }}"><span style="{{ s.chipStyle }}">{{ s.chip }}</span></sc-if>
-                  </div>
-                </sc-for>
-              </div>
-            </div>
-          </sc-for>
-          <div style="display:flex;gap:8px;align-items:center;background:#eaeef2;border-radius:10px;padding:8px 12px">
-            <span style="{{ badgeStyle }}">3</span>
-            <span style="font-size:11px;color:#475569">Red / amber chips are unresolved review flags. The <strong>Sign</strong> button stays locked until every flag is cleared in the live verification panel (Transcript tab) — this is the safety gate.</span>
-          </div>
-        </div>
-      </sc-if>
-
-      <!-- ============ 5. EVIDENCE ============ -->
-      <sc-if value="{{ isEvidence }}" hint-placeholder-val="{{ false }}">
-        <div style="padding:20px 22px;display:flex;flex-direction:column;gap:16px;max-width:980px;margin:0 auto">
-          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">2</span><h2 style="margin:0;font-size:17px;font-weight:700">How a spoken word becomes a signed record</h2></div>
-          <div style="display:flex;align-items:stretch;gap:0;background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px">
-            <sc-for list="{{ pipeline }}" as="st" hint-placeholder-count="5">
-              <div style="flex:1;display:flex;align-items:center">
-                <div style="flex:1;text-align:center;padding:0 6px">
-                  <div style="{{ st.dotStyle }}">{{ st.icon }}</div>
-                  <div style="font-size:12px;font-weight:700;margin-top:6px">{{ st.name }}</div>
-                  <div style="font-size:10.5px;color:#5b6b74;margin-top:2px;line-height:1.4">{{ st.desc }}</div>
-                </div>
-                <sc-if value="{{ st.arrow }}" hint-placeholder-val="{{ false }}"><div style="font-size:16px;color:#b9c4ca;flex:none">→</div></sc-if>
-              </div>
-            </sc-for>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">1</span><h3 style="margin:0;font-size:14px;font-weight:700">The five provenance classes — every note sentence is exactly one of these</h3></div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <sc-for list="{{ provLegend }}" as="p" hint-placeholder-count="5">
-              <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:center">
-                <span style="{{ p.tokStyle }}">{{ p.code }}</span>
-                <div style="width:170px;flex:none;font-size:13px;font-weight:700">{{ p.name }}</div>
-                <div style="flex:1;font-size:12px;color:#5b6b74;line-height:1.45">{{ p.desc }}</div>
-                <div style="width:270px;flex:none;font-size:11px;color:#475569;background:#f6f9fa;border-radius:8px;padding:7px 10px">{{ p.sign }}</div>
-              </div>
-            </sc-for>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">3</span><h3 style="margin:0;font-size:14px;font-weight:700">Inspect any sentence</h3><span style="font-size:11.5px;color:#5b6b74">— tap one to open its full evidence card</span></div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px">
-            <sc-for list="{{ allSentChips }}" as="sc" hint-placeholder-count="6">
-              <button onClick="{{ sc.open }}" style="{{ sc.style }}" style-hover="filter:brightness(.97)">{{ sc.label }}</button>
-            </sc-for>
-          </div>
-        </div>
-      </sc-if>
-
-      <!-- ============ 6. PATIENT VIEW ============ -->
-      <sc-if value="{{ isPatient }}" hint-placeholder-val="{{ false }}">
-        <div style="background:linear-gradient(180deg,#f0ece4 0%,#f4f1ea 100%);min-height:100%;padding:26px 22px 40px">
-        <div style="max-width:1064px;margin:0 auto;display:flex;flex-direction:column;gap:14px">
-          <div style="display:flex;align-items:center;gap:10px;justify-content:center">
-            <span style="{{ badgeStyle }}">1</span>
-            <span style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#7a7261">Patient portal preview · what Adaeze sees on her phone</span>
-          </div>
-          <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start">
-          <div style="min-width:0">
-
-          <div style="background:#fdfcf9;border:1px solid #e7e1d3;border-radius:22px;box-shadow:0 24px 50px rgba(70,58,30,.10),0 2px 6px rgba(70,58,30,.05);overflow:hidden">
-            <div style="padding:30px 42px 24px;border-bottom:1px solid #efe9dc">
-              <div style="display:flex;align-items:baseline;justify-content:space-between">
-                <div style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#0f766e">Riverside Family Practice</div>
-                <div style="font-size:11.5px;color:#9a917e;font-family:Newsreader,Georgia,serif;font-style:italic">Monday 6 July · 09:15</div>
-              </div>
-              <div style="font-family:Newsreader,Georgia,serif;font-size:31px;font-weight:500;line-height:1.15;margin-top:14px;color:#241f14">Your visit summary, Adaeze</div>
-              <div style="font-size:12.5px;color:#7a7261;margin-top:8px">Written with your doctor · reviewed and signed by <strong style="color:#3d382a">Dr. Hassan</strong></div>
-            </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid #efe9dc">
-              <div style="padding:20px 24px 18px;border-right:1px solid #efe9dc">
-                <div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9a917e">Blood pressure today</div>
-                <div style="font-family:Newsreader,Georgia,serif;font-size:30px;font-weight:500;color:#241f14;margin-top:6px">142<span style="color:#b3a88f">/</span>88</div>
-                <div style="font-size:11px;color:#0f766e;font-weight:600;margin-top:3px">Improving ↘</div>
-              </div>
-              <div style="padding:20px 24px 18px;border-right:1px solid #efe9dc">
-                <div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9a917e">Your target</div>
-                <div style="font-family:Newsreader,Georgia,serif;font-size:30px;font-weight:500;color:#241f14;margin-top:6px">135<span style="color:#b3a88f">/</span>85</div>
-                <div style="font-size:11px;color:#7a7261;margin-top:3px">Nearly there</div>
-              </div>
-              <div style="padding:20px 24px 18px">
-                <div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9a917e">Next review</div>
-                <div style="font-family:Newsreader,Georgia,serif;font-size:30px;font-weight:500;color:#241f14;margin-top:6px">4 wks</div>
-                <div style="font-size:11px;color:#7a7261;margin-top:3px">Blood test before</div>
-              </div>
-            </div>
-
-            <div style="padding:26px 42px 30px;display:flex;flex-direction:column;gap:4px">
-              <sc-for list="{{ patientParas }}" as="pp" hint-placeholder-count="4">
-                <div>
-                  <sc-if value="{{ pp.heading }}" hint-placeholder-val="{{ false }}">
-                    <div style="font-family:Newsreader,Georgia,serif;font-size:17px;font-weight:600;color:#241f14;margin:16px 0 6px">{{ pp.heading }}</div>
-                  </sc-if>
-                  <div style="{{ pp.rowStyle }}" style-hover="background:#f6f2e9">
-                    <div style="flex:1;font-size:14px;line-height:1.75;color:#3d382a">{{ pp.text }}</div>
-                    <button onClick="{{ pp.flag }}" style="{{ pp.btnStyle }}" style-hover="opacity:1;color:#a3202a;border-color:#dcb9bb">{{ pp.btnLabel }}</button>
-                  </div>
-                </div>
-              </sc-for>
-              <div style="font-family:Newsreader,Georgia,serif;font-style:italic;font-size:12.5px;color:#9a917e;border-top:1px solid #efe9dc;padding-top:14px;margin-top:14px">Underlined medical terms open a glossary. If anything here doesn't match your memory of the visit, use “Not right?” beside it — your doctor will respond within five working days.</div>
-            </div>
-          </div>
-          </div>
-
-          <!-- Patient action rail -->
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <div style="background:#fdfcf9;border:1px solid #e7e1d3;border-radius:16px;padding:18px 20px;box-shadow:0 12px 28px rgba(70,58,30,.07)">
-              <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">2</span><div style="font-family:Newsreader,Georgia,serif;font-size:16px;font-weight:600;color:#241f14">Review &amp; sign</div></div>
-              <div style="font-size:11.5px;color:#7a7261;line-height:1.55;margin-top:6px">{{ ackHint }}</div>
-              <sc-if value="{{ notAcked }}" hint-placeholder-val="{{ false }}">
-                <button onClick="{{ patientAck }}" style="font-family:inherit;width:100%;margin-top:12px;font-size:12.5px;font-weight:700;border-radius:10px;padding:11px;border:none;cursor:pointer;background:#241f14;color:#fdfcf9;box-shadow:0 6px 14px rgba(36,31,20,.25)" style-hover="filter:brightness(1.25)">I've read this — sign &amp; approve</button>
-              </sc-if>
-              <sc-if value="{{ patientAcked }}" hint-placeholder-val="{{ false }}">
-                <div style="border:1px dashed #d8d0bd;border-radius:10px;padding:12px 14px;margin-top:12px;text-align:center;background:#fbf8f1">
-                  <div style="font-family:Newsreader,Georgia,serif;font-style:italic;font-size:22px;color:#241f14">Adaeze Okafor</div>
-                  <div style="font-size:9.5px;color:#9a917e;margin-top:3px;letter-spacing:.09em">SIGNED · TODAY 09:56 · IDENTITY VERIFIED VIA PORTAL</div>
-                </div>
-              </sc-if>
-            </div>
-
-            <div style="background:#fdfcf9;border:1px solid #e7e1d3;border-radius:16px;padding:18px 20px;box-shadow:0 12px 28px rgba(70,58,30,.07)">
-              <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">3</span><div style="font-family:Newsreader,Georgia,serif;font-size:16px;font-weight:600;color:#241f14">Send to my record</div></div>
-              <div style="font-size:11.5px;color:#7a7261;line-height:1.55;margin-top:6px">{{ pushHint }}</div>
-              <sc-if value="{{ notPushed }}" hint-placeholder-val="{{ false }}">
-                <button onClick="{{ pushEHR }}" style="{{ pushBtnStyle }}" style-hover="filter:brightness(1.08)">⬆ Push to EHR</button>
-              </sc-if>
-              <sc-if value="{{ pushed }}" hint-placeholder-val="{{ false }}">
-                <div style="background:#eaf3ec;border:1px solid #cfe3d4;border-radius:10px;padding:10px 13px;margin-top:12px;font-size:11.5px;color:#1f7a3d;font-weight:600;line-height:1.6">OK In your medical record<br/><span style="font-family:ui-monospace,Menlo,monospace;font-weight:400;color:#4a7a58">Encounter #E-20481 · 09:58</span></div>
-              </sc-if>
-            </div>
-
-          <sc-if value="{{ flaggingPara }}" hint-placeholder-val="{{ false }}">
-            <div style="background:#fdfcf9;border:1px solid #e7e1d3;border-left:3px solid #0f766e;border-radius:16px;padding:20px 26px;box-shadow:0 12px 28px rgba(70,58,30,.08)">
-              <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">4</span><div style="font-family:Newsreader,Georgia,serif;font-size:16px;font-weight:600;color:#241f14">Tell us what's not right</div></div>
-              <div style="font-size:12px;color:#9a917e;margin-top:3px;font-style:italic;font-family:Newsreader,Georgia,serif">“{{ flaggingText }}”</div>
-              <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
-                <sc-for list="{{ correctionReasons }}" as="cr" hint-placeholder-count="4">
-                  <button onClick="{{ cr.pick }}" style="{{ cr.style }}" style-hover="filter:brightness(.97)">{{ cr.label }}</button>
-                </sc-for>
-              </div>
-              <div style="display:flex;gap:10px;margin-top:16px;align-items:center">
-                <button onClick="{{ submitCorrection }}" style="{{ submitCorStyle }}">Send to my care team</button>
-                <button onClick="{{ cancelFlag }}" style="background:transparent;border:none;color:#9a917e;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;text-decoration:underline">Cancel</button>
-              </div>
-            </div>
-          </sc-if>
-
-          <sc-if value="{{ correctionSent }}" hint-placeholder-val="{{ false }}">
-            <div style="background:#fdfcf9;border:1px solid #e7e1d3;border-left:3px solid #1f7a3d;border-radius:16px;padding:18px 26px;box-shadow:0 12px 28px rgba(70,58,30,.08)">
-              <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">4</span><div style="font-family:Newsreader,Georgia,serif;font-size:15px;font-weight:600;color:#1f7a3d">Request CR-1042 is with your doctor</div></div>
-              <div style="font-size:11.5px;color:#7a7261;margin-top:5px;line-height:1.6">Dr. Hassan will respond within 5 working days. You'll see the outcome here, and the note will show any amendment. Serious errors auto-escalate to the safety team.</div>
-            </div>
-          </sc-if>
-          <sc-if value="{{ noCorrection }}" hint-placeholder-val="{{ false }}">
-            <div style="border:1px dashed #d8d0bd;border-radius:14px;padding:14px 18px">
-              <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">4</span><div style="font-size:12px;font-weight:700;color:#7a7261">Corrections</div></div>
-              <div style="font-size:11px;color:#9a917e;line-height:1.55;margin-top:4px">Spotted something wrong? Tap “Not right?” beside any line of the summary — it becomes a tracked request your doctor must answer.</div>
-            </div>
-          </sc-if>
-          </div>
-          </div>
-        </div>
-        </div>
-      </sc-if>
-
-      <!-- ============ 8. EHR WRITE-BACK ============ -->
-      <sc-if value="{{ isWriteback }}" hint-placeholder-val="{{ false }}">
-        <div style="padding:20px 22px;display:grid;grid-template-columns:1.35fr 1fr;gap:18px">
-          <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">1</span><h3 style="margin:0;font-size:14px;font-weight:700">Field mapping — app note → EHR chart</h3></div>
-            <div style="display:flex;flex-direction:column;gap:7px">
-              <sc-for list="{{ mappings }}" as="m" hint-placeholder-count="6">
-                <div style="display:flex;align-items:center;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px">
-                  <div style="width:150px;flex:none;font-size:12.5px;font-weight:700">{{ m.what }}</div>
-                  <div style="flex:1;font-size:11px;color:#5b6b74;font-family:ui-monospace,Menlo,monospace">{{ m.route }}</div>
-                  <span style="{{ m.stStyle }}">{{ m.status }}</span>
-                </div>
-              </sc-for>
-            </div>
-            <div style="font-size:11px;color:#8a4b0f;background:#fdf3e0;border-radius:8px;padding:8px 11px;margin-top:10px">Copy-paste is treated as a weak fallback: it is allowed only with a logged warning, never as the default path.</div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="{{ badgeStyle }}">2</span><h3 style="margin:0;font-size:14px;font-weight:700">Sign-off gate</h3></div>
-              <div style="display:flex;flex-direction:column;gap:7px">
-                <sc-for list="{{ gateItems }}" as="g" hint-placeholder-count="4">
-                  <div style="display:flex;align-items:center;gap:9px;font-size:12.5px"><span style="{{ g.dotStyle }}">{{ g.icon }}</span><span style="flex:1">{{ g.label }}</span></div>
-                </sc-for>
-              </div>
-              <div style="display:flex;align-items:center;gap:8px;margin-top:14px"><span style="{{ badgeStyle }}">3</span>
-                <button onClick="{{ trySign }}" style="{{ signBtnStyleWide }}" style-hover="filter:brightness(1.05)">{{ signBtnLabel }}</button>
-              </div>
-            </div>
-            <sc-if value="{{ signed }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#e3f1e7;border:1px solid #b9dcc3;border-radius:14px;padding:16px 18px">
-                <div style="display:flex;align-items:center;gap:8px"><span style="{{ badgeStyle }}">4</span><div style="font-size:14px;font-weight:700;color:#1f7a3d">Signed by Dr. Hassan OK</div></div>
-                <div style="font-size:11.5px;color:#3d6b4a;margin-top:6px;line-height:1.6">09:52 · Content hash <span style="font-family:ui-monospace,Menlo,monospace">a91f…c47e</span> · provenance frozen<br/>{{ wbPatientLine }}</div>
-                <sc-if value="{{ notPushed }}" hint-placeholder-val="{{ false }}">
-                  <button onClick="{{ pushEHR }}" style="{{ pushBtnStyleWB }}" style-hover="filter:brightness(1.08)">⬆ Push to EHR</button>
-                </sc-if>
-                <sc-if value="{{ pushed }}" hint-placeholder-val="{{ false }}">
-                  <div style="background:#fff;border:1px solid #cfe3d4;border-radius:10px;padding:9px 12px;margin-top:10px;font-size:11px;color:#1f7a3d;font-weight:600;line-height:1.6">OK Written to EHR via FHIR DocumentReference · 09:58<br/><span style="font-family:ui-monospace,Menlo,monospace;font-weight:400;color:#4a7a58">audit pointer → encounter #E-20481</span></div>
-                </sc-if>
-              </div>
-            </sc-if>
-            <sc-if value="{{ notSigned }}" hint-placeholder-val="{{ false }}">
-              <div style="background:#eaeef2;border-radius:12px;padding:12px 14px;font-size:11.5px;color:#475569">Order of operations: clinician signs (hash + identity recorded) → patient reads and counter-signs in her portal → note is pushed to the EHR. Nothing reaches the legal record before both signatures.</div>
-            </sc-if>
-          </div>
-        </div>
-      </sc-if>
-
-      <!-- ============ 9. GOVERNANCE ============ -->
-      <sc-if value="{{ isGov }}" hint-placeholder-val="{{ false }}">
-        <div style="padding:20px 22px;display:flex;flex-direction:column;gap:14px">
-          <div style="display:flex;align-items:center;gap:10px"><span style="{{ badgeStyle }}">1</span><h2 style="margin:0;font-size:17px;font-weight:700">Governance analytics — for safety &amp; informatics leads, not clinicians</h2></div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">Blocked sign attempts (wk)</div><div style="font-size:22px;font-weight:700;margin-top:4px">{{ govAttempts }}</div><div style="font-size:10.5px;color:#5b6b74;margin-top:2px">Each one is a prevented unsafe note</div></div>
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">Open patient corrections</div><div style="font-size:22px;font-weight:700;margin-top:4px">{{ govCorrections }}</div><div style="font-size:10.5px;color:#5b6b74;margin-top:2px">SLA: 5 working days</div></div>
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">Hallucination reports (mo)</div><div style="font-size:22px;font-weight:700;margin-top:4px">7</div><div style="font-size:10.5px;color:#92610c;margin-top:2px">3 traced to scribe-v3.1 → vendor ticket</div></div>
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:12px;padding:12px 14px"><div style="font-size:11px;color:#5b6b74;font-weight:600">After-hours charting</div><div style="font-size:22px;font-weight:700;margin-top:4px">−31%</div><div style="font-size:10.5px;color:#1f7a3d;margin-top:2px">vs pre-pilot baseline</div></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1.1fr 1fr 0.95fr;gap:14px">
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">2</span><h3 style="margin:0;font-size:13.5px;font-weight:700">Error taxonomy — flags raised this month</h3></div>
-              <div style="display:flex;flex-direction:column;gap:9px">
-                <sc-for list="{{ govBars }}" as="b" hint-placeholder-count="5">
-                  <div>
-                    <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px"><span style="font-weight:600">{{ b.name }}</span><span style="color:#5b6b74">{{ b.n }}</span></div>
-                    <div style="height:8px;background:#eef2f4;border-radius:4px"><div style="{{ b.barStyle }}"></div></div>
-                  </div>
-                </sc-for>
-              </div>
-            </div>
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">3</span><h3 style="margin:0;font-size:13.5px;font-weight:700">Model &amp; template version registry</h3></div>
-              <div style="display:flex;flex-direction:column;gap:7px;font-size:12px">
-                <div style="display:flex;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px;align-items:center"><span style="font-family:ui-monospace,Menlo,monospace;font-weight:700">scribe-v3.2</span><span style="color:#5b6b74;flex:1">ASR + drafting · live since 12 Jun</span><span style="font-size:10.5px;font-weight:700;background:#e3f1e7;color:#1f7a3d;padding:3px 9px;border-radius:12px">Active</span></div>
-                <div style="display:flex;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px;align-items:center"><span style="font-family:ui-monospace,Menlo,monospace;font-weight:700">scribe-v3.1</span><span style="color:#5b6b74;flex:1">Retired · drift in negation handling</span><span style="font-size:10.5px;font-weight:700;background:#fdecec;color:#a3202a;padding:3px 9px;border-radius:12px">Under review</span></div>
-                <div style="display:flex;gap:10px;padding:8px 11px;background:#f6f9fa;border-radius:9px;align-items:center"><span style="font-family:ui-monospace,Menlo,monospace;font-weight:700">SOAP v12</span><span style="color:#5b6b74;flex:1">Note template · approved by informatics 02 May</span><span style="font-size:10.5px;font-weight:700;background:#e3f1e7;color:#1f7a3d;padding:3px 9px;border-radius:12px">Active</span></div>
-              </div>
-              <div style="font-size:11px;color:#475569;background:#eaeef2;border-radius:8px;padding:8px 11px;margin-top:10px">Every signed note records which model + template versions produced it — so vendor behaviour changes can never silently alter the record.</div>
-            </div>
-            <div style="background:#fff;border:1px solid #dde4e8;border-radius:14px;padding:16px 18px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><span style="{{ badgeStyle }}">4</span><h3 style="margin:0;font-size:13.5px;font-weight:700">Patient corrections (VOICE)</h3></div>
-              <div style="display:flex;flex-direction:column;gap:7px">
-                <sc-for list="{{ govCorrList }}" as="cr" hint-placeholder-count="3">
-                  <div style="padding:8px 11px;background:#f6f9fa;border-radius:9px">
-                    <div style="display:flex;align-items:center;gap:8px"><span style="font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:700">{{ cr.id }}</span><span style="{{ cr.stStyle }}">{{ cr.state }}</span></div>
-                    <div style="font-size:11px;color:#5b6b74;margin-top:3px">{{ cr.desc }}</div>
-                  </div>
-                </sc-for>
-              </div>
-              <div style="display:flex;justify-content:space-between;font-size:11px;color:#475569;background:#eaeef2;border-radius:8px;padding:8px 11px;margin-top:10px"><span>Median response time</span><strong>2.1 days · SLA 5 days</strong></div>
-            </div>
-          </div>
-          <div style="background:#1a2b33;border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:28px;color:#fff">
-            <span style="{{ badgeStyle }}">5</span>
-            <div style="flex:none"><div style="font-size:10.5px;color:#7fb8b1;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Fiscal credibility</div><div style="font-size:11.5px;color:#a9bcc4;margin-top:2px;max-width:230px">Cost &amp; benefit reported as governance data, not marketing</div></div>
-            <div style="width:1px;height:36px;background:rgba(255,255,255,.16);flex:none"></div>
-            <div style="flex:1"><div style="font-size:21px;font-weight:700">$1.84</div><div style="font-size:10.5px;color:#a9bcc4">cost per assisted note</div></div>
-            <div style="flex:1"><div style="font-size:21px;font-weight:700">6.2 min</div><div style="font-size:10.5px;color:#a9bcc4">clinician time saved per visit</div></div>
-            <div style="flex:1"><div style="font-size:21px;font-weight:700">−31%</div><div style="font-size:10.5px;color:#a9bcc4">after-hours charting</div></div>
-            <div style="flex:1"><div style="font-size:21px;font-weight:700">$21k</div><div style="font-size:10.5px;color:#a9bcc4">quarterly reinvestment pool</div></div>
-          </div>
-        </div>
-      </sc-if>
-
-      <!-- ============ EVIDENCE DRAWER (slide-in) ============ -->
-      <div style="{{ drawerStyle }}">
-        <sc-if value="{{ drawerData }}" hint-placeholder-val="{{ false }}">
-          <div style="display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid #dde4e8">
-            <span style="{{ badgeStyle }}">4</span>
-            <div style="font-size:13px;font-weight:700;flex:1">Evidence · sentence {{ drawerData.sid }}</div>
-            <button onClick="{{ closeDrawer }}" style="background:#eef2f4;border:none;border-radius:8px;width:26px;height:26px;font-size:13px;cursor:pointer;color:#5b6b74;font-family:inherit">✕</button>
-          </div>
-          <div style="padding:14px 16px;overflow:auto;flex:1;display:flex;flex-direction:column;gap:12px">
-            <div style="font-size:13px;line-height:1.55;background:#f6f9fa;border-radius:10px;padding:10px 12px">“{{ drawerData.text }}”</div>
-            <div style="display:flex;align-items:center;gap:8px">
-              <span style="{{ drawerData.tokStyle }}">{{ drawerData.prov }}</span>
-              <div><div style="font-size:12.5px;font-weight:700">{{ drawerData.provName }}</div><div style="font-size:11px;color:#5b6b74">{{ drawerData.provDesc }}</div></div>
-            </div>
-            <sc-if value="{{ drawerData.hasTurns }}" hint-placeholder-val="{{ false }}">
-              <div>
-                <div style="font-size:11px;font-weight:700;color:#5b6b74;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Supporting utterances</div>
-                <div style="display:flex;flex-direction:column;gap:6px">
-                  <sc-for list="{{ drawerData.turns }}" as="dt" hint-placeholder-count="2">
-                    <div style="border:1px solid #e4eaed;border-radius:10px;padding:8px 10px">
-                      <div style="display:flex;align-items:center;gap:7px"><span style="{{ dt.nameStyle }}">{{ dt.name }}</span><span style="font-size:10px;color:#8a979e;font-family:ui-monospace,Menlo,monospace">{{ dt.time }}</span><button onClick="{{ dt.play }}" style="{{ dt.playStyle }}">{{ dt.playIcon }}</button></div>
-                      <div style="font-size:12px;margin-top:4px;line-height:1.5;color:#33454e">“{{ dt.text }}”</div>
+                  <div style="{{ s.rowStyle }}" onClick="{{ s.onClick }}">
+                    <sc-if value="{{ s.showToken }}" hint-placeholder-val="{{ true }}">
+                      <div style="{{ s.tokenStyle }}">{{ s.prov }}</div>
+                    </sc-if>
+                    <div style="flex:1; min-width:0;">
+                      <span style="{{ s.textStyle }}">{{ s.text }}</span>
+                      <sc-if value="{{ s.hasChip }}" hint-placeholder-val="{{ false }}">
+                        <span style="{{ s.chipStyle }}">{{ s.chip }}</span>
+                      </sc-if>
                     </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+            <div style="font-size:12px; color:#A99C8C; font-weight:700; text-align:center; margin-top:4px;">Tap any sentence to open its evidence. The sign button stays off until every mandatory flag is resolved.</div>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <!-- ===== VERIFICATION QUEUE ===== -->
+      <sc-if value="{{ paneVerify }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:820px;">
+          <sc-if value="{{ queueClear }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#EAF3EC; border:1px solid #CBE2D1; color:#2E6B48; border-radius:16px; padding:20px 24px; font-size:15px; font-weight:800; margin-bottom:16px;">✓ Nothing left to verify. The note is ready to sign.</div>
+          </sc-if>
+          <sc-for list="{{ queue }}" as="q" hint-placeholder-count="4">
+            <div style="background:#FFFFFF; border:1px solid #EBE2D4; border-radius:18px; padding:16px 20px; margin-bottom:12px; display:flex; gap:16px;">
+              <div style="{{ q.riskStyle }}">{{ q.risk }}</div>
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  <div style="font-size:13px; font-weight:900;">{{ q.type }}</div>
+                  <div style="font-size:12px; color:#A99C8C; font-weight:700;">{{ q.loc }}</div>
+                </div>
+                <div style="font-size:15px; font-weight:700; margin-top:5px; line-height:1.45;">“{{ q.text }}”</div>
+                <div style="font-size:13px; color:#8E8275; font-weight:600; margin-top:5px; line-height:1.5;">{{ q.reason }}</div>
+                <div style="display:flex; gap:8px; margin-top:11px; flex-wrap:wrap;">
+                  <sc-for list="{{ q.actions }}" as="a" hint-placeholder-count="3">
+                    <button onClick="{{ a.onClick }}" style="{{ a.style }}">{{ a.label }}</button>
                   </sc-for>
                 </div>
               </div>
-            </sc-if>
-            <sc-if value="{{ drawerData.noTurns }}" hint-placeholder-val="{{ false }}">
-              <div style="font-size:11.5px;color:#8a4b0f;background:#fdf3e0;border-radius:8px;padding:8px 11px">{{ drawerData.noTurnsMsg }}</div>
-            </sc-if>
-            <div style="font-size:10.5px;color:#5b6b74;font-family:ui-monospace,Menlo,monospace;background:#f6f9fa;border-radius:8px;padding:8px 11px;line-height:1.6">model: scribe-v3.2<br/>template: Primary-care SOAP v12<br/>review history: {{ drawerData.history }}</div>
-            <div style="display:flex;gap:7px;flex-wrap:wrap">
-              <sc-for list="{{ drawerData.actions }}" as="da" hint-placeholder-count="2">
-                <button onClick="{{ da.run }}" style="{{ da.style }}" style-hover="filter:brightness(1.06)">{{ da.label }}</button>
+            </div>
+          </sc-for>
+          <sc-if value="{{ hasResolved }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px; font-weight:900; letter-spacing:1.4px; text-transform:uppercase; color:#A99C8C; margin:20px 0 10px 0;">Resolved this session</div>
+            <sc-for list="{{ resolvedList }}" as="r" hint-placeholder-count="2">
+              <div style="display:flex; align-items:center; gap:12px; background:#FBF7F0; border:1px solid #EFE7D9; border-radius:14px; padding:11px 16px; margin-bottom:8px;">
+                <div style="color:#4E9B6F; font-weight:900; font-size:14px;">✓</div>
+                <div style="flex:1; font-size:13px; font-weight:700; color:#6E6355;">{{ r.text }}</div>
+                <div style="font-size:12px; font-weight:800; color:#3D9083;">{{ r.how }}</div>
+              </div>
+            </sc-for>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ===== PATIENT VIEW ===== -->
+      <sc-if value="{{ panePatient }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:760px;">
+          <div style="background:#FFF6EF; border:1px solid #F2DECF; border-radius:16px; padding:14px 18px; font-size:13px; font-weight:700; color:#8A5B3E; margin-bottom:16px;">This is how the note will read in the patient portal. Patients can flag any sentence for correction — flags become tracked tasks with deadlines.</div>
+          <sc-if value="{{ hasCorrections }}" hint-placeholder-val="{{ false }}">
+            <sc-for list="{{ corrections }}" as="co" hint-placeholder-count="1">
+              <div style="background:#FFFFFF; border:2px solid #E8B44C; border-radius:18px; padding:16px 20px; margin-bottom:16px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <div style="font-size:13px; font-weight:900; color:#9A6B14;">⚑ Correction request · {{ co.id }}</div>
+                  <div style="font-size:12px; font-weight:700; color:#A99C8C;">{{ co.due }}</div>
+                </div>
+                <div style="font-size:14px; font-weight:700; margin-top:8px;">“{{ co.sentence }}”</div>
+                <div style="font-size:14px; font-weight:600; color:#6E6355; margin-top:6px; font-style:italic;">Patient: “{{ co.comment }}”</div>
+                <sc-if value="{{ co.open }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:flex; gap:8px; margin-top:12px;">
+                    <button onClick="{{ co.onAccept }}" style="border:none; background:#3D9083; color:#FFFFFF; border-radius:12px; padding:9px 16px; font-size:13px; font-weight:800; cursor:pointer;">Accept &amp; amend note</button>
+                    <button onClick="{{ co.onExplain }}" style="border:1px solid #EBE2D4; background:#FBF7F0; color:#3B342C; border-radius:12px; padding:9px 16px; font-size:13px; font-weight:800; cursor:pointer;">Keep wording, explain to patient</button>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ co.done }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:12px; font-size:13px; font-weight:800; color:#2E6B48;">✓ {{ co.outcome }} · Patient notified · Amendment logged in audit trail</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </sc-if>
+          <div style="background:#FFFFFF; border:1px solid #EBE2D4; border-radius:18px; padding:18px 22px;">
+            <sc-for list="{{ patientItems }}" as="p" hint-placeholder-count="5">
+              <div style="display:flex; align-items:flex-start; gap:12px; padding:10px 0; border-bottom:1px solid #F3EDE2;">
+                <div style="flex:1; font-size:15px; font-weight:600; line-height:1.55;">{{ p.text }}</div>
+                <sc-if value="{{ p.canFlag }}" hint-placeholder-val="{{ true }}">
+                  <button onClick="{{ p.onFlag }}" style="flex:0 0 auto; border:1px solid #EBE2D4; background:#FBF7F0; color:#8E8275; border-radius:999px; padding:5px 12px; font-size:12px; font-weight:800; cursor:pointer;">⚑ Flag</button>
+                </sc-if>
+                <sc-if value="{{ p.flagged }}" hint-placeholder-val="{{ false }}">
+                  <div style="flex:0 0 auto; font-size:12px; font-weight:800; color:#9A6B14; background:#FBF0D9; border-radius:999px; padding:5px 12px;">⚑ Sent to care team</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== EHR WRITE BACK ===== -->
+      <sc-if value="{{ paneExport }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:760px;">
+          <div style="{{ gateBanner.style }}">
+            <div style="font-size:16px; font-weight:900;">{{ gateBanner.title }}</div>
+            <div style="font-size:13px; font-weight:600; margin-top:2px; opacity:0.85;">{{ gateBanner.sub }}</div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBE2D4; border-radius:18px; padding:18px 22px; margin-top:16px;">
+            <div style="font-size:15px; font-weight:900; margin-bottom:6px;">Field mapping</div>
+            <sc-for list="{{ exportRows }}" as="x" hint-placeholder-count="4">
+              <div style="display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:1px solid #F3EDE2;">
+                <div style="width:130px; font-size:13px; font-weight:900; color:#8E8275;">{{ x.section }}</div>
+                <div style="flex:1; font-size:14px; font-weight:700;">{{ x.field }}</div>
+                <div style="{{ x.statusStyle }}">{{ x.status }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBE2D4; border-radius:18px; padding:18px 22px; margin-top:16px;">
+            <div style="font-size:15px; font-weight:900; margin-bottom:8px;">Encounter timeline</div>
+            <sc-for list="{{ timeline }}" as="tl" hint-placeholder-count="6">
+              <div style="display:flex; align-items:center; gap:12px; padding:7px 0;">
+                <div style="{{ tl.dotStyle }}"></div>
+                <div style="flex:1; font-size:14px; font-weight:700;">{{ tl.label }}</div>
+                <div style="font-size:12px; font-weight:700; color:#A99C8C;">{{ tl.time }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ onWrite }}" disabled="{{ writeDisabled }}" style="{{ writeStyle }}">{{ writeLabel }}</button>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- ========== RIGHT DRAWER: EVIDENCE ========== -->
+  <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ drawerStyle }}">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 20px 12px 20px; border-bottom:1px solid #F3EDE2;">
+        <div style="font-size:16px; font-weight:900;">Evidence</div>
+        <sc-if value="{{ drawerClosable }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ onCloseDrawer }}" style="border:none; background:#F1EADF; color:#8E8275; border-radius:99px; width:28px; height:28px; font-size:14px; font-weight:900; cursor:pointer;">✕</button>
+        </sc-if>
+      </div>
+      <div style="flex:1; overflow-y:auto; padding:16px 20px 30px 20px; min-height:0;">
+        <sc-if value="{{ drawerHasSentence }}" hint-placeholder-val="{{ false }}">
+          <div style="{{ d.provBadge }}">{{ d.provCode }} · {{ d.provLabel }}</div>
+          <div style="font-size:15px; font-weight:700; line-height:1.5; margin-top:12px;">“{{ d.text }}”</div>
+          <sc-if value="{{ d.isResolved }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:12px; background:#EAF3EC; border:1px solid #CBE2D1; border-radius:12px; padding:10px 14px; font-size:13px; font-weight:800; color:#2E6B48;">✓ Resolved · {{ d.resolvedHow }}</div>
+          </sc-if>
+          <sc-if value="{{ d.hasFlag }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:12px; background:#FDF3EE; border:1px solid #F0D5C8; border-radius:12px; padding:12px 14px;">
+              <div style="font-size:12px; font-weight:900; color:#B04A32; text-transform:uppercase; letter-spacing:0.8px;">Why this is flagged · {{ d.flagType }}</div>
+              <div style="font-size:13px; font-weight:600; color:#6E6355; line-height:1.5; margin-top:5px;">{{ d.flagReason }}</div>
+            </div>
+          </sc-if>
+          <div style="font-size:12px; font-weight:900; letter-spacing:1.2px; text-transform:uppercase; color:#A99C8C; margin:18px 0 8px 0;">Supporting transcript</div>
+          <sc-if value="{{ d.hasTurns }}" hint-placeholder-val="{{ false }}">
+            <sc-for list="{{ d.turns }}" as="dt" hint-placeholder-count="2">
+              <div style="background:#FBF7F0; border:1px solid #EFE7D9; border-radius:12px; padding:11px 14px; margin-bottom:8px;">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                  <div style="font-size:12px; font-weight:900; color:#8E8275;">{{ dt.role }} · {{ dt.time }}</div>
+                  <div style="{{ dt.confStyle }}">{{ dt.conf }}</div>
+                </div>
+                <div style="font-size:13px; font-weight:600; line-height:1.5; margin-top:4px;">“{{ dt.text }}”</div>
+              </div>
+            </sc-for>
+            <button onClick="{{ d.onReplay }}" style="width:100%; border:1px solid #EBE2D4; background:#FFFFFF; color:#3B342C; border-radius:12px; padding:10px 14px; font-size:13px; font-weight:800; cursor:pointer;">{{ d.replayLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ d.noTurns }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FDF3EE; border:1px dashed #E8C4B4; border-radius:12px; padding:14px; font-size:13px; font-weight:700; color:#B04A32; text-align:center;">No supporting turn found in this encounter.</div>
+          </sc-if>
+          <sc-if value="{{ d.hasActions }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px; font-weight:900; letter-spacing:1.2px; text-transform:uppercase; color:#A99C8C; margin:18px 0 8px 0;">Resolve</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <sc-for list="{{ d.actions }}" as="da" hint-placeholder-count="3">
+                <button onClick="{{ da.onClick }}" style="{{ da.style }}">{{ da.label }}</button>
               </sc-for>
             </div>
+          </sc-if>
+          <div style="font-size:12px; font-weight:900; letter-spacing:1.2px; text-transform:uppercase; color:#A99C8C; margin:18px 0 8px 0;">Provenance record</div>
+          <sc-for list="{{ d.history }}" as="dh" hint-placeholder-count="3">
+            <div style="display:flex; gap:10px; padding:5px 0; font-size:12px; font-weight:700; color:#8E8275;">
+              <div style="width:44px; color:#A99C8C;">{{ dh.time }}</div>
+              <div style="flex:1;">{{ dh.event }}</div>
+            </div>
+          </sc-for>
+        </sc-if>
+        <sc-if value="{{ drawerEmpty }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center; margin-top:70px; color:#A99C8C;">
+            <div style="font-size:30px;">◎</div>
+            <div style="font-size:14px; font-weight:800; margin-top:8px; color:#8E8275;">Select a sentence</div>
+            <div style="font-size:13px; font-weight:600; margin-top:4px; line-height:1.5;">Tap any sentence in the note to see where it came from and who accepted it.</div>
           </div>
         </sc-if>
       </div>
-
-      </div><!-- /content -->
     </div>
-  </div>
-
-  <!-- ===================== ENGINEER EXPLAINER PANEL ===================== -->
-  <div style="{{ explainerStyle }}">
-    <div style="background:#1a2b33;color:#fff;border-radius:14px 14px 0 0;padding:16px 18px">
-      <div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7fb8b1">Engineer walkthrough</div>
-      <div style="font-size:16px;font-weight:700;margin-top:4px">{{ explain.title }}</div>
-      <div style="font-size:11px;color:#a9bcc4;margin-top:2px">Screen {{ explain.step }} of 8 · numbered dots on the left match the list below</div>
-    </div>
-    <div style="background:#fff;border:1px solid #dde4e8;border-top:none;border-radius:0 0 14px 14px;padding:16px 18px;display:flex;flex-direction:column;gap:14px;overflow:auto;flex:1">
-      <div>
-        <div style="font-size:11px;font-weight:700;color:#0f766e;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">What this screen is</div>
-        <div style="font-size:12.5px;line-height:1.6;color:#33454e">{{ explain.what }}</div>
-      </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;color:#0f766e;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Why it exists</div>
-        <div style="font-size:12.5px;line-height:1.6;color:#33454e">{{ explain.why }}</div>
-      </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;color:#0f766e;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px">Labelled components</div>
-        <div style="display:flex;flex-direction:column;gap:7px">
-          <sc-for list="{{ explain.components }}" as="c" hint-placeholder-count="4">
-            <div style="display:flex;gap:9px;align-items:flex-start">
-              <span style="flex:none;width:18px;height:18px;border-radius:50%;background:#0f766e;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-top:1px">{{ c.n }}</span>
-              <div style="font-size:12px;line-height:1.5;color:#33454e"><strong>{{ c.name }}.</strong> {{ c.desc }}</div>
-            </div>
-          </sc-for>
-        </div>
-      </div>
-      <div style="background:#e4f2f0;border-radius:10px;padding:11px 13px">
-        <div style="font-size:11px;font-weight:700;color:#0b5a54;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px">Try it now</div>
-        <div style="display:flex;flex-direction:column;gap:4px">
-          <sc-for list="{{ explain.tries }}" as="tr" hint-placeholder-count="2">
-            <div style="font-size:11.5px;line-height:1.55;color:#0b5a54">▸ {{ tr }}</div>
-          </sc-for>
-        </div>
-      </div>
-      <div style="font-size:10.5px;color:#8a979e;line-height:1.55;border-top:1px solid #eef2f4;padding-top:10px">All patient data is synthetic. Concept follows the “AI scribe system design workbook” — a governed documentation cockpit: <em>listen → transcribe → draft → explain → verify → write back</em>, with nothing entering the legal record until flagged uncertainty is resolved by the clinician.</div>
-    </div>
-  </div>
-
+  </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1740, &quot;height&quot;: 950}, &quot;showLabels&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Walkthrough&quot;}, &quot;showExplainer&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Walkthrough&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 1366, &quot;height&quot;: 1024}, &quot;accentColor&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#E1704B&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#E1704B&quot;, &quot;#3D9083&quot;, &quot;#5B8DB8&quot;, &quot;#B07A1E&quot;], &quot;section&quot;: &quot;Look&quot;}, &quot;noteLayout&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;gutter&quot;, &quot;options&quot;: [&quot;gutter&quot;, &quot;inline&quot;, &quot;split&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Workspace&quot;}, &quot;compactRail&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Look&quot;}}">
 class Component extends DCLogic {
   state = {
-    tab: 'home',
-    recording: false,
-    recSeconds: 0,
-    playingTurn: null,
-    drawer: null,
-    toast: null,
-    consent: { rec: true, tx: true, draft: true, portal: false, secondary: false },
-    tasks: { t1: 'open', t2: 'open', t3: 'open', t4: 'open' },
-    overrides: {},           // sid -> {text, prov, removed}
-    signed: false,
-    patientAcked: false,
-    pushed: false,
-    unsafeAttempts: 3,
-    flaggingPara: null,
-    pickedReason: null,
-    correctionSent: false
+    enc: 'e1', tab: 'note', layout: null, drawerSid: null,
+    res: {},            // 'e1:o2' -> {action, prov, removed, text}
+    signed: { e3: true, e4: true }, written: { e3: true, e4: true },
+    consent2: { rec: true, tx: true, gen: false, portal: false, model: false },
+    pflags: {}, corrDone: {}, replaying: null, ver: 0
   };
 
   componentDidMount() {
-    this._tick = setInterval(() => {
-      if (this.state.recording) this.setState(s => ({ recSeconds: s.recSeconds + 1 }));
-    }, 1000);
+    this._onR = () => this.setState({ narrow: window.innerWidth < 1120 });
+    window.addEventListener('resize', this._onR);
+    this._onR();
   }
-  componentWillUnmount() { clearInterval(this._tick); clearTimeout(this._toastT); clearTimeout(this._playT); }
+  componentWillUnmount() { window.removeEventListener('resize', this._onR); }
 
-  toast(msg) {
-    this.setState({ toast: msg });
-    clearTimeout(this._toastT);
-    this._toastT = setTimeout(() => this.setState({ toast: null }), 3200);
-  }
-
-  // ---------- static data ----------
-  get PROV() {
+  data() {
+    const T1 = [
+      { id: 0, role: 'Clinician', time: '00:04', conf: 0.96, text: 'Good morning Amara — how have you been since we increased the amlodipine?', chips: ['medication'] },
+      { id: 1, role: 'Patient', time: '00:12', conf: 0.93, text: 'Mostly fine. Some ankle swelling in the evenings.', chips: [] },
+      { id: 2, role: 'Patient', time: '00:41', conf: 0.61, text: 'I take the little white one every morning… I think it\u2019s the ten?', chips: ['medication', 'number', 'low confidence'] },
+      { id: 3, role: 'Clinician', time: '01:05', conf: 0.95, text: 'Any headaches or dizziness?', chips: [] },
+      { id: 4, role: 'Patient', time: '01:11', conf: 0.90, text: 'No headaches. A bit lightheaded standing up, maybe twice.', chips: ['negation', 'number'] },
+      { id: 5, role: 'Patient', time: '02:20', conf: 0.88, text: 'My sister had a stroke last month, so I\u2019ve been anxious about my pressure.', chips: ['third party'] },
+      { id: 6, role: 'Clinician', time: '03:02', conf: 0.97, text: 'Your reading today is 152 over 94, so still above target.', chips: ['numbers'] },
+      { id: 7, role: 'Patient', time: '03:15', conf: 0.92, text: 'I did miss a few days when I travelled.', chips: [] },
+      { id: 8, role: 'Clinician', time: '03:48', conf: 0.94, text: 'Let\u2019s check again in two weeks. Try a home monitor, and keep an eye on salt.', chips: [] }
+    ];
+    const S1 = [
+      { title: 'Subjective', items: [
+        { id: 's1', prov: 'TG', turns: [1], text: 'Reports intermittent ankle swelling in the evenings, worse after long days.', pt: 'You mentioned some ankle swelling in the evenings, worse after long days.' },
+        { id: 's2', prov: 'MS', turns: [], text: 'Denies chest pain or palpitations.', alt: 'Chest pain and palpitations were not discussed during this visit.', pt: 'You did not report chest pain or palpitations.',
+          flag: { type: 'Negation', risk: 'High', reason: 'No supporting transcript turn found for this denial. The model may have inserted a template negation the patient never made.', actions: ['Rephrase as \u201cnot discussed\u201d', 'Verify \u2014 asked verbally', 'Remove sentence'] } },
+        { id: 's3', prov: 'TG', turns: [4], text: 'Reports feeling lightheaded on standing, approximately twice since the last visit.', pt: 'You felt lightheaded when standing up, about twice.' },
+        { id: 's4', prov: 'TP', turns: [], text: 'Former smoker, quit 2019.', alt: 'Former smoker, quit 2019 (historic \u2014 confirmed from prior record).', pt: 'Your record notes you stopped smoking in 2019.',
+          flag: { type: 'Template carryover', risk: 'Medium', reason: 'Carried forward from the previous note. Smoking was not mentioned in this encounter \u2014 confirm it still applies.', actions: ['Confirm still applies', 'Mark as historic', 'Remove sentence'] } }
+      ]},
+      { title: 'Objective', items: [
+        { id: 'o1', prov: 'TG', turns: [6], text: 'Blood pressure 152/94 in clinic today.', pt: 'Your blood pressure today was 152/94 \u2014 above your target.' },
+        { id: 'o2', prov: 'TG', turns: [2], text: 'Current medication: amlodipine 10 mg once daily.', pt: 'You are taking amlodipine 10 mg once a day.',
+          flag: { type: 'Medication dose', risk: 'High', reason: 'Dose transcribed at 61% confidence. The patient said \u201cI think it\u2019s the ten\u201d \u2014 replay the audio or confirm against the medication list.', actions: ['Replay \u2014 dose confirmed', 'Edit dose', 'Route to pharmacy review'] } }
+      ]},
+      { title: 'Assessment', items: [
+        { id: 'a1', prov: 'MS', turns: [6, 7], text: 'Hypertension, suboptimally controlled.', pt: 'Your blood pressure is not yet at target.' },
+        { id: 'a2', prov: 'MS', turns: [7], text: 'Elevated readings are likely due to missed doses while travelling.', alt: 'Patient reports missing several doses while travelling, which may explain the elevated readings.', pt: 'Missed doses while travelling may explain the higher readings.',
+          flag: { type: 'Speaker attribution', risk: 'Medium', reason: 'The patient\u2019s own speculation has been phrased as a clinical assessment. Reattribute it to patient report or own it as your assessment.', actions: ['Reattribute to patient report', 'Edit sentence', 'Verify as my assessment'] } }
+      ]},
+      { title: 'Plan', items: [
+        { id: 'p1', prov: 'CA', turns: [], text: 'Continue amlodipine 10 mg daily; recheck blood pressure in 2 weeks.', pt: 'Keep taking amlodipine daily. We will recheck your blood pressure in 2 weeks.' },
+        { id: 'p2', prov: 'MS', turns: [8], text: 'Discussed home blood pressure monitoring and reducing salt intake.', pt: 'We discussed checking your blood pressure at home and cutting down on salt.' }
+      ]}
+    ];
     return {
-      TG: { name: 'Transcript grounded', color: '#0f766e', bg: '#e4f2f0', bd: '#bcdcd7', desc: 'Taken directly from what was said. Verify by replaying the linked audio span.', sign: 'Sign-off: verifiable against the recording — lowest review burden.' },
-      MS: { name: 'Model summarised', color: '#6d4fa1', bg: '#efeaf7', bd: '#d8cdec', desc: 'The AI compressed or rephrased one or more utterances. Meaning may have shifted.', sign: 'Sign-off: clinician must check the abstraction and who actually said it.' },
-      TP: { name: 'Template / copied forward', color: '#92610c', bg: '#faf0dc', bd: '#ecd9ab', desc: 'Came from a template or a previous note, not from this conversation.', sign: 'Sign-off: clinician must confirm it still applies to this encounter.' },
-      CA: { name: 'Clinician authored', color: '#475569', bg: '#eaeef2', bd: '#d3dbe1', desc: 'Typed by the clinician. Human authorship is recorded as such.', sign: 'Sign-off: no transcript support needed — the human is the source.' },
-      CV: { name: 'Clinician verified', color: '#1f7a3d', bg: '#e3f1e7', bd: '#b9dcc3', desc: 'Machine text explicitly reviewed and accepted (or corrected) by the clinician.', sign: 'Sign-off: the review action is on the audit ledger with identity + time.' }
+      e1: { name: 'Amara Nwosu', initials: 'AN', meta: '58 F \u00b7 Follow-up \u00b7 Hypertension \u00b7 Room 3', time: '9:15', hue: '#E1704B', turns: T1, sections: S1, audio: '4 min 02 s',
+        timeline: [['Consent recorded (verbal)', '9:14'], ['Ambient capture', '9:15 \u2013 9:19'], ['Draft generated \u00b7 model v2.4.1', '9:20'], ['Verification', 'in progress'], ['Sign-off', 'pending'], ['EHR write-back', 'pending']] },
+      e2: { name: 'Tom Bailey', initials: 'TB', meta: '46 M \u00b7 New patient \u00b7 Knee pain \u00b7 Room 1', time: '10:00', hue: '#5B8DB8', audio: '0 min 48 s',
+        turns: [
+          { id: 0, role: 'Clinician', time: '00:02', conf: 0.95, text: 'What brings you in today?', chips: [] },
+          { id: 1, role: 'Patient', time: '00:07', conf: 0.87, text: 'My right knee has been aching for about three weeks.', chips: ['laterality', 'number'] },
+          { id: 2, role: 'Patient', time: '00:31', conf: 0.83, text: 'Ibuprofen helps a little, but it comes back after walking.', chips: ['medication'] }
+        ], sections: [],
+        timeline: [['Consent \u2014 in progress', '10:00'], ['Capture', 'not started'], ['Draft', '\u2014'], ['Verification', '\u2014'], ['Sign-off', '\u2014'], ['EHR write-back', '\u2014']] },
+      e3: { name: 'Ruth Kaur', initials: 'RK', meta: '71 F \u00b7 Medication review \u00b7 Room 3', time: '8:30', hue: '#3D9083', audio: '6 min 20 s',
+        turns: [
+          { id: 0, role: 'Clinician', time: '00:05', conf: 0.96, text: 'How are you getting on with the atorvastatin?', chips: ['medication'] },
+          { id: 1, role: 'Patient', time: '00:12', conf: 0.94, text: 'No problems at all. No aches this time.', chips: ['negation'] },
+          { id: 2, role: 'Clinician', time: '04:40', conf: 0.97, text: 'Your pressure is 128 over 76 \u2014 that\u2019s lovely. Same plan, see you in six months.', chips: ['numbers'] }
+        ],
+        sections: [
+          { title: 'Subjective', items: [{ id: 'r1', prov: 'CV', turns: [1], text: 'Feels well; no muscle aches on atorvastatin.', pt: 'You feel well, with no muscle aches from your statin.' }] },
+          { title: 'Objective', items: [{ id: 'r2', prov: 'CV', turns: [2], text: 'Blood pressure 128/76.', pt: 'Your blood pressure was 128/76 \u2014 in a healthy range.' }] },
+          { title: 'Assessment', items: [{ id: 'r3', prov: 'CV', turns: [2], text: 'Stable on current regimen.', pt: 'You are stable on your current medications.' }] },
+          { title: 'Plan', items: [{ id: 'r4', prov: 'CA', turns: [], text: 'Continue all medications; review in 6 months.', pt: 'Keep taking your medications as usual. Next review in 6 months.' }] }
+        ],
+        timeline: [['Consent recorded (portal pre-consent)', '8:28'], ['Ambient capture', '8:30 \u2013 8:37'], ['Draft generated \u00b7 model v2.4.1', '8:38'], ['Verification complete', '8:49'], ['Signed by Dr. Osei', '8:52'], ['Written to EHR', '8:52']] },
+      e4: { name: 'Dev Patel', initials: 'DP', meta: '34 M \u00b7 Asthma review \u00b7 Telehealth', time: 'Fri', hue: '#8B7BC7', audio: '9 min 12 s',
+        turns: [
+          { id: 0, role: 'Clinician', time: '00:10', conf: 0.95, text: 'How often are you needing the blue inhaler?', chips: ['medication'] },
+          { id: 1, role: 'Patient', time: '00:16', conf: 0.78, text: 'Mostly before football \u2014 maybe once a week, sometimes more.', chips: ['frequency', 'low confidence'] },
+          { id: 2, role: 'Clinician', time: '07:30', conf: 0.96, text: 'Let\u2019s try a regular preventer and see where we are in eight weeks.', chips: ['medication'] }
+        ],
+        sections: [
+          { title: 'Subjective', items: [{ id: 'd1', prov: 'CV', turns: [1], text: 'Using salbutamol inhaler most days before exercise.', pt: 'You use your reliever inhaler most days before exercise.' }] },
+          { title: 'Objective', items: [{ id: 'd2', prov: 'CV', turns: [], text: 'Peak flow 610 L/min (predicted 620).', pt: 'Your peak flow was 610 \u2014 close to the expected value.' }] },
+          { title: 'Assessment', items: [{ id: 'd3', prov: 'CV', turns: [], text: 'Exercise-induced asthma, partially controlled.', pt: 'Your asthma is partly controlled, mainly triggered by exercise.' }] },
+          { title: 'Plan', items: [{ id: 'd4', prov: 'CV', turns: [2], text: 'Trial regular preventer inhaler; review in 8 weeks.', pt: 'Start a daily preventer inhaler. We will review in 8 weeks.' }] }
+        ],
+        timeline: [['Consent recorded (verbal)', 'Fri 14:02'], ['Ambient capture', 'Fri 14:03 \u2013 14:12'], ['Signed by Dr. Osei', 'Fri 14:31'], ['Written to EHR', 'Fri 14:31'], ['Released to portal', 'Fri 16:00'], ['Patient correction opened', 'Sat 09:12']] }
     };
   }
 
-  get TURNS() {
-    return [
-      { id: 'T1', role: 'c', time: '00:04', text: 'Good morning Adaeze — how have you been since we increased the lisinopril?', flags: [], links: ['S1'] },
-      { id: 'T2', role: 'p', time: '00:11', text: 'Better, I think. But I get a bit dizzy in the mornings sometimes.', flags: [], links: ['S1', 'S2'] },
-      { id: 'T3', role: 'c', time: '00:26', text: 'Are you taking it ten milligrams, once daily?', flags: [{ label: 'Check: “ten milligrams” heard at 71%', kind: 'warn' }], links: ['S8'] },
-      { id: 'T4', role: 'p', time: '00:31', text: 'Yes… well, most days. I missed a few last week.', flags: [{ label: 'Check: brief yes/no cue', kind: 'warn' }], links: ['S3'] },
-      { id: 'T5', role: 'c', time: '00:48', text: 'Any chest pain, palpitations, or swelling in your ankles?', flags: [], links: [] },
-      { id: 'T6', role: 'p', time: '00:55', text: 'No chest pain. My ankles were a little puffy on Friday though.', flags: [{ label: 'Check: negation — check what was denied', kind: 'warn' }], links: ['S4', 'S5'] },
-      { id: 'T7', role: 'c', time: '02:10', text: 'Your blood pressure today is 142 over 88.', flags: [{ label: '№ number — verified 98%', kind: 'ok' }], links: ['S6'] },
-      { id: 'T8', role: 'p', time: '02:31', text: 'Is that still high? My sister says I should try garlic tablets.', flags: [{ label: 'Check: attribution — reported speech', kind: 'warn' }], links: ['S9'] },
-      { id: 'T9', role: 'c', time: '03:02', text: 'It has improved but it is not at target yet. Let us check your kidney function and review in four weeks.', flags: [], links: ['S10', 'S11'] },
-      { id: 'T10', role: 'p', time: '03:15', text: 'Okay, that works for me.', flags: [], links: [] }
-    ];
-  }
-
-  get SENTENCES() {
-    return [
-      { id: 'S1', sec: 'Subjective', prov: 'MS', text: 'Patient reports improvement since the lisinopril dose increase.', turns: ['T1', 'T2'] },
-      { id: 'S2', sec: 'Subjective', prov: 'TG', text: 'Reports intermittent morning dizziness.', turns: ['T2'] },
-      { id: 'S3', sec: 'Subjective', prov: 'MS', text: 'Adherence incomplete; several doses missed in the past week.', turns: ['T4'] },
-      { id: 'S4', sec: 'Subjective', prov: 'MS', text: 'Denies chest pain and palpitations.', turns: ['T5', 'T6'], task: 't2' },
-      { id: 'S5', sec: 'Subjective', prov: 'TG', text: 'Mild ankle swelling noted on Friday.', turns: ['T6'] },
-      { id: 'S6', sec: 'Objective', prov: 'TG', text: 'BP 142/88 mmHg.', turns: ['T7'] },
-      { id: 'S7', sec: 'Objective', prov: 'TP', text: 'Weight stable at 78 kg.', turns: [], task: 't3' },
-      { id: 'S8', sec: 'Assessment', prov: 'MS', text: 'Hypertension, improving on lisinopril 10 mg daily but above target.', turns: ['T3', 'T7', 'T9'], task: 't1' },
-      { id: 'S9', sec: 'Assessment', prov: 'MS', text: 'Patient is considering herbal supplements (garlic tablets).', turns: ['T8'], task: 't4' },
-      { id: 'S10', sec: 'Plan', prov: 'MS', text: 'Renal function panel ordered.', turns: ['T9'] },
-      { id: 'S11', sec: 'Plan', prov: 'TG', text: 'Review appointment in four weeks.', turns: ['T9'] },
-      { id: 'S12', sec: 'Plan', prov: 'CA', text: 'Counselled on adherence and consistent morning dosing.', turns: [] }
-    ];
-  }
-
-  get TASKS() {
-    return [
-      { id: 't1', sev: 'HIGH', cat: 'Medication', ref: 'S8 ← T3', sid: 'S8',
-        why: 'The dose “ten milligrams” was transcribed at only 71% ASR confidence. Wrong doses are the highest-harm scribe error, so this blocks signing until a human confirms it.',
-        actions: [{ label: 'Play Replay T3', kind: 'ghost', act: 'play', turn: 'T3' }, { label: 'OK Verify — dose is correct', kind: 'primary', act: 'verify' }],
-        resolvedMsg: 'Dose confirmed against audio — sentence promoted to CV' },
-      { id: 't2', sev: 'HIGH', cat: 'Negation', ref: 'S4 ← T5, T6', sid: 'S4',
-        why: 'The patient said “no chest pain” but never answered about palpitations. The AI generalised the denial — an invented negative finding is a classic hallucination.',
-        actions: [{ label: '✎ Rephrase: “palpitations not discussed”', kind: 'primary', act: 'rephrase', newText: 'Denies chest pain; palpitations not discussed.' }, { label: 'Remove sentence', kind: 'ghost', act: 'remove' }],
-        resolvedMsg: 'Rephrased to match the evidence — sentence promoted to CV' },
-      { id: 't3', sev: 'MEDIUM', cat: 'Template carryover', ref: 'S7 · no utterance', sid: 'S7',
-        why: 'The weight was copied from the previous visit. Nothing in today’s conversation supports it, so the clinician must confirm it still applies.',
-        actions: [{ label: 'OK Confirm — still applies', kind: 'primary', act: 'verify' }, { label: 'Remove sentence', kind: 'ghost', act: 'remove' }],
-        resolvedMsg: 'Confirmed as applicable — sentence promoted to CV' },
-      { id: 't4', sev: 'MEDIUM', cat: 'Speaker attribution', ref: 'S9 ← T8', sid: 'S9',
-        why: 'The garlic-tablets idea came from the patient’s sister, quoted by the patient. The draft turned reported speech into the patient’s own intention.',
-        actions: [{ label: '✎ Reattribute to reported speech', kind: 'primary', act: 'rephrase', newText: 'Patient mentions her sister suggested garlic supplements; discussed evidence and interactions.' }, { label: 'OK Verify as-is', kind: 'ghost', act: 'verify' }],
-        resolvedMsg: 'Reattributed correctly — sentence promoted to CV' }
-    ];
-  }
-
-  // ---------- helpers ----------
-  sent(id) {
-    const base = this.SENTENCES.find(s => s.id === id);
-    const o = this.state.overrides[id] || {};
-    return Object.assign({}, base, o);
-  }
-  openFlags() { return Object.values(this.state.tasks).filter(v => v === 'open').length; }
-
-  resolveTask(taskId, act, newText) {
-    const task = this.TASKS.find(t => t.id === taskId);
-    const ov = Object.assign({}, this.state.overrides);
-    if (act === 'remove') {
-      ov[task.sid] = Object.assign({}, ov[task.sid], { removed: true });
-      this.setState(s => ({ overrides: ov, tasks: Object.assign({}, s.tasks, { [taskId]: 'removed' }) }));
-      this.toast('Sentence ' + task.sid + ' removed from the note. Logged to audit ledger.');
-    } else {
-      ov[task.sid] = Object.assign({}, ov[task.sid], { prov: 'CV' }, newText ? { text: newText } : {});
-      this.setState(s => ({ overrides: ov, tasks: Object.assign({}, s.tasks, { [taskId]: 'done' }) }));
-      this.toast('Flag resolved · ' + task.sid + ' is now CV (clinician verified).');
-    }
-  }
-
-  playTurn(id) {
-    clearTimeout(this._playT);
-    if (this.state.playingTurn === id) { this.setState({ playingTurn: null }); return; }
-    this.setState({ playingTurn: id });
-    this._playT = setTimeout(() => this.setState({ playingTurn: null }), 3000);
-  }
-
-  fmtClock(sec) {
-    const m = Math.floor(sec / 60), s = sec % 60;
-    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-  }
-
-  chipStyle(bg, color, bd) {
-    return { fontSize: '10.2px', fontWeight: 600, background: bg, color: color, padding: '3px 8px', borderRadius: '20px', border: bd ? '1px solid ' + bd : 'none', whiteSpace: 'normal', lineHeight: 1.16, textAlign: 'center', maxWidth: '100%' };
-  }
-  tokStyle(code) {
-    const p = this.PROV[code];
-    return { flex: 'none', fontFamily: 'ui-monospace,Menlo,monospace', fontSize: '10px', fontWeight: 700, color: p.color, background: p.bg, border: '1px solid ' + p.bd, borderRadius: '6px', padding: '2px 6px', width: '22px', textAlign: 'center', marginTop: '2px' };
-  }
-  btn(kind) {
-    if (kind === 'primary') return { background: '#0f766e', color: '#fff', border: 'none', borderRadius: '9px', padding: '7px 12px', fontSize: '11.5px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'normal', lineHeight: 1.16 };
-    return { background: '#fff', color: '#475569', border: '1px solid #d3dbe1', borderRadius: '9px', padding: '7px 12px', fontSize: '11.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'normal', lineHeight: 1.16 };
-  }
-
-  // ---------- explainer content ----------
-  get EXPLAIN() {
+  provMeta(code) {
     return {
-      home: { step: 1, title: 'Home — safe-work triage', 
-        what: 'The clinician’s landing screen. One card per patient visit (“encounter”), each showing the state of its note: recorded, drafted, flagged, signed, exported.',
-        why: 'In hospitals, unfinished notes hide in scattered inboxes. This screen surfaces the riskiest work first — a note with an unverified drug dose outranks a merely old one.',
-        components: [
-          { n: 1, name: 'Encounter card', desc: 'One visit. Chips show consent, unresolved safety flags, and whether the note reached the hospital record system (EHR).' },
-          { n: 2, name: 'Service indicators', desc: 'Health-of-the-service numbers: how fast drafts arrive, whether notes are getting bloated, how many unsafe sign attempts the gate blocked.' }
-        ],
-        tries: ['Tap the top encounter card (Adaeze O.) to open its consent screen.', 'Note the red “4 flags” chip — watch it count down as you resolve items in the live verification panel (Transcript tab).'] },
-      consent: { step: 2, title: 'Consent & Capture', 
-        what: 'Everything that must be true before the microphone turns on: patient permission (split into five separate scopes) and device readiness.',
-        why: 'Recording a medical conversation is legally sensitive. Consent to record ≠ consent to AI drafting ≠ consent to portal release — so each is a separate, logged switch. Recording can only start when everything is green.',
-        components: [
-          { n: 1, name: 'Consent scope switches', desc: 'Five independent permissions, each stored as a structured audit event.' },
-          { n: 2, name: 'Consent method', desc: 'How permission was obtained (verbal / written / portal / declined).' },
-          { n: 3, name: 'Device readiness', desc: 'Mic, network, and EHR encounter match — pre-flight checklist.' },
-          { n: 4, name: 'Ready state + record control', desc: 'Goes green only when consent + devices + encounter all align.' }
-        ],
-        tries: ['Toggle “Portal release” and watch the state chip flip.', 'Press “Start ambient recording” — a REC timer appears in the top strip and a live “listening” bubble appears in the Transcript tab.'] },
-      transcript: { step: 3, title: 'Transcript + live verification', 
-        what: 'The visit as a mobile-style chat — patient bubbles left, clinician bubbles right — with a live verification panel beside it. Flags appear in the panel as the AI listens, and the clinician resolves them right next to the evidence.',
-        why: 'Speech recognition mishears drug names, doses, negations and numbers. Verifying in real time, beside the replayable utterance, is faster and safer than hunting through the finished note later.',
-        components: [
-          { n: 1, name: 'Speaker bubbles', desc: 'Turn-by-turn record with speaker role, timestamp, and diarisation (who-spoke) attribution.' },
-          { n: 2, name: 'Per-turn replay', desc: 'Play plays exactly that audio span — the unit of verification.' },
-          { n: 3, name: 'Risk flags', desc: 'Amber marks on high-risk speech: low-confidence dose, brief yes/no, negation, reported speech.' },
-          { n: 4, name: 'Note links', desc: 'Teal chips list every note sentence derived from this turn; tapping one opens that sentence’s evidence.' },
-          { n: 5, name: 'Quality banner', desc: 'Audio and speaker-separation quality is preserved as provenance, never hidden.' },
-          { n: 6, name: 'Live verification panel', desc: 'The same flag queue as the Verify tab, docked beside the chat — resolve a flag while the utterance is one tap away.' }
-        ],
-        tries: ['Press Play on the 00:26 clinician bubble, then resolve the dose flag in the panel beside it.', 'Watch the flag counter in the top strip drop in real time as you resolve items.'] },
-      note: { step: 4, title: 'Note workspace — what will be signed', 
-        what: 'The AI-drafted clinical note in SOAP structure (Subjective / Objective / Assessment / Plan). Each sentence is an addressable unit with a provenance token and, where needed, a risk chip.',
-        why: 'A note is a legal document. No sentence should look like neutral fact until you know where it came from — spoken, summarised, templated, or typed — and whether a human accepted it.',
-        components: [
-          { n: 1, name: 'Note sections', desc: 'SOAP here, but the pattern works for any local template.' },
-          { n: 2, name: 'Provenance tokens', desc: 'TG / MS / TP / CA / CV in the gutter — colour + code + label, never colour alone.' },
-          { n: 3, name: 'Risk chips', desc: 'Unresolved flags shown inline, at the exact sentence they concern.' },
-          { n: 4, name: 'Evidence drawer', desc: 'Tap any sentence → a drawer slides in with its supporting utterances, replay, model version and review history.' },
-          { n: 5, name: 'Sign state', desc: 'The Sign button is disabled while mandatory flags remain — the core safety mechanism.' }
-        ],
-        tries: ['Tap sentence S4 (“Denies chest pain…”) to open its evidence drawer.', 'Try pressing Sign while flags remain — the gate blocks you and counts the attempt.'] },
-      evidence: { step: 5, title: 'Evidence — the provenance system', 
-        what: 'The reference screen: the five provenance classes, the utterance-to-signature pipeline, and an inspector for any sentence.',
-        why: 'This is the contract the whole system enforces. Engineers should treat provenance as a graph: audio span → transcript turn → note sentence → review event → signed hash. Every arrow is stored data, not decoration.',
-        components: [
-          { n: 1, name: 'Provenance legend', desc: 'The five classes with their sign-off implications — TG, MS, TP, CA, CV.' },
-          { n: 2, name: 'Pipeline map', desc: 'The chain of custody from spoken word to legal record.' },
-          { n: 3, name: 'Sentence inspector', desc: 'Every note sentence, colour-coded; tap to open its evidence card.' }
-        ],
-        tries: ['Tap any sentence chip to open its evidence drawer.', 'Compare S6 (TG, replayable) with S7 (TP, no utterance at all).'] },
-      patient: { step: 6, title: 'Patient view — read, challenge, counter-sign', 
-        what: 'A preview of the premium portal summary the patient reads on her phone, partitioned into the summary document (left) and her action rail (right): sign & approve, push to record, and corrections.',
-        why: 'Patients increasingly read their own notes — and they are often first to spot an AI invention. Making the patient a counter-signatory closes the loop: the record enters the EHR only after both parties have seen the same text.',
-        components: [
-          { n: 1, name: 'Visit summary document', desc: 'Same facts as the clinical note, patient-appropriate wording, vitals band up top. Billing fields hidden but auditable.' },
-          { n: 2, name: 'Review & sign', desc: 'The patient counter-signature. Unlocks after the clinician signs; recorded on the provenance ledger against this exact text.' },
-          { n: 3, name: 'Push to EHR', desc: 'Enabled only when both signatures exist — the patient can send the note into her permanent record herself.' },
-          { n: 4, name: 'Corrections', desc: '“Not right?” beside any line → reason → tracked request with a 5-day SLA. Serious errors auto-escalate.' }
-        ],
-        tries: ['Flag any line with “Not right?” and submit a correction request.', 'After the doctor signs (Write-back tab), counter-sign here and push the note to the EHR.'] },
-      writeback: { step: 7, title: 'EHR write-back — draft becomes legal record', 
-        what: 'The final gate. Left: exactly which EHR fields each part of the note maps to (via FHIR interfaces where possible). Right: the six-item sign-off checklist, the clinician signature, and the EHR push.',
-        why: 'The EHR (Electronic Health Record) is the hospital’s system of record. Order of operations: clinician signs (content hash + identity frozen) → patient counter-signs in her portal → push to EHR. Weak paths like copy-paste are permitted only with a logged warning.',
-        components: [
-          { n: 1, name: 'Field mapping', desc: 'Narrative → DocumentReference, problems → Condition, meds → MedicationStatement, and the fallback when an interface is missing.' },
-          { n: 2, name: 'Sign-off gate', desc: 'Consent OK, zero flags, mappings OK, both signatures — all six must pass before the push.' },
-          { n: 3, name: 'Clinician signature', desc: 'Records signatory identity, timestamp, and content hash.' },
-          { n: 4, name: 'Push to EHR', desc: 'Available here and on the patient side once both signatures exist; writes the audit pointer.' }
-        ],
-        tries: ['Press Sign while flags remain — the block is counted as governance data.', 'Clear the flags (Transcript tab), sign here, counter-sign on the Patient tab, then push to the EHR.'] },
-      gov: { step: 8, title: 'Governance — patterns, not blame', 
-        what: 'The full-width management dashboard: safety KPIs, error taxonomy, model/template registry, the patient-correction queue, and the fiscal strip.',
-        why: 'When the AI errs, the clinician should not be the only shock absorber. Version registries and error trends make vendor drift visible and contractable — if v3.1 started mishandling negations, that is a ticket, not a mystery.',
-        components: [
-          { n: 1, name: 'Safety metrics', desc: 'Blocked signs, corrections, hallucination reports, after-hours charting.' },
-          { n: 2, name: 'Error taxonomy', desc: 'Flags by category — the input for tuning thresholds per specialty.' },
-          { n: 3, name: 'Version registry', desc: 'Every signed note records its model + template versions; behaviour changes can never silently rewrite history.' },
-          { n: 4, name: 'Patient corrections', desc: 'The VOICE queue with SLA tracking — submit one from the Patient tab and it appears here.' },
-          { n: 5, name: 'Fiscal strip', desc: 'Cost per note, time saved, after-hours reduction, reinvestment — reported as governance data, not marketing.' }
-        ],
-        tries: ['Compare “Blocked sign attempts” with the counter you incremented on the Note tab.', 'Submit a patient correction, then watch CR-1042 appear in the corrections panel.'] }
-    };
+      TG: { c: '#4E9B6F', bg: '#EAF3EC', label: 'Transcript grounded' },
+      MS: { c: '#B07A1E', bg: '#FBF0D9', label: 'Model summarised' },
+      TP: { c: '#7A68B8', bg: '#EFEBF9', label: 'Template / carried forward' },
+      CA: { c: '#4E7FA8', bg: '#E8F0F7', label: 'Clinician authored' },
+      CV: { c: '#3D9083', bg: '#E6F2F0', label: 'Clinician verified' }
+    }[code];
   }
 
-  // ---------- render ----------
+  sentState(encId, s) {
+    const r = this.state.res[encId + ':' + s.id];
+    if (!r) return { text: s.text, prov: s.prov, resolved: false, removed: false, flagged: !!s.flag };
+    return { text: r.text || s.text, prov: r.prov || s.prov, resolved: true, removed: !!r.removed, flagged: false, how: r.action };
+  }
+
+  resolve(encId, s, action) {
+    const key = encId + ':' + s.id;
+    let r = { action };
+    if (action.indexOf('Remove') === 0) r.removed = true;
+    else if (action.indexOf('Rephrase') === 0 || action.indexOf('Reattribute') === 0 || action.indexOf('Mark') === 0) { r.text = s.alt || s.text; r.prov = 'CA'; }
+    else if (action.indexOf('Edit') === 0) { r.text = s.text; r.prov = 'CA'; r.action = 'Edited by Dr. Osei'; }
+    else r.prov = 'CV';
+    this.setState(st => ({ res: Object.assign({}, st.res, { [key]: r }) }));
+  }
+
+  replay(sid) {
+    this.setState({ replaying: sid });
+    clearTimeout(this._rt);
+    this._rt = setTimeout(() => this.setState({ replaying: null }), 2200);
+  }
+
   renderVals() {
-    const S = this.state;
-    const labelsOn = this.props.showLabels ?? true;
-    const showExplainer = this.props.showExplainer ?? false;
-    const flags = this.openFlags();
-    const signReady = flags === 0;
-    const go = t => () => this.setState({ tab: t, drawer: t === this.state.tab ? this.state.drawer : null });
+    const st = this.state;
+    const D = this.data();
+    const accent = this.props.accentColor ?? '#E1704B';
+    const layout = st.layout ?? this.props.noteLayout ?? 'gutter';
+    const compact = this.props.compactRail ?? false;
+    const encId = st.enc;
+    const E = D[encId];
+    const signed = !!st.signed[encId];
+    const written = !!st.written[encId];
 
-    const badgeStyle = labelsOn
-      ? { flex: 'none', width: '18px', height: '18px', borderRadius: '50%', background: '#0f766e', color: '#fff', fontSize: '10px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 0 2px rgba(15,118,110,.18)' }
-      : { display: 'none' };
-
-    // tabs
-    const tabDefs = [
-      ['home', 'Home'], ['consent', 'Consent'], ['transcript', 'Transcript'], ['note', 'Note'],
-      ['evidence', 'Evidence'], ['patient', 'Patient'], ['writeback', 'Write-back'], ['gov', 'Governance']
-    ];
-    const tabsNav = tabDefs.map(([id, label]) => ({
-      id, label, go: go(id),
-      badge: id === 'transcript' && flags > 0 ? flags : null,
-      style: {
-        fontFamily: 'inherit', fontSize: '12.5px', fontWeight: S.tab === id ? 700 : 600, cursor: 'pointer',
-        padding: '8px 8px', border: 'none', background: 'transparent', flex: '1 1 0', minWidth: '76px', textAlign: 'center', lineHeight: 1.15,
-        color: S.tab === id ? '#0f766e' : '#5b6b74',
-        borderBottom: S.tab === id ? '3px solid #0f766e' : '3px solid transparent',
-        borderRadius: '6px 6px 0 0'
-      }
-    }));
-
-    // status strip
-    const noteStateLabel = S.pushed ? 'In EHR OK' : S.signed ? 'Signed — awaiting patient' : 'Draft — unsigned';
-    const noteStateStyle = S.pushed ? this.chipStyle('#e3f1e7', '#1f7a3d') : S.signed ? this.chipStyle('#e4f2f0', '#0b5a54') : this.chipStyle('#eaf1f7', '#2b5d8a');
-    const flagChipLabel = flags > 0 ? flags + ' flags unresolved' : 'All flags resolved OK';
-    const flagChipStyle = flags > 0 ? this.chipStyle('#fdecec', '#a3202a', '#f2c6c8') : this.chipStyle('#e3f1e7', '#1f7a3d');
-
-    // consent
-    const consentDefs = [
-      ['rec', 'Ambient recording', 'Microphone captures the conversation in the room.'],
-      ['tx', 'Transcription', 'Speech is converted to text with speaker attribution.'],
-      ['draft', 'AI note drafting', 'A draft clinical note is generated from the transcript.'],
-      ['portal', 'Portal release', 'The signed note becomes visible to the patient online.'],
-      ['secondary', 'Model improvement use', 'De-identified data may be used to improve the AI. Off by default.']
-    ];
-    const consentItems = consentDefs.map(([k, label, desc]) => {
-      const on = S.consent[k];
-      return {
-        label, desc,
-        toggle: () => { this.setState(s => ({ consent: Object.assign({}, s.consent, { [k]: !s.consent[k] }) })); },
-        swStyle: { flex: 'none', width: '38px', height: '22px', borderRadius: '12px', background: on ? '#0f766e' : '#c6cfd4', position: 'relative', transition: 'background .2s' },
-        knobStyle: { position: 'absolute', top: '2px', left: on ? '18px' : '2px', width: '18px', height: '18px', borderRadius: '50%', background: '#fff', transition: 'left .2s', boxShadow: '0 1px 3px rgba(0,0,0,.25)' },
-        stateStyle: on ? this.chipStyle('#e3f1e7', '#1f7a3d') : this.chipStyle('#eaeef2', '#5b6b74'),
-        stateLabel: on ? 'Granted' : 'Not granted'
-      };
-    });
-    const coreConsent = S.consent.rec && S.consent.tx;
-    const readyCardStyle = {
-      background: coreConsent ? '#e3f1e7' : '#fdf3e0', border: '1px solid ' + (coreConsent ? '#b9dcc3' : '#ecd9ab'),
-      borderRadius: '14px', padding: '16px 18px', textAlign: 'left'
+    // ---- per-encounter flag math ----
+    const flagsLeft = (id) => {
+      let n = 0;
+      (D[id].sections || []).forEach(sec => sec.items.forEach(s => { if (s.flag && !st.res[id + ':' + s.id]) n++; }));
+      return n;
     };
+    const myFlags = flagsLeft(encId);
 
-    // transcript turns
-    const turns = this.TURNS.map(u => {
-      const isC = u.role === 'c';
-      const meta = (u.flags.length + u.links.length) > 0;
+    // ---- rail ----
+    const encMeta = {
+      e1: { preview: st.signed.e1 ? 'Signed \u00b7 written to EHR' : (flagsLeft('e1') ? 'Draft ready \u00b7 ' + flagsLeft('e1') + ' to verify' : 'Draft verified \u00b7 ready to sign'), state: st.signed.e1 ? 'ok' : 'warn' },
+      e2: { preview: 'In visit \u00b7 consent in progress', state: 'rec' },
+      e3: { preview: 'Signed \u00b7 written to EHR 8:52', state: 'ok' },
+      e4: { preview: st.corrDone.c1 ? 'Correction resolved \u00b7 amended' : 'Patient correction request open', state: st.corrDone.c1 ? 'ok' : 'corr' }
+    };
+    const railItems = ['e1', 'e2', 'e3', 'e4'].map(id => {
+      const en = D[id]; const m = encMeta[id]; const active = id === encId;
+      const fl = flagsLeft(id);
+      let badge = '', badgeStyle = null;
+      if (id === 'e2') { badge = 'REC'; badgeStyle = { fontSize: '10px', fontWeight: 900, color: '#FFFFFF', background: '#C24E3D', borderRadius: '999px', padding: '3px 8px', letterSpacing: '0.8px', animation: 'recpulse 1.6s infinite' }; }
+      else if (m.state === 'corr') { badge = '\u2691 1'; badgeStyle = { fontSize: '11px', fontWeight: 900, color: '#9A6B14', background: '#FBF0D9', borderRadius: '999px', padding: '3px 9px' }; }
+      else if (fl > 0) { badge = String(fl); badgeStyle = { fontSize: '11px', fontWeight: 900, color: '#FFFFFF', background: accent, borderRadius: '999px', minWidth: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 6px' }; }
+      else if (m.state === 'ok') { badge = '\u2713'; badgeStyle = { fontSize: '12px', fontWeight: 900, color: '#4E9B6F' }; }
       return {
-        id: u.id, time: u.time, text: u.text,
-        name: isC ? 'Dr. Hassan · Clinician' : 'Adaeze · Patient',
-        rowStyle: { display: 'flex', justifyContent: isC ? 'flex-end' : 'flex-start', margin: '5px 0' },
-        bubbleStyle: {
-          maxWidth: '82%', padding: '9px 13px', borderRadius: isC ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-          background: isC ? '#dcefec' : '#ffffff',
-          border: isC ? '1px solid #bcdcd7' : '1px solid #dde4e8',
-          boxShadow: '0 1px 3px rgba(20,40,50,.05)'
-        },
-        nameStyle: { fontSize: '10.5px', fontWeight: 700, color: isC ? '#0b5a54' : '#6d4fa1' },
-        play: () => this.playTurn(u.id),
-        playing: S.playingTurn === u.id,
-        playIcon: S.playingTurn === u.id ? '❚❚' : 'Play',
-        playStyle: { flex: 'none', width: '22px', height: '22px', borderRadius: '50%', border: 'none', cursor: 'pointer', fontSize: '9px', background: isC ? '#0f766e' : '#6d4fa1', color: '#fff', fontFamily: 'inherit', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' },
-        hasMeta: meta,
-        flags: u.flags.map(f => ({
-          label: f.label,
-          style: f.kind === 'ok' ? this.chipStyle('#e3f1e7', '#1f7a3d', '#b9dcc3') : this.chipStyle('#fdf3e0', '#8a4b0f', '#ecd9ab')
-        })),
-        links: u.links.map(sid => ({ sid, go: () => this.setState({ tab: 'note', drawer: sid }) }))
+        initials: en.initials, name: en.name, time: en.time, preview: m.preview,
+        hasBadge: !!badge, badge, badgeStyle,
+        prevStyle: { fontSize: '12.5px', fontWeight: 600, color: m.state === 'rec' ? '#C24E3D' : '#8E8275', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
+        rowStyle: { display: 'flex', gap: '12px', alignItems: 'center', padding: compact ? '9px 12px' : '13px 12px', borderRadius: '16px', cursor: 'pointer', background: active ? '#FFFFFF' : 'transparent', border: active ? '1px solid #EBE2D4' : '1px solid transparent', boxShadow: active ? '0 2px 8px rgba(90,70,40,0.06)' : 'none', marginBottom: '2px' },
+        avStyle: { width: compact ? '38px' : '46px', height: compact ? '38px' : '46px', flex: '0 0 auto', borderRadius: '50%', background: en.hue + '22', color: en.hue, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '15px', fontWeight: 900 },
+        onClick: () => this.setState({ enc: id, tab: { e1: 'note', e2: 'consent', e3: 'note', e4: 'patient' }[id], drawerSid: null })
       };
     });
 
-    // note
-    const secNames = ['Subjective', 'Objective', 'Assessment', 'Plan'];
-    const noteSections = secNames.map(title => ({
-      title,
-      sentences: this.SENTENCES.filter(s => s.sec === title).map(base => {
-        const s = this.sent(base.id);
-        if (s.removed) return {
-          id: s.id, prov: '—', text: '(removed by clinician — retained on audit ledger)', open: () => {},
-          rowStyle: { display: 'flex', gap: '10px', padding: '6px 9px', borderRadius: '9px', opacity: .45, fontStyle: 'italic' },
-          tokStyle: { flex: 'none', width: '22px', textAlign: 'center', fontSize: '10px', color: '#8a979e', marginTop: '2px' }, chip: null
-        };
-        const taskOpen = base.task && S.tasks[base.task] === 'open';
+    // ---- header ----
+    const chip = (label, kind) => {
+      const k = { ok: ['#2E6B48', '#EAF3EC', '#CBE2D1'], warn: ['#9A6B14', '#FBF0D9', '#EFDDAE'], rec: ['#FFFFFF', '#C24E3D', '#C24E3D'], mut: ['#8E8275', '#F1EADF', '#EBE2D4'] }[kind];
+      return { label, style: { fontSize: '12px', fontWeight: 800, color: k[0], background: k[1], border: '1px solid ' + k[2], borderRadius: '999px', padding: '5px 12px', whiteSpace: 'nowrap' } };
+    };
+    const headChips = [];
+    if (encId === 'e2') { headChips.push(chip('Consent in progress', 'warn')); headChips.push({ label: '\u25CF Recording ready', style: Object.assign(chip('', 'mut').style, {}) }); headChips.pop(); headChips.push(chip('Capture not started', 'mut')); }
+    else headChips.push(chip('\u2713 Consent', 'ok'));
+    if (encId !== 'e2') headChips.push(chip(signed ? 'Signed' : 'Draft', signed ? 'ok' : 'mut'));
+    if (myFlags > 0) headChips.push(chip(myFlags + ' unresolved', 'warn'));
+    if (written) headChips.push(chip('\u2713 In EHR', 'ok'));
+    if (encId === 'e4' && !st.corrDone.c1) headChips.push(chip('\u2691 Correction open', 'warn'));
+
+    const canSign = !signed && encId === 'e1' && myFlags === 0;
+    const signDisabled = signed ? true : !canSign;
+    const signLabel = signed ? '\u2713 Signed' : (myFlags > 0 ? 'Sign \u00b7 ' + myFlags + ' left' : 'Sign note');
+    const signStyle = {
+      border: 'none', borderRadius: '14px', padding: '11px 22px', fontSize: '14px', fontWeight: 900, cursor: canSign ? 'pointer' : 'default', whiteSpace: 'nowrap',
+      background: signed ? '#EAF3EC' : (canSign ? accent : '#F1EADF'),
+      color: signed ? '#2E6B48' : (canSign ? '#FFFFFF' : '#B4A globalization'), // fixed below
+      boxShadow: canSign ? '0 3px 10px rgba(225,112,75,0.35)' : 'none'
+    };
+    signStyle.color = signed ? '#2E6B48' : (canSign ? '#FFFFFF' : '#B4A897');
+    const onSign = () => { if (canSign) this.setState(s => ({ signed: Object.assign({}, s.signed, { [encId]: true }), tab: 'export' })); };
+
+    // ---- tabs ----
+    const tabDefs = [['consent', 'Consent & Capture'], ['transcript', 'Transcript'], ['note', 'Note'], ['verify', 'Verify'], ['patient', 'Patient view'], ['export', 'EHR']];
+    const tabItems = tabDefs.map(([id, label]) => {
+      const active = st.tab === id;
+      const badge = id === 'verify' && myFlags > 0 ? String(myFlags) : (id === 'patient' && encId === 'e4' && !st.corrDone.c1 ? '1' : '');
+      return {
+        label, hasBadge: !!badge, badge,
+        badgeStyle: { marginLeft: '7px', fontSize: '11px', fontWeight: 900, color: '#FFFFFF', background: accent, borderRadius: '999px', padding: '2px 7px', display: 'inline-block' },
+        style: { border: 'none', cursor: 'pointer', background: 'transparent', padding: '10px 16px 12px 16px', fontSize: '14px', fontWeight: active ? 900 : 700, color: active ? '#3B342C' : '#8E8275', borderBottom: active ? '3px solid ' + accent : '3px solid transparent', borderRadius: '2px 2px 0 0' },
+        onClick: () => this.setState({ tab: id, drawerSid: null })
+      };
+    });
+
+    // ---- consent pane ----
+    const isE2 = encId === 'e2';
+    const scopeDefs = [
+      ['rec', 'Ambient recording', 'Microphone capture during the visit'],
+      ['tx', 'Transcription', 'Speech converted to a reviewable transcript'],
+      ['gen', 'Draft note generation', 'AI drafts the clinical note from the transcript'],
+      ['portal', 'Patient portal release', 'Signed note visible to the patient'],
+      ['model', 'Model improvement use', 'De-identified data used to improve the service']
+    ];
+    const consentRows = scopeDefs.map(([id, label, sub]) => {
+      const on = isE2 ? st.consent2[id] : true;
+      return {
+        label, sub, method: isE2 ? (on ? 'Verbal \u00b7 10:00' : 'Not yet asked') : 'Verbal \u00b7 recorded',
+        switchStyle: { border: 'none', cursor: isE2 ? 'pointer' : 'default', width: '46px', height: '27px', borderRadius: '999px', background: on ? '#4E9B6F' : '#DED4C4', position: 'relative', flex: '0 0 auto', transition: 'background 0.15s' },
+        knobStyle: { position: 'absolute', top: '3px', left: on ? '22px' : '3px', width: '21px', height: '21px', borderRadius: '50%', background: '#FFFFFF', transition: 'left 0.15s', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' },
+        onToggle: () => { if (isE2) this.setState(s => ({ consent2: Object.assign({}, s.consent2, { [id]: !s.consent2[id] }) })); }
+      };
+    });
+    const e2ready = isE2 && st.consent2.rec && st.consent2.tx && st.consent2.gen;
+    const readyBanner = isE2
+      ? (e2ready
+        ? { title: '\u25CF Ready to record', sub: 'Room mic matched, EHR encounter open, required consents captured. Tap the room device to begin.', style: { background: '#EAF3EC', border: '1px solid #CBE2D1', color: '#2E6B48', borderRadius: '18px', padding: '18px 22px' } }
+        : { title: 'Not ready yet', sub: 'Recording, transcription, and draft generation consent are required before capture can start.', style: { background: '#FBF0D9', border: '1px solid #EFDDAE', color: '#8A5B3E', borderRadius: '18px', padding: '18px 22px' } })
+      : { title: '\u2713 Consent recorded', sub: 'All scopes granted verbally and logged as structured events in the audit trail.', style: { background: '#EAF3EC', border: '1px solid #CBE2D1', color: '#2E6B48', borderRadius: '18px', padding: '18px 22px' } };
+    const okVal = (v, good) => ({ val: v, valStyle: { fontSize: '13px', fontWeight: 800, color: good ? '#4E9B6F' : '#B07A1E' } });
+    const deviceRows = [
+      Object.assign({ label: 'Room microphone' }, okVal('\u2713 Room 3 array', true)),
+      Object.assign({ label: 'Network' }, okVal('\u2713 Good', true)),
+      Object.assign({ label: 'EHR encounter' }, okVal('\u2713 Matched', true)),
+      Object.assign({ label: 'Interpreter' }, okVal(encId === 'e2' ? 'Not required' : 'Not required', true))
+    ];
+
+    // ---- transcript ----
+    const turns = (E.turns || []).map(t => {
+      const clin = t.role === 'Clinician';
+      const low = t.conf < 0.75;
+      return {
+        who: clin ? 'C' : 'P', role: t.role, time: t.time, text: t.text,
+        rowStyle: { display: 'flex', gap: '14px', background: low ? '#FDF6E3' : '#FFFFFF', border: '1px solid ' + (low ? '#EFDDAE' : '#EBE2D4'), borderRadius: '16px', padding: '14px 18px', marginBottom: '10px' },
+        avStyle: { width: '34px', height: '34px', flex: '0 0 auto', borderRadius: '50%', background: clin ? '#3D908322' : '#E1704B22', color: clin ? '#3D9083' : '#B9532F', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 900 },
+        confPct: Math.round(t.conf * 100) + '%',
+        confTextStyle: { fontSize: '11px', fontWeight: 900, color: low ? '#B07A1E' : '#A99C8C', width: '32px' },
+        confBar: { width: Math.round(t.conf * 100) + '%', height: '100%', borderRadius: '99px', background: low ? '#D9A23D' : '#4E9B6F' },
+        hasChips: t.chips.length > 0,
+        chips: t.chips.map(c => ({ label: c, style: { fontSize: '11px', fontWeight: 800, color: c === 'low confidence' ? '#B04A32' : '#8E8275', background: c === 'low confidence' ? '#FDF3EE' : '#F1EADF', border: '1px solid ' + (c === 'low confidence' ? '#F0D5C8' : '#EBE2D4'), borderRadius: '999px', padding: '3px 10px' } }))
+      };
+    });
+
+    // ---- note ----
+    const noteEmpty = (E.sections || []).length === 0;
+    const layoutBtns = [['gutter', 'A \u00b7 Gutter tokens'], ['inline', 'B \u00b7 Inline'], ['split', 'C \u00b7 Split evidence']].map(([id, label]) => ({
+      label,
+      style: { border: 'none', cursor: 'pointer', borderRadius: '10px', padding: '7px 14px', fontSize: '12.5px', fontWeight: 800, background: layout === id ? '#FFFFFF' : 'transparent', color: layout === id ? '#3B342C' : '#8E8275', boxShadow: layout === id ? '0 1px 4px rgba(90,70,40,0.12)' : 'none' },
+      onClick: () => this.setState({ layout: id })
+    }));
+    const legend = ['TG', 'MS', 'TP', 'CA', 'CV'].map(code => {
+      const m = this.provMeta(code);
+      return { code, label: m.label, dot: { fontSize: '9px', fontWeight: 900, color: m.c, background: m.bg, borderRadius: '5px', padding: '2px 5px', border: '1px solid ' + m.c + '44' } };
+    });
+    const openDrawer = (sid) => this.setState({ drawerSid: sid });
+    const sections = (E.sections || []).map(sec => ({
+      title: sec.title,
+      sentences: sec.items.map(s => {
+        const ss = this.sentState(encId, s);
+        const m = this.provMeta(ss.prov);
+        const sel = st.drawerSid === s.id;
+        const flagged = ss.flagged;
         return {
-          id: s.id, prov: s.prov, text: s.text,
-          open: () => this.setState({ drawer: s.id }),
-          rowStyle: {
-            display: 'flex', gap: '10px', padding: '6px 9px', borderRadius: '9px', cursor: 'pointer', alignItems: 'flex-start',
-            background: S.drawer === s.id ? '#e4f2f0' : 'transparent',
-            outline: S.drawer === s.id ? '1.5px solid #0f766e' : 'none'
+          text: ss.text, prov: ss.prov,
+          showToken: layout !== 'inline',
+          tokenStyle: { flex: '0 0 auto', width: '34px', textAlign: 'center', fontSize: '10px', fontWeight: 900, color: m.c, background: m.bg, border: '1px solid ' + m.c + '44', borderRadius: '8px', padding: '4px 0', marginTop: '2px' },
+          textStyle: {
+            fontSize: '15.5px', fontWeight: 600, lineHeight: 1.65,
+            textDecoration: ss.removed ? 'line-through' : 'none', color: ss.removed ? '#B4A897' : '#3B342C',
+            borderBottom: layout === 'inline' && !ss.removed ? '2px dotted ' + m.c : 'none', paddingBottom: layout === 'inline' ? '1px' : 0
           },
-          tokStyle: this.tokStyle(s.prov),
-          chip: taskOpen ? 'Needs review' : null,
-          chipStyle: this.chipStyle('#fdecec', '#a3202a', '#f2c6c8')
+          hasChip: flagged || ss.resolved,
+          chip: ss.removed ? 'removed' : (ss.resolved ? '\u2713 resolved' : '\u26A0 ' + (s.flag ? s.flag.type.toLowerCase() : 'review')),
+          chipStyle: {
+            marginLeft: '8px', fontSize: '11px', fontWeight: 800, borderRadius: '999px', padding: '3px 10px', whiteSpace: 'nowrap',
+            color: flagged ? '#B04A32' : (ss.removed ? '#A99C8C' : '#2E6B48'),
+            background: flagged ? '#FDF3EE' : (ss.removed ? '#F1EADF' : '#EAF3EC'),
+            border: '1px solid ' + (flagged ? '#F0D5C8' : (ss.removed ? '#EBE2D4' : '#CBE2D1'))
+          },
+          rowStyle: {
+            display: 'flex', gap: '12px', alignItems: 'flex-start', padding: '7px 10px', margin: '0 -10px', borderRadius: '12px', cursor: 'pointer',
+            background: sel ? '#FBF3EC' : (flagged ? '#FFFBF3' : 'transparent'),
+            outline: sel ? '2px solid ' + accent + '55' : 'none'
+          },
+          onClick: () => openDrawer(s.id)
         };
       })
     }));
 
-    const provLegendMini = Object.keys(this.PROV).map(code => ({
-      code, short: this.PROV[code].name.split(' ')[0].toLowerCase() === 'clinician' ? this.PROV[code].name.replace('Clinician ', 'clin. ') : this.PROV[code].name.toLowerCase(),
-      tokStyle: this.tokStyle(code)
+    // ---- verification queue ----
+    const allFlagged = [];
+    (E.sections || []).forEach(sec => sec.items.forEach(s => { if (s.flag) allFlagged.push(Object.assign({ sec: sec.title }, s)); }));
+    const pending = allFlagged.filter(s => !st.res[encId + ':' + s.id]).sort((a, b) => (a.flag.risk === 'High' ? 0 : 1) - (b.flag.risk === 'High' ? 0 : 1));
+    const queue = pending.map(s => ({
+      type: s.flag.type, risk: s.flag.risk, loc: s.sec + ' \u00b7 sentence ' + s.id.toUpperCase(),
+      text: s.text, reason: s.flag.reason,
+      riskStyle: { flex: '0 0 auto', alignSelf: 'flex-start', fontSize: '11px', fontWeight: 900, letterSpacing: '0.6px', textTransform: 'uppercase', borderRadius: '10px', padding: '6px 10px', color: s.flag.risk === 'High' ? '#B04A32' : '#B07A1E', background: s.flag.risk === 'High' ? '#FDF3EE' : '#FBF0D9', border: '1px solid ' + (s.flag.risk === 'High' ? '#F0D5C8' : '#EFDDAE') },
+      actions: s.flag.actions.map((a, i) => ({
+        label: a,
+        style: { border: i === 0 ? 'none' : '1px solid #EBE2D4', cursor: 'pointer', borderRadius: '11px', padding: '8px 14px', fontSize: '13px', fontWeight: 800, background: i === 0 ? accent : '#FBF7F0', color: i === 0 ? '#FFFFFF' : '#3B342C' },
+        onClick: () => this.resolve(encId, s, a)
+      }))
     }));
+    const resolvedFlagged = allFlagged.filter(s => st.res[encId + ':' + s.id]);
+    const resolvedList = resolvedFlagged.map(s => ({ text: s.text, how: st.res[encId + ':' + s.id].action }));
 
-    // sign button
-    const trySign = () => {
-      if (S.signed) { this.toast('Already signed and exported.'); return; }
-      if (!signReady) {
-        this.setState(s => ({ unsafeAttempts: s.unsafeAttempts + 1 }));
-        this.toast('Sign blocked: ' + flags + ' unresolved safety flag' + (flags > 1 ? 's' : '') + '. Attempt logged. Resolve them in the Verify tab.');
-      } else {
-        this.setState({ signed: true, tab: 'writeback' });
-        this.toast('Note signed — hash a91f…c47e recorded. Now waiting for the patient to read and counter-sign before the EHR push.');
-      }
-    };
-    const signBase = { fontFamily: 'inherit', fontSize: '12.5px', fontWeight: 700, borderRadius: '10px', padding: '9px 18px', border: 'none', cursor: 'pointer' };
-    const signBtnStyle = Object.assign({}, signBase, S.signed
-      ? { background: '#e3f1e7', color: '#1f7a3d', cursor: 'default' }
-      : signReady ? { background: '#1f7a3d', color: '#fff' } : { background: '#c6cfd4', color: '#fff' });
-    const signBtnLabel = S.signed ? 'Signed OK' : signReady ? 'Sign + export' : 'Locked: ' + flags + ' flags';
-
-    // evidence tab
-    const provLegend = Object.keys(this.PROV).map(code => {
-      const p = this.PROV[code];
-      return { code, name: p.name, desc: p.desc, sign: p.sign, tokStyle: Object.assign({}, this.tokStyle(code), { width: '26px', fontSize: '11px', padding: '4px 6px' }) };
-    });
-    const pipeDefs = [
-      ['Audio', 'Audio span', 'Recorded with consent; pausable; retained per policy'],
-      ['Turn', 'Transcript turn', 'Speaker + timestamp + ASR confidence'],
-      ['Draft', 'Draft sentence', 'Model + template versions recorded'],
-      ['Review', 'Review event', 'Verify / edit / remove / reattribute — all logged'],
-      ['Signed', 'Signed record', 'Hash + signatory + frozen provenance']
-    ];
-    const pipeline = pipeDefs.map(([icon, name, desc], i) => ({
-      icon, name, desc, arrow: i < pipeDefs.length - 1,
-      dotStyle: { width: '44px', height: '44px', borderRadius: '50%', background: '#e4f2f0', border: '1px solid #bcdcd7', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '19px' }
-    }));
-    const allSentChips = this.SENTENCES.map(base => {
-      const s = this.sent(base.id);
-      if (s.removed) return { label: s.id + ' (removed)', open: () => {}, style: Object.assign({}, this.btn('ghost'), { opacity: .4, fontSize: '11px' }) };
-      const p = this.PROV[s.prov];
+    // ---- patient view ----
+    const flatItems = [];
+    (E.sections || []).forEach(sec => sec.items.forEach(s => flatItems.push(s)));
+    const patientItems = flatItems.filter(s => !this.sentState(encId, s).removed).map(s => {
+      const ss = this.sentState(encId, s);
+      const key = encId + ':' + s.id;
+      const preFlag = encId === 'e4' && s.id === 'd1';
+      const flagged = !!st.pflags[key] || (preFlag && !st.corrDone.c1);
       return {
-        label: s.id + ' · ' + s.prov,
-        open: () => this.setState({ drawer: s.id }),
-        style: { fontFamily: 'ui-monospace,Menlo,monospace', fontSize: '11px', fontWeight: 700, color: p.color, background: p.bg, border: '1px solid ' + p.bd, borderRadius: '9px', padding: '6px 11px', cursor: 'pointer' }
+        text: s.pt || ss.text, canFlag: !flagged, flagged,
+        onFlag: () => this.setState(x => ({ pflags: Object.assign({}, x.pflags, { [key]: true }) }))
       };
     });
+    const corrections = encId === 'e4' ? [{
+      id: 'CR-0142', due: 'due in 3 days \u00b7 opened Sat 09:12',
+      sentence: 'Using salbutamol inhaler most days before exercise.',
+      comment: 'I said I use it about once a week before football, not most days.',
+      open: !st.corrDone.c1, done: !!st.corrDone.c1,
+      outcome: st.corrDone.c1 === 'amend' ? 'Note amended to \u201capproximately once a week before exercise\u201d' : 'Explanation sent with provenance summary',
+      onAccept: () => this.setState({ corrDone: { c1: 'amend' } }),
+      onExplain: () => this.setState({ corrDone: { c1: 'explain' } })
+    }] : [];
 
-    // verify tab
-    const taskCards = this.TASKS.map(t => {
-      const st = S.tasks[t.id];
-      const isOpen = st === 'open';
-      const s = this.sent(t.sid);
-      return {
-        sev: t.sev, cat: t.cat, ref: t.ref, sentence: s.text, why: t.why, isOpen,
-        cardStyle: { background: '#fff', border: isOpen ? '1.5px solid ' + (t.sev === 'HIGH' ? '#e4a6aa' : '#ecd9ab') : '1px solid #dde4e8', borderRadius: '14px', padding: '14px 18px', opacity: isOpen ? 1 : .82 },
-        cardStyleCompact: { background: isOpen ? '#fff' : '#f8fafb', border: isOpen ? '1.5px solid ' + (t.sev === 'HIGH' ? '#e4a6aa' : '#ecd9ab') : '1px solid #e4eaed', borderRadius: '12px', padding: '10px 12px', opacity: isOpen ? 1 : .8 },
-        sevStyle: t.sev === 'HIGH' ? this.chipStyle('#fdecec', '#a3202a', '#f2c6c8') : this.chipStyle('#fdf3e0', '#8a4b0f', '#ecd9ab'),
-        state: isOpen ? 'Open' : st === 'removed' ? 'Resolved — removed' : 'Resolved',
-        stateStyle: isOpen ? this.chipStyle('#eaf1f7', '#2b5d8a') : this.chipStyle('#e3f1e7', '#1f7a3d'),
-        resolution: isOpen ? null : (st === 'removed' ? 'Sentence removed from the note' : t.resolvedMsg),
-        actions: t.actions.map(a => ({
-          label: a.label,
-          style: this.btn(a.kind),
-          styleCompact: Object.assign({}, this.btn(a.kind), { fontSize: '10.5px', padding: '5px 10px', borderRadius: '8px' }),
-          run: () => {
-            if (a.act === 'play') { this.playTurn(a.turn); this.toast('Replaying ' + a.turn + ' — “Are you taking it ten milligrams, once daily?”'); }
-            else this.resolveTask(t.id, a.act, a.newText);
-          }
-        }))
-      };
-    });
-
-    // patient view
-    const paraDefs = [
-      ['P1', 'How you have been', 'You told us you have been feeling better since we increased your blood-pressure tablet (lisinopril), though you sometimes feel a little dizzy in the mornings.'],
-      ['P2', null, 'Your blood pressure today was 142 over 88 — better than before, and getting close to the target we agreed together.'],
-      ['P3', 'Your medicine', 'We talked about taking your tablet at the same time each morning, and about checking with us before starting herbal supplements such as garlic tablets — some can interact with your medicine.'],
-      ['P4', 'What happens next', 'We have ordered a simple blood test to check your kidneys are happy with the medicine, and we will see you again in four weeks.']
-    ];
-    const patientParas = paraDefs.map(([pid, heading, text]) => ({
-      text, heading,
-      rowStyle: { display: 'flex', gap: '14px', alignItems: 'flex-start', padding: '6px 10px', margin: '0 -10px', borderRadius: '10px', background: S.flaggingPara === pid ? '#f6f2e9' : 'transparent', transition: 'background .15s' },
-      flag: () => this.setState({ flaggingPara: pid, pickedReason: null }),
-      btnStyle: { flex: '0 1 auto', fontFamily: 'inherit', fontSize: '10.5px', fontWeight: 600, color: '#9a917e', background: 'transparent', border: '1px solid #e0d9c8', borderRadius: '14px', padding: '4px 10px', cursor: 'pointer', marginTop: '4px', opacity: S.flaggingPara === pid ? 1 : .75, whiteSpace: 'normal', lineHeight: 1.16 },
-      btnLabel: 'Not right?'
-    }));
-    const reasonDefs = ['This is factually wrong', 'I never said this', 'I don’t understand this', 'This feels unfair or sensitive'];
-    const correctionReasons = reasonDefs.map(r => ({
-      label: r,
-      pick: () => this.setState({ pickedReason: r }),
-      style: S.pickedReason === r
-        ? { fontFamily: 'inherit', fontSize: '11.5px', fontWeight: 700, color: '#fdfcf9', background: '#0f766e', border: '1px solid #0f766e', borderRadius: '18px', padding: '7px 15px', cursor: 'pointer' }
-        : { fontFamily: 'inherit', fontSize: '11.5px', fontWeight: 600, color: '#3d382a', background: '#fdfcf9', border: '1px solid #e0d9c8', borderRadius: '18px', padding: '7px 15px', cursor: 'pointer' }
-    }));
-    const flaggingText = S.flaggingPara ? (paraDefs.find(p => p[0] === S.flaggingPara)[2].slice(0, 70) + '…') : '';
-    const submitCorrection = () => {
-      if (!S.pickedReason) { this.toast('Pick a reason first.'); return; }
-      this.setState({ correctionSent: true, flaggingPara: null });
-      this.toast('Correction request CR-1042 created and routed to the signatory.');
+    // ---- export ----
+    const secStatus = (secTitle) => {
+      const items = (E.sections || []).find(x => x.title === secTitle);
+      if (!items) return ['\u2014', false];
+      const unres = items.items.filter(s => s.flag && !st.res[encId + ':' + s.id]).length;
+      if (unres > 0) return [unres + ' unresolved', false];
+      return [signed ? (written ? '\u2713 Written' : 'Ready') : 'Ready after sign', true];
     };
-    const submitCorStyle = { fontFamily: 'inherit', fontSize: '12.5px', fontWeight: 700, color: '#fff', background: '#0f766e', border: 'none', borderRadius: '10px', padding: '9px 20px', cursor: 'pointer', opacity: S.pickedReason ? 1 : .45, boxShadow: '0 6px 14px rgba(15,118,110,.25)' };
+    const exportRows = [['Subjective', 'Progress note \u203a History of present illness'], ['Objective', 'Vitals & medication list'], ['Assessment', 'Problem list update'], ['Plan', 'Orders & patient instructions']].map(([section, field]) => {
+      const [status, good] = secStatus(section);
+      return { section, field, status, statusStyle: { fontSize: '12.5px', fontWeight: 800, color: good ? '#4E9B6F' : '#B07A1E', whiteSpace: 'nowrap' } };
+    });
+    const gateBanner = written
+      ? { title: '\u2713 Written to EHR', sub: 'All sections transferred with provenance summary attached to the encounter.', style: { background: '#EAF3EC', border: '1px solid #CBE2D1', color: '#2E6B48', borderRadius: '18px', padding: '18px 22px' } }
+      : (signed
+        ? { title: 'Signed \u2014 ready for write-back', sub: 'The note is signed. Review the field mapping, then write to the chart.', style: { background: '#EAF3EC', border: '1px solid #CBE2D1', color: '#2E6B48', borderRadius: '18px', padding: '18px 22px' } }
+        : { title: 'Sign gate active', sub: myFlags > 0 ? myFlags + ' mandatory flag(s) must be resolved before this note can be signed or exported.' : 'Sign the note to unlock EHR write-back.', style: { background: '#FBF0D9', border: '1px solid #EFDDAE', color: '#8A5B3E', borderRadius: '18px', padding: '18px 22px' } });
+    const timeline = (E.timeline || []).map(([label, time], i) => {
+      let done = time !== 'pending' && time !== 'in progress' && time !== '\u2014' && time !== 'not started';
+      if (encId === 'e1') { if (label === 'Verification') done = myFlags === 0; if (label === 'Sign-off') done = signed; if (label === 'EHR write-back') done = written; }
+      return { label, time: encId === 'e1' && label === 'Verification' && myFlags === 0 ? 'complete' : (encId === 'e1' && label === 'Sign-off' && signed ? 'signed' : (encId === 'e1' && label === 'EHR write-back' && written ? 'written' : time)), dotStyle: { width: '10px', height: '10px', borderRadius: '50%', flex: '0 0 auto', background: done ? '#4E9B6F' : '#DED4C4' } };
+    });
+    const writeDisabled = !signed || written;
+    const writeLabel = written ? '\u2713 Written to EHR' : 'Write to EHR';
+    const writeStyle = { marginTop: '16px', width: '100%', border: 'none', borderRadius: '14px', padding: '14px', fontSize: '15px', fontWeight: 900, cursor: writeDisabled ? 'default' : 'pointer', background: written ? '#EAF3EC' : (signed ? '#3D9083' : '#F1EADF'), color: written ? '#2E6B48' : (signed ? '#FFFFFF' : '#B4A897') };
+    const onWrite = () => { if (!writeDisabled) this.setState(s => ({ written: Object.assign({}, s.written, { [encId]: true }) })); };
 
-    // write-back
-    const mapDefs = [
-      ['Note narrative', 'FHIR DocumentReference → Progress Notes', 'ok'],
-      ['Problem: Hypertension', 'FHIR Condition → Problem list', 'ok'],
-      ['Med: lisinopril 10 mg', 'FHIR MedicationStatement', flags > 0 ? 'hold' : 'ok'],
-      ['Allergies', 'No changes this visit', 'na'],
-      ['Follow-up 4 weeks', 'Scheduling API → task created', 'ok'],
-      ['Audit pointer', 'Encounter #E-20481 → provenance ledger', 'ok']
-    ];
-    const mappings = mapDefs.map(([what, route, st]) => ({
-      what, route,
-      status: st === 'ok' ? 'Mapped OK' : st === 'hold' ? 'Held — flag open' : 'N/A',
-      stStyle: st === 'ok' ? this.chipStyle('#e3f1e7', '#1f7a3d') : st === 'hold' ? this.chipStyle('#fdf3e0', '#8a4b0f', '#ecd9ab') : this.chipStyle('#eaeef2', '#5b6b74')
-    }));
-    const gateDefs = [
-      ['Consent recorded (scoped)', true],
-      ['Verification queue empty', signReady],
-      ['All field mappings resolved', signReady],
-      ['Patient visibility settings confirmed', true],
-      ['Clinician signature', S.signed],
-      ['Patient counter-signature', S.patientAcked]
-    ];
-    const gateItems = gateDefs.map(([label, ok]) => ({
-      label,
-      icon: ok ? 'OK' : '✕',
-      dotStyle: { flex: 'none', width: '20px', height: '20px', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: 700, background: ok ? '#e3f1e7' : '#fdecec', color: ok ? '#1f7a3d' : '#a3202a' }
-    }));
-    const signBtnStyleWide = Object.assign({}, signBtnStyle, { flex: 1 });
-
-    // governance
-    const barDefs = [['Medication / dose', 14, '#c22730'], ['Negation & invented denials', 9, '#c22730'], ['Template carryover', 11, '#92610c'], ['Speaker attribution', 6, '#92610c'], ['Billing language expansion', 4, '#6d4fa1']];
-    const maxBar = 14;
-    const govBars = barDefs.map(([name, n, color]) => ({
-      name, n,
-      barStyle: { height: '8px', width: Math.round(n / maxBar * 100) + '%', background: color, borderRadius: '4px' }
-    }));
-
-    // drawer
-    let drawerData = null;
-    if (S.drawer) {
-      const s = this.sent(S.drawer);
-      if (!s.removed) {
-        const p = this.PROV[s.prov];
-        const supTurns = s.turns.map(tid => {
-          const u = this.TURNS.find(x => x.id === tid);
-          const isC = u.role === 'c';
-          return {
-            name: (isC ? 'Clinician' : 'Patient') + ' · ' + tid, time: u.time, text: u.text,
-            nameStyle: { fontSize: '10px', fontWeight: 700, color: isC ? '#0b5a54' : '#6d4fa1' },
-            play: () => this.playTurn(tid),
-            playIcon: S.playingTurn === tid ? '❚❚' : 'Play',
-            playStyle: { flex: 'none', width: '18px', height: '18px', borderRadius: '50%', border: 'none', cursor: 'pointer', fontSize: '7px', background: isC ? '#0f766e' : '#6d4fa1', color: '#fff', fontFamily: 'inherit', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginLeft: 'auto' }
-          };
-        });
-        const base = this.SENTENCES.find(x => x.id === S.drawer);
-        const taskOpen = base.task && S.tasks[base.task] === 'open';
-        const acts = [];
-        if (taskOpen) acts.push({ label: 'Resolve flag', style: this.btn('primary'), run: () => this.setState({ tab: 'transcript', drawer: null }) });
-        else if (s.prov !== 'CV' && s.prov !== 'CA') acts.push({ label: 'Verify CV', style: this.btn('primary'), run: () => { const ov = Object.assign({}, this.state.overrides); ov[s.id] = Object.assign({}, ov[s.id], { prov: 'CV' }); this.setState({ overrides: ov }); this.toast(s.id + ' verified — provenance is now CV.'); } });
-        if (supTurns.length) acts.push({ label: 'View in transcript', style: this.btn('ghost'), run: () => this.setState({ tab: 'transcript', drawer: null }) });
-        drawerData = {
-          sid: s.id, text: s.text, prov: s.prov, provName: p.name, provDesc: p.desc,
-          tokStyle: Object.assign({}, this.tokStyle(s.prov), { width: '26px', fontSize: '11px', padding: '4px 6px' }),
-          hasTurns: supTurns.length > 0, turns: supTurns,
-          noTurns: supTurns.length === 0,
-          noTurnsMsg: s.prov === 'TP' ? 'No supporting utterance — this text was copied forward from the previous visit (template source: last encounter, 08 Apr).' : 'No transcript support required — clinician-authored text.',
-          history: s.prov === 'CV' ? 'verified by Dr. Hassan, just now' : taskOpen ? 'flagged by rule engine · unresolved' : 'drafted 09:41 · not yet reviewed',
-          actions: acts
-        };
-      }
+    // ---- drawer ----
+    const narrow = !!st.narrow;
+    const docked = layout === 'split' && st.tab === 'note' && !noteEmpty && !narrow;
+    const drawerOpen = !!st.drawerSid || docked;
+    const selS = flatItems.find(s => s.id === st.drawerSid) || null;
+    let d = null;
+    if (selS) {
+      const ss = this.sentState(encId, selS);
+      const m = this.provMeta(ss.prov);
+      const turnObjs = (selS.turns || []).map(i => E.turns[i]).filter(Boolean).map(t => ({
+        role: t.role, time: t.time, text: t.text, conf: Math.round(t.conf * 100) + '%',
+        confStyle: { fontSize: '11px', fontWeight: 900, color: t.conf < 0.75 ? '#B07A1E' : '#A99C8C' }
+      }));
+      d = {
+        text: ss.text, provCode: ss.prov, provLabel: m.label,
+        provBadge: { display: 'inline-block', fontSize: '12px', fontWeight: 900, color: m.c, background: m.bg, border: '1px solid ' + m.c + '44', borderRadius: '999px', padding: '6px 14px' },
+        isResolved: ss.resolved, resolvedHow: ss.how || '',
+        hasFlag: !!selS.flag && !ss.resolved, flagType: selS.flag ? selS.flag.type + ' \u00b7 ' + selS.flag.risk + ' risk' : '', flagReason: selS.flag ? selS.flag.reason : '',
+        hasTurns: turnObjs.length > 0, noTurns: turnObjs.length === 0, turns: turnObjs,
+        replayLabel: st.replaying === selS.id ? '\u25B6 Playing audio span\u2026' : '\u25B6 Replay audio span',
+        onReplay: () => this.replay(selS.id),
+        hasActions: !!selS.flag && !ss.resolved,
+        actions: selS.flag ? selS.flag.actions.map((a, i) => ({
+          label: a,
+          style: { border: i === 0 ? 'none' : '1px solid #EBE2D4', cursor: 'pointer', borderRadius: '11px', padding: '10px 14px', fontSize: '13px', fontWeight: 800, textAlign: 'left', background: i === 0 ? accent : '#FBF7F0', color: i === 0 ? '#FFFFFF' : '#3B342C' },
+          onClick: () => this.resolve(encId, selS, a)
+        })) : [],
+        history: [
+          { time: '9:20', event: 'Generated by model v2.4.1 \u00b7 template ' + (selS.prov === 'TP' ? 'HTN-followup v3' : 'SOAP-standard v7') },
+          selS.flag ? { time: '9:20', event: 'Auto-flagged: ' + selS.flag.type + ' (' + selS.flag.risk + ' risk)' } : { time: '9:20', event: 'Passed automatic checks' },
+          ss.resolved ? { time: 'now', event: 'Resolved by Dr. Osei: ' + (ss.how || '') } : { time: '\u2014', event: 'Awaiting clinician review' }
+        ].filter(Boolean)
+      };
     }
-    const drawerStyle = {
-      position: 'absolute', top: 0, right: 0, bottom: 0, width: '350px', background: '#fff',
-      borderLeft: '1px solid #dde4e8', boxShadow: '-12px 0 30px rgba(20,40,50,.12)',
-      display: 'flex', flexDirection: 'column', zIndex: 40,
-      transform: drawerData ? 'translateX(0)' : 'translateX(105%)', transition: 'transform .28s ease'
-    };
-
-    const explain = this.EXPLAIN[S.tab];
 
     return {
-      // shell
-      tabsNav, badgeStyle,
-      isHome: S.tab === 'home', isConsent: S.tab === 'consent', isTranscript: S.tab === 'transcript',
-      isNote: S.tab === 'note', isEvidence: S.tab === 'evidence',
-      isPatient: S.tab === 'patient', isWriteback: S.tab === 'writeback', isGov: S.tab === 'gov',
-      noteStateLabel, noteStateStyle, flagChipLabel, flagChipStyle,
-      recording: S.recording, recClock: this.fmtClock(S.recSeconds), toast: S.toast,
-      // home
-      openFeatured: go('consent'),
-      homeFlagLabel: flags > 0 ? '' + flags + ' flags' : 'Flags clear OK',
-      homeFlagStyle: flags > 0 ? this.chipStyle('#fdecec', '#a3202a', '#f2c6c8') : this.chipStyle('#e3f1e7', '#1f7a3d'),
-      unsafeAttempts: S.unsafeAttempts,
-      // consent
-      consentItems, readyCardStyle,
-      readyTitle: coreConsent ? (S.recording ? 'Recording in progress' : 'Ready to record') : 'Not ready — core consent missing',
-      readyDesc: coreConsent ? 'Consent OK · devices OK · EHR encounter matched OK' : 'Ambient recording and transcription consent are required before capture can start.',
-      toggleRec: () => {
-        if (!coreConsent) { this.toast('Cannot start: recording/transcription consent not granted.'); return; }
-        if (S.recording) { this.setState({ recording: false }); this.toast('Recording stopped at ' + this.fmtClock(S.recSeconds) + '. Segment logged.'); }
-        else { this.setState({ recording: true, recSeconds: 0 }); this.toast('Ambient recording started — consent scope and device state logged.'); }
-      },
-      recBtnStyle: Object.assign({ fontFamily: 'inherit', width: '100%', marginTop: '12px', fontSize: '13px', fontWeight: 700, borderRadius: '10px', padding: '11px', border: 'none', cursor: 'pointer' },
-        S.recording ? { background: '#c22730', color: '#fff' } : coreConsent ? { background: '#0f766e', color: '#fff' } : { background: '#c6cfd4', color: '#fff' }),
-      recBtnLabel: S.recording ? '■ Stop recording' : '● Start ambient recording',
-      // transcript
-      turns,
-      // note
-      noteSections, provLegendMini, trySign, signBtnStyle, signBtnLabel,
-      // evidence
-      provLegend, pipeline, allSentChips,
-      // verify
-      taskCards, allResolved: signReady && !S.signed, goWriteback: go('writeback'),
-      goWritebackLink: (e) => { e.preventDefault(); this.setState({ tab: 'writeback' }); },
-      // patient
-      patientParas, flaggingPara: !!S.flaggingPara, flaggingText, correctionReasons, submitCorrection, submitCorStyle,
-      cancelFlag: () => this.setState({ flaggingPara: null }),
-      correctionSent: S.correctionSent,
-      noCorrection: !S.correctionSent && !S.flaggingPara,
-      patientAcked: S.patientAcked, notAcked: !S.patientAcked,
-      ackHint: S.patientAcked
-        ? 'Your signature is attached to this exact version of the summary. Any later amendment will ask you to sign again.'
-        : S.signed
-          ? 'Dr. Hassan has signed. Confirm you have read your summary — your signature is recorded alongside the note.'
-          : 'You can read your summary now. Signing unlocks the moment your doctor signs the clinical note.',
-      patientAck: () => {
-        if (!S.signed) { this.toast('Signing is locked until Dr. Hassan signs the clinical note (Write-back tab).'); return; }
-        this.setState({ patientAcked: true });
-        this.toast('Patient signature recorded (09:56) and added to the provenance ledger.');
-      },
-      pushed: S.pushed, notPushed: !S.pushed,
-      pushHint: S.pushed
-        ? 'This visit is now part of your permanent medical record.'
-        : S.signed && S.patientAcked
-          ? 'Both signatures are in place — the note is ready to enter your medical record.'
-          : 'Available after both you and Dr. Hassan have signed.',
-      pushEHR: () => {
-        if (!S.signed) { this.toast('Push blocked: the clinician has not signed yet (Write-back tab).'); return; }
-        if (!S.patientAcked) { this.toast('Push blocked: waiting for the patient\u2019s counter-signature (Patient tab).'); return; }
-        this.setState({ pushed: true });
-        this.toast('Note written to the EHR via FHIR DocumentReference · audit pointer #E-20481.');
-      },
-      pushBtnStyle: Object.assign(
-        { fontFamily: 'inherit', width: '100%', marginTop: '12px', fontSize: '12.5px', fontWeight: 700, borderRadius: '10px', padding: '11px', border: 'none', cursor: 'pointer' },
-        S.signed && S.patientAcked ? { background: '#0f766e', color: '#fff', boxShadow: '0 6px 14px rgba(15,118,110,.28)' } : { background: '#e0d9c8', color: '#9a917e' }
-      ),
-      pushBtnStyleWB: Object.assign(
-        { fontFamily: 'inherit', width: '100%', marginTop: '10px', fontSize: '12px', fontWeight: 700, borderRadius: '9px', padding: '9px', border: 'none', cursor: 'pointer' },
-        S.patientAcked ? { background: '#1f7a3d', color: '#fff' } : { background: '#c6cfd4', color: '#fff' }
-      ),
-      wbPatientLine: S.pushed ? 'Patient counter-signed 09:56 OK · pushed 09:58 OK' : S.patientAcked ? 'Patient counter-signed 09:56 OK — ready to push' : 'Patient counter-signature: pending (Patient tab)',
-      // writeback
-      mappings, gateItems, signBtnStyleWide, signed: S.signed, notSigned: !S.signed,
-      ehrChipLabel: S.pushed ? 'EHR: written OK' : 'EHR: not written',
-      ehrChipStyle: S.pushed ? this.chipStyle('#e3f1e7', '#1f7a3d') : this.chipStyle('#eaeef2', '#475569'),
-      // governance
-      govAttempts: S.unsafeAttempts, govCorrections: S.correctionSent ? 3 : 2, govBars,
-      govCorrList: [
-        ...(S.correctionSent ? [{ id: 'CR-1042', desc: 'Visit summary wording · Adaeze O. · routed to signatory', state: 'Open · due 13 Jul', stStyle: this.chipStyle('#eaf1f7', '#2b5d8a') }] : []),
-        { id: 'CR-1037', desc: 'Medication list error · resolved with amendment', state: 'Resolved · 1.8 d', stStyle: this.chipStyle('#e3f1e7', '#1f7a3d') },
-        { id: 'CR-1031', desc: 'Confusing terminology · explanation added', state: 'Resolved · 3.2 d', stStyle: this.chipStyle('#e3f1e7', '#1f7a3d') }
-      ],
-      // drawer
-      drawerData, drawerStyle, closeDrawer: () => this.setState({ drawer: null }),
-      // explainer
-      explain,
-      explainerStyle: showExplainer
-        ? { width: '400px', flex: 'none', display: 'flex', flexDirection: 'column', maxHeight: '876px', position: 'sticky', top: '32px' }
-        : { display: 'none' }
+      todayCount: 4,
+      railItems,
+      headName: E.name, headMeta: E.meta, headInitials: E.initials,
+      headAvStyle: { width: '48px', height: '48px', borderRadius: '50%', background: E.hue + '22', color: E.hue, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '17px', fontWeight: 900, flex: '0 0 auto' },
+      headChips, signLabel, signStyle, signDisabled, onSign,
+      tabItems,
+      paneConsent: st.tab === 'consent', paneTranscript: st.tab === 'transcript', paneNote: st.tab === 'note',
+      paneVerify: st.tab === 'verify', panePatient: st.tab === 'patient', paneExport: st.tab === 'export',
+      readyBanner, consentRows, deviceRows,
+      turns, turnCount: (E.turns || []).length, audioLen: E.audio,
+      noteEmpty, noteReady: !noteEmpty,
+      signedBanner: !noteEmpty && signed, signedBannerText: encId === 'e3' ? 'Signed by Dr. Osei at 8:52 and written to the EHR. Read-only.' : (encId === 'e4' ? 'Signed Friday 14:31. A patient correction is open in the Patient view tab.' : 'Signed by Dr. Osei just now. Head to the EHR tab to write it back.'),
+      layoutBtns, legend, sections,
+      queue, queueClear: !noteEmpty && pending.length === 0, hasResolved: resolvedList.length > 0, resolvedList,
+      patientItems, corrections, hasCorrections: corrections.length > 0,
+      exportRows, gateBanner, timeline, writeLabel, writeStyle, writeDisabled, onWrite,
+      railStyle: { width: narrow ? '256px' : '312px', flex: narrow ? '0 0 256px' : '0 0 312px', background: '#FCF9F4', borderRight: '1px solid #EBE2D4', display: 'flex', flexDirection: 'column', minHeight: 0 },
+      drawerStyle: narrow
+        ? { position: 'absolute', right: 0, top: 0, bottom: 0, width: '344px', maxWidth: '85vw', background: '#FFFDFA', borderLeft: '1px solid #EBE2D4', boxShadow: '-12px 0 32px rgba(60,45,25,0.14)', display: 'flex', flexDirection: 'column', minHeight: 0, zIndex: 20 }
+        : { width: '344px', flex: '0 1 344px', minWidth: '280px', background: '#FFFDFA', borderLeft: '1px solid #EBE2D4', display: 'flex', flexDirection: 'column', minHeight: 0 },
+      drawerOpen, drawerClosable: !docked || !!st.drawerSid || narrow, onCloseDrawer: () => this.setState({ drawerSid: null }),
+      drawerHasSentence: !!d, drawerEmpty: !d, d: d || {}
     };
   }
 }
-</script>
-
-<script>
-  (function () {
-    function fitPrototype() {
-      document.body.style.zoom = '1';
-      var stage = document.querySelector('x-dc > div');
-      if (!stage) return;
-      var width = Math.max(stage.scrollWidth, stage.getBoundingClientRect().width) + 18;
-      var height = Math.max(stage.scrollHeight, stage.getBoundingClientRect().height) + 18;
-      var scale = Math.min(1, (window.innerWidth - 8) / width, (window.innerHeight - 8) / height);
-      document.body.style.zoom = String(Math.max(0.48, scale));
-    }
-    window.addEventListener('resize', fitPrototype);
-    window.addEventListener('orientationchange', fitPrototype);
-    window.addEventListener('load', fitPrototype);
-    fitPrototype();
-    setTimeout(fitPrototype, 120);
-    setTimeout(fitPrototype, 500);
-    setTimeout(fitPrototype, 1200);
-  })();
 </script>
 </body>
 </html>
